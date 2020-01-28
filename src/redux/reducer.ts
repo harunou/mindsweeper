@@ -6,14 +6,7 @@ import {
     fetchMapSuccess,
 } from './action';
 import { reducer, on } from 'ts-action';
-import { GameLevel, GameBoard } from './redux.typings';
-
-export interface AppState {
-    level: GameLevel | null;
-    board: GameBoard;
-    isOnline: boolean;
-    isLoading: boolean;
-}
+import { AppState } from './redux.typings';
 
 export const initialState: AppState = {
     level: null,

@@ -1,9 +1,18 @@
 import { WebSocketSubject } from 'rxjs/webSocket';
 
+export interface AppState {
+    level: GameLevel | null;
+    board: GameBoard;
+    isOnline: boolean;
+    isLoading: boolean;
+}
+
 export type GameLevel = 1 | 2 | 3 | 4;
 
+export type GameSocket = WebSocketSubject<string>;
+
 export interface EpicMiddlewareDependencies {
-    socket$: WebSocketSubject<string>;
+    socket$: GameSocket;
 }
 
 export type GameBoard = Array<string[]>;

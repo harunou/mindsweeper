@@ -1,6 +1,6 @@
 import { Store, createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { appReducer, AppState } from './reducer';
+import { appReducer } from './reducer';
 import { AppActions } from './action';
 import {
     combineEpics,
@@ -8,15 +8,15 @@ import {
     Epic,
     EpicMiddleware,
 } from 'redux-observable';
-import { WebSocketSubject } from 'rxjs/webSocket';
 import { fetchMapEpic } from './epics';
-
-interface EpicMiddlewareDependencies {
-    socket$: WebSocketSubject<string>;
-}
+import {
+    GameSocket,
+    EpicMiddlewareDependencies,
+    AppState,
+} from './redux.typings';
 
 const createAppStore = (
-    socket$: WebSocketSubject<string>
+    socket$: GameSocket
 ): Store<AppState, AppActions> => {
     const epicMiddleware: EpicMiddleware<
         AppActions,

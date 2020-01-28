@@ -1,6 +1,5 @@
 import { webSocket } from 'rxjs/webSocket';
-import { GameLevel, GameBoard } from '../redux/redux.typings';
-import { AppState } from '../redux/reducer';
+import { GameLevel, GameBoard, AppState } from '../redux/redux.typings';
 import {
     AppActions,
     setOffline,

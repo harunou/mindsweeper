@@ -1,5 +1,5 @@
 import createAppStore from './store';
-import { initialState, AppState } from './reducer';
+import { initialState } from './reducer';
 import { createObserverSpy } from '../testing-tools';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import {
@@ -13,8 +13,9 @@ import {
 } from '../api/websocket.fixtures';
 import { AppActions } from './action';
 import { Store } from 'redux';
+import { GameSocket, AppState } from './redux.typings';
 
-let socket$: WebSocketSubject<string>;
+let socket$: GameSocket;
 let store: Store<AppState, AppActions>;
 let successHandler: (message: string) => void;
 

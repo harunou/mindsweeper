@@ -1,7 +1,6 @@
 import { AppActions, fetchMap } from './action';
 import { Epic } from 'redux-observable';
-import { AppState } from './reducer';
-import { EpicMiddlewareDependencies } from './redux.typings';
+import { EpicMiddlewareDependencies, AppState } from './redux.typings';
 import { ofType } from './ts-action.patch';
 import { tap, ignoreElements } from 'rxjs/operators';
 import { socketCommand } from '../api/websocket.client';
