@@ -7,8 +7,12 @@ import { Store } from 'redux';
 import { AppState } from './redux/reducer';
 import createAppStore from './redux/store';
 import { AppActions } from './redux/action';
+import { webSocket } from 'rxjs/webSocket';
 
-const store: Store<AppState, AppActions> = createAppStore();
+const WS_API_URL = 'ws://echo.websocket.org';
+const socket$ = webSocket(WS_API_URL);
+const store: Store<AppState, AppActions> = createAppStore(socket$);
+socket$.subscribe();
 
 ReactDOM.render(
     <React.StrictMode>
