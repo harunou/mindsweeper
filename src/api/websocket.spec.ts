@@ -1,12 +1,17 @@
-import { socketResponse } from './websocket.client';
+import {
+    socketResponse,
+    parseMapResponseToGameBoard,
+} from './websocket.client';
 import {
     newOkResponse,
     openOkResponse,
     openYouLoseResponse,
     mapResponse,
+    mapResponseShort,
+    mapResponseShortAsGameBoard,
 } from './websocket.fixtures';
 
-describe('websocket responses', () => {
+describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {
         expect(socketResponse.isNewOk(newOkResponse)).toBeTruthy();
     });
@@ -20,5 +25,13 @@ describe('websocket responses', () => {
     });
     it('should detect response: map', () => {
         expect(socketResponse.isMap(mapResponse)).toBeTruthy();
+    });
+});
+
+describe('map response parser', () => {
+    it('should parse array response to 2D array of chars', () => {
+        expect(parseMapResponseToGameBoard(mapResponseShort)).toEqual(
+            mapResponseShortAsGameBoard
+        );
     });
 });

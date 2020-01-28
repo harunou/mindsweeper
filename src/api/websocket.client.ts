@@ -1,7 +1,12 @@
 import { webSocket } from 'rxjs/webSocket';
-import { GameLevel } from '../redux/redux.typings';
+import { GameLevel, GameBoard } from '../redux/redux.typings';
 import { AppState } from '../redux/reducer';
-import { AppActions, setOffline, fetchMap } from '../redux/action';
+import {
+    AppActions,
+    setOffline,
+    fetchMap,
+    fetchMapSuccess,
+} from '../redux/action';
 import { Store } from 'redux';
 
 export const createSocket$ = (wsUrl: string) =>
@@ -29,6 +34,13 @@ export const handleSuccessMessages = (
         case socketResponse.isOpenYouLose(message):
             store.dispatch(fetchMap());
             break;
+        case socketResponse.isMap(message):
+            store.dispatch(
+                fetchMapSuccess({
+                    board: parseMapResponseToGameBoard(message),
+                })
+            );
+            break;
     }
 };
 
@@ -42,4 +54,15 @@ export const handleCompleteMessages = (
     store: Store<AppState, AppActions>
 ) => () => {
     store.dispatch(setOffline());
+};
+
+export const parseMapResponseToGameBoard = (
+    message: string
+): GameBoard => {
+    return message
+        .split(/\r?\n/)
+        .slice(1)
+        .map(row => {
+            return row.split('');
+        });
 };

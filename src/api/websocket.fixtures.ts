@@ -1,3 +1,5 @@
+import { GameBoard } from '../redux/redux.typings';
+
 export const newOkResponse = 'new: OK';
 export const openOkResponse = 'open: OK';
 export const openYouLoseResponse = 'open: You lose';
@@ -12,3 +14,10 @@ export const mapResponse = `map:
 01□□□□□□□□
 02□□□□□□□□
 01□□□□□□□□`;
+export const mapResponseShort = `map:
+1*□□
+01□□`;
+export const mapResponseShortAsGameBoard: GameBoard = [
+    ['1', '*', '□', '□'],
+    ['0', '1', '□', '□'],
+];
