@@ -1,15 +1,13 @@
-import { Reducer, Action } from 'redux';
+import { Reducer } from 'redux';
+import { AppActions } from './action';
 
 export interface AppState {}
 
 export const initialState: AppState = {};
 
-export const appReducer: Reducer<AppState, Action<string>> = (
+export const appReducer: Reducer<AppState, AppActions> = (
     prevState: AppState = initialState,
-    action: Action<string>
+    action: AppActions
 ): AppState => {
-    switch (action.type) {
-        default:
-            return prevState;
-    }
+    return prevState;
 };
