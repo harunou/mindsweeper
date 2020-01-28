@@ -1,7 +1,11 @@
 import { webSocket } from 'rxjs/webSocket';
 import { GameLevel } from '../redux/redux.typings';
+import { AppState } from '../redux/reducer';
+import { AppActions, setOffline, fetchMap } from '../redux/action';
+import { Store } from 'redux';
 
-export const createSocket$ = (wsUrl: string) => webSocket(wsUrl);
+export const createSocket$ = (wsUrl: string) =>
+    webSocket<string>(wsUrl);
 
 export const socketCommand = {
     new: (level: GameLevel) => `new ${level}`,
@@ -14,4 +18,28 @@ export const socketResponse = {
     isOpenOk: (message: string) => /^open: OK/.test(message),
     isOpenYouLose: (message: string) => /^open: You lose/.test(message),
     isMap: (message: string) => /^map:/.test(message),
+};
+
+export const handleSuccessMessages = (
+    store: Store<AppState, AppActions>
+) => (message: string) => {
+    switch (true) {
+        case socketResponse.isNewOk(message):
+        case socketResponse.isOpenOk(message):
+        case socketResponse.isOpenYouLose(message):
+            store.dispatch(fetchMap());
+            break;
+    }
+};
+
+export const handleErrorMessages = (
+    store: Store<AppState, AppActions>
+) => (error: Error) => {
+    store.dispatch(setOffline());
+};
+
+export const handleCompleteMessages = (
+    store: Store<AppState, AppActions>
+) => () => {
+    store.dispatch(setOffline());
 };

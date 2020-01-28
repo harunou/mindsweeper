@@ -11,11 +11,11 @@ import {
 import { WebSocketSubject } from 'rxjs/webSocket';
 
 interface EpicMiddlewareDependencies {
-    socket$: WebSocketSubject<unknown>;
+    socket$: WebSocketSubject<string>;
 }
 
 const createAppStore = (
-    socket$: WebSocketSubject<unknown>
+    socket$: WebSocketSubject<string>
 ): Store<AppState, AppActions> => {
     const epicMiddleware: EpicMiddleware<
         AppActions,
