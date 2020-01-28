@@ -9,6 +9,7 @@ import {
     EpicMiddleware,
 } from 'redux-observable';
 import { WebSocketSubject } from 'rxjs/webSocket';
+import { fetchMapEpic } from './epics';
 
 interface EpicMiddlewareDependencies {
     socket$: WebSocketSubject<string>;
@@ -39,6 +40,6 @@ const createRootEpic = (): Epic<
     AppActions,
     AppState,
     EpicMiddlewareDependencies
-> => combineEpics();
+> => combineEpics(fetchMapEpic);
 
 export default createAppStore;
