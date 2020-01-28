@@ -1,4 +1,7 @@
 import { PartialObserver } from 'rxjs';
+import { AppState } from './redux/redux.typings';
+import { AppActions } from './redux/action';
+import { Store } from 'redux';
 
 type SpyObj<T> = T &
     {
@@ -26,4 +29,14 @@ export const createObserverSpy = <T>(
     jest.spyOn(observerSpy, 'error');
     jest.spyOn(observerSpy, 'complete');
     return observerSpy as SpyObserver<T>;
+};
+
+export type SpyStore = SpyObj<Store<AppState, AppActions>>;
+
+export const createStoreSpy = (): SpyStore => {
+    const storeSpy = {
+        dispatch: () => {},
+    };
+    jest.spyOn(storeSpy, 'dispatch');
+    return (storeSpy as unknown) as SpyStore;
 };

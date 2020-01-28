@@ -1,6 +1,7 @@
 import {
     socketResponse,
     parseMapResponseToGameBoard,
+    handleSuccessMessages,
 } from './websocket.client';
 import {
     newOkResponse,
@@ -10,6 +11,9 @@ import {
     mapResponseShort,
     mapResponseShortAsGameBoard,
 } from './websocket.fixtures';
+import { fetchMap, fetchMapSuccess } from '../redux/action';
+import { SpyStore, createStoreSpy } from '../testing-tools';
+import { ActionType } from 'ts-action';
 
 describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {
@@ -25,6 +29,40 @@ describe('Websocket responses', () => {
     });
     it('should detect response: map', () => {
         expect(socketResponse.isMap(mapResponse)).toBeTruthy();
+    });
+});
+
+let successHandler: (message: string) => void;
+let store: SpyStore;
+let fetchMapAction: ActionType<typeof fetchMap>;
+let fetchMapSuccessAction: ActionType<typeof fetchMapSuccess>;
+
+describe('Socket success handler', () => {
+    beforeEach(() => {
+        store = createStoreSpy();
+        successHandler = handleSuccessMessages(store);
+        fetchMapAction = fetchMap();
+        fetchMapSuccessAction = fetchMapSuccess({
+            board: mapResponseShortAsGameBoard,
+        });
+    });
+    it('should dispatch "fetchMap" command on "new: ok" message', () => {
+        successHandler(newOkResponse);
+        expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
+    });
+    it('should send "map" command on "open: ok" message', () => {
+        successHandler(openOkResponse);
+        expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
+    });
+    it('should send "map" command on "open: You lose" message', () => {
+        successHandler(openYouLoseResponse);
+        expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
+    });
+    it('should send "fetchMapSuccess" command on "map: ..." message', () => {
+        successHandler(mapResponseShort);
+        expect(store.dispatch).toHaveBeenCalledWith(
+            fetchMapSuccessAction
+        );
     });
 });
 
