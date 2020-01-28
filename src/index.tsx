@@ -6,13 +6,23 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { AppState } from './redux/reducer';
 import createAppStore from './redux/store';
-import { AppActions } from './redux/action';
+import { AppActions, setOffline } from './redux/action';
 import { webSocket } from 'rxjs/webSocket';
+import { finalize } from 'rxjs/operators';
 
 const WS_API_URL = 'ws://echo.websocket.org';
+
 const socket$ = webSocket(WS_API_URL);
+
 const store: Store<AppState, AppActions> = createAppStore(socket$);
-socket$.subscribe();
+
+socket$
+    .pipe(
+        finalize(() => {
+            store.dispatch(setOffline());
+        })
+    )
+    .subscribe(message => {});
 
 ReactDOM.render(
     <React.StrictMode>
