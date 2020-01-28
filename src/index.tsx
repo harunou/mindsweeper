@@ -7,12 +7,12 @@ import { Store } from 'redux';
 import { AppState } from './redux/reducer';
 import createAppStore from './redux/store';
 import { AppActions, setOffline } from './redux/action';
-import { webSocket } from 'rxjs/webSocket';
 import { finalize } from 'rxjs/operators';
+import { createSocket$ } from './api/websocket.client';
 
 const WS_API_URL = 'ws://echo.websocket.org';
 
-const socket$ = webSocket(WS_API_URL);
+const socket$ = createSocket$(WS_API_URL);
 
 const store: Store<AppState, AppActions> = createAppStore(socket$);
 
