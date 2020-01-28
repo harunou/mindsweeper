@@ -11,7 +11,7 @@ import {
     openOkResponse,
     openYouLoseResponse,
 } from '../api/websocket.fixtures';
-import { AppActions } from './action';
+import { AppActions, setLevel } from './action';
 import { Store } from 'redux';
 import { GameSocket, AppState } from './redux.typings';
 
@@ -44,5 +44,10 @@ describe('Store', () => {
         const mapCommand = socketCommand.map();
         successHandler(openYouLoseResponse);
         expect(socket$.next).toHaveBeenCalledWith(mapCommand);
+    });
+    it('should send "new 1" command on "setLevel" action', () => {
+        store.dispatch(setLevel({ level: 1 }));
+        const new1Command = socketCommand.new(1);
+        expect(socket$.next).toHaveBeenCalledWith(new1Command);
     });
 });
