@@ -20,9 +20,11 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
     on(setOffline, state => ({
         ...state,
         isOnline: false,
+        isLoading: false,
     })),
     on(newGame, (state, { payload }) => ({
         ...state,
+        board: [[]],
         level: payload.level,
         isLoading: true,
     })),
