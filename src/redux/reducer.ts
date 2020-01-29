@@ -15,6 +15,7 @@ import {
     AppReducer,
     GameBoard,
 } from './reducer.typings';
+import { mapResponse } from '../api/websocket.fixtures';
 
 export const initialState: AppState = {
     level: null,
@@ -28,7 +29,7 @@ export const appReducer: AppReducer = reducer(
     initialState,
     on(levelInputClick, (state, { payload }) => ({
         ...state,
-        board: [[]],
+        board: parseMapResponseToGameBoard(mapResponse),
         level: payload.level,
         isLoading: true,
     })),
@@ -56,7 +57,6 @@ export const appReducer: AppReducer = reducer(
         isLoading: false,
     }))
 );
-
 export const parseMapResponseToGameBoard = (
     message: string
 ): GameBoard => {

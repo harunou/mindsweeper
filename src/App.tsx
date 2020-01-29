@@ -1,9 +1,48 @@
-import React from 'react';
+import React, { useCallback, Dispatch } from 'react';
+import { GameLevel, AppState } from './redux/reducer.typings';
+import { useSelector, useDispatch } from 'react-redux';
+import { levelInputClick, AppActions } from './redux/actions';
+import Board from './components/Board';
 
-class App extends React.Component {
-    render(): React.ReactNode {
-        return <div>Minesweeper</div>;
+const App: React.FC = (): React.ReactElement => {
+    const state: AppState = useSelector(selectState);
+    const activeLevel: GameLevel | null = useSelector(selectGameLevel);
+
+    const dispatch: Dispatch<AppActions> = useDispatch();
+    const dispatchLevelInputClick = useCallback(
+        (level: GameLevel) => () =>
+            dispatch(levelInputClick({ level })),
+        [dispatch]
+    );
+    if (activeLevel === null) {
+        return <>loading</>;
     }
-}
+    return (
+        <>
+            <div>Minesweeper</div>
+            {levels.map((level: GameLevel) => {
+                return (
+                    <span key={level} className='ms-level-input'>
+                        <input
+                            type='radio'
+                            name='level'
+                            value={level}
+                            checked={activeLevel === level}
+                            onChange={dispatchLevelInputClick(level)}
+                        />
+                        {level}
+                    </span>
+                );
+            })}
+            <Board />
+            <pre>{JSON.stringify(state, null, '  ')}</pre>
+        </>
+    );
+};
+
+const levels: GameLevel[] = [1, 2, 3, 4];
+
+const selectGameLevel = (state: AppState) => state.level;
+const selectState = (state: AppState) => state;
 
 export default App;
