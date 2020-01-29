@@ -8,6 +8,7 @@ import {
     statusUpdate,
     newLevelStarted,
     cellOpenedOk,
+    cellOpenedYouLose,
 } from './actions';
 import { AppState, GameStatus } from './redux.typings';
 import {
@@ -142,6 +143,21 @@ describe('Reducer', () => {
         const state = appReducer(initialState, cellOpenedOk());
         expect(state).toEqual({
             ...initialState,
+            isLoading: true,
+        });
+    });
+    it('should handle "cellOpenedYouLose" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, cellOpenedYouLose());
+        expect(state).toEqual({
+            ...initialState,
+            status: GameStatus.Lose,
             isLoading: true,
         });
     });

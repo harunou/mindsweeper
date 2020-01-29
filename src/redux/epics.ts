@@ -6,6 +6,7 @@ import {
     statusUpdate,
     newLevelStarted,
     cellOpenedOk,
+    cellOpenedYouLose,
 } from './actions';
 import { Epic } from 'redux-observable';
 import { EpicMiddlewareDependencies, AppState } from './redux.typings';
@@ -62,7 +63,12 @@ export const sendMapCommand: Epic<
     EpicMiddlewareDependencies
 > = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(statusUpdate, newLevelStarted, cellOpenedOk),
+        ofType(
+            statusUpdate,
+            newLevelStarted,
+            cellOpenedOk,
+            cellOpenedYouLose
+        ),
         tap(() => {
             socket$.next(socketCommand.map());
         }),

@@ -9,9 +9,10 @@ import {
     statusUpdate,
     newLevelStarted,
     cellOpenedOk,
+    cellOpenedYouLose,
 } from './actions';
 import { reducer, on } from 'ts-action';
-import { AppState } from './redux.typings';
+import { AppState, GameStatus } from './redux.typings';
 
 export const initialState: AppState = {
     level: null,
@@ -51,6 +52,11 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
     })),
     on(newLevelStarted, cellOpenedOk, state => ({
         ...state,
+        isLoading: true,
+    })),
+    on(cellOpenedYouLose, state => ({
+        ...state,
+        status: GameStatus.Lose,
         isLoading: true,
     })),
 
