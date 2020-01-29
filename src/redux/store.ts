@@ -12,7 +12,7 @@ import {
     fetchMapEpic,
     levelInputClickEpic,
     boardCellClickEpic,
-    statusUpdateEpic,
+    sendMapCommand,
 } from './epics';
 import {
     GameSocket,
@@ -50,7 +50,7 @@ const createRootEpic = (): Epic<
         fetchMapEpic,
         levelInputClickEpic,
         boardCellClickEpic,
-        statusUpdateEpic
+        sendMapCommand
     );
 
 export default createAppStore;

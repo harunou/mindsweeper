@@ -13,7 +13,12 @@ import {
     mapResponseShortAsGameBoard,
     open11Command,
 } from './websocket.fixtures';
-import { fetchMap, mapUpdated, statusUpdate } from '../redux/actions';
+import {
+    fetchMap,
+    mapUpdated,
+    statusUpdate,
+    newLevelStarted,
+} from '../redux/actions';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { ActionType } from 'ts-action';
 import { GameCell, GameStatus } from '../redux/redux.typings';
@@ -53,10 +58,6 @@ describe('Socket success handler', () => {
         successHandler = handleSuccessMessages(store);
         fetchMapAction = fetchMap();
     });
-    it('should dispatch "fetchMap" command on "new: ok" message', () => {
-        successHandler(newOkResponse);
-        expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
-    });
     it('should send "map" command on "open: ok" message', () => {
         successHandler(openOkResponse);
         expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
@@ -68,12 +69,19 @@ describe('Socket success handler', () => {
         successHandler(openYouLoseResponse);
         expect(store.dispatch).toHaveBeenCalledWith(setStatusAction);
     });
-    it('should send "mapUpdated" action on "map: ..." message', () => {
+    it('should dispatch "mapUpdated({message})" action on "map: ..." message', () => {
         const mapUpdatedAction = mapUpdated({
             board: mapResponseShortAsGameBoard,
         });
         successHandler(mapResponseShort);
         expect(store.dispatch).toHaveBeenCalledWith(mapUpdatedAction);
+    });
+    it('should dispatch "newLevelStarted()" action on "new: OK" message', () => {
+        const newLevelStartedAction = newLevelStarted();
+        successHandler(newOkResponse);
+        expect(store.dispatch).toHaveBeenCalledWith(
+            newLevelStartedAction
+        );
     });
 });
 

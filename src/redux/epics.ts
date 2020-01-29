@@ -4,6 +4,7 @@ import {
     levelInputClick,
     boardCellClick,
     statusUpdate,
+    newLevelStarted,
 } from './actions';
 import { Epic } from 'redux-observable';
 import { EpicMiddlewareDependencies, AppState } from './redux.typings';
@@ -53,14 +54,14 @@ export const boardCellClickEpic: Epic<
         ignoreElements()
     );
 
-export const statusUpdateEpic: Epic<
+export const sendMapCommand: Epic<
     AppActions,
     AppActions,
     AppState,
     EpicMiddlewareDependencies
 > = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(statusUpdate),
+        ofType(statusUpdate, newLevelStarted),
         tap(() => {
             socket$.next(socketCommand.map());
         }),

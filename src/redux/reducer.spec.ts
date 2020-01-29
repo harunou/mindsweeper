@@ -6,6 +6,7 @@ import {
     fetchMap,
     boardCellClick,
     statusUpdate,
+    newLevelStarted,
 } from './actions';
 import { AppState, GameStatus } from './redux.typings';
 import {
@@ -112,6 +113,20 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             status: GameStatus.Lose,
+            isLoading: true,
+        });
+    });
+    it('should handle "newLevelStarted" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, newLevelStarted());
+        expect(state).toEqual({
+            ...initialState,
             isLoading: true,
         });
     });

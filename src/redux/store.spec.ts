@@ -9,6 +9,7 @@ import {
     fetchMap,
     boardCellClick,
     statusUpdate,
+    newLevelStarted,
 } from './actions';
 import { Store } from 'redux';
 import { GameSocket, AppState, GameStatus } from './redux.typings';
@@ -44,6 +45,11 @@ describe('Store', () => {
     });
     it('should send "map" command on "statusUpdate({status: GameStatus})" action', () => {
         store.dispatch(statusUpdate({ status: GameStatus.Lose }));
+        const mapCommand = socketCommand.map();
+        expect(socket$.next).toHaveBeenCalledWith(mapCommand);
+    });
+    it('should send "map" command on "newLevelStarted()" action', () => {
+        store.dispatch(newLevelStarted());
         const mapCommand = socketCommand.map();
         expect(socket$.next).toHaveBeenCalledWith(mapCommand);
     });

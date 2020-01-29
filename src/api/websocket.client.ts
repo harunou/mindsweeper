@@ -12,6 +12,7 @@ import {
     mapUpdated,
     statusUpdate,
     connectionLost,
+    newLevelStarted,
 } from '../redux/actions';
 import { Store } from 'redux';
 
@@ -35,7 +36,9 @@ export const handleSuccessMessages = (
     store: Store<AppState, AppActions>
 ) => (message: string) => {
     switch (true) {
-        case socketResponse.isNewOk(message): // store.dispatch(newLevelStarted())
+        case socketResponse.isNewOk(message):
+            store.dispatch(newLevelStarted());
+            break;
         case socketResponse.isOpenOk(message): // store.dispatch(cellOpened())
             store.dispatch(fetchMap());
             break;
