@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import {
     AppActions,
     setOffline,
-    setLevel,
+    newGame,
     fetchMapSuccess,
 } from './action';
 import { reducer, on } from 'ts-action';
@@ -21,7 +21,7 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
         ...state,
         isOnline: false,
     })),
-    on(setLevel, (state, { payload }) => ({
+    on(newGame, (state, { payload }) => ({
         ...state,
         level: payload.level,
         isLoading: true,

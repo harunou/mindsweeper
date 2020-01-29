@@ -1,4 +1,4 @@
-import { AppActions, fetchMap, setLevel } from './action';
+import { AppActions, fetchMap, newGame } from './action';
 import { Epic } from 'redux-observable';
 import { EpicMiddlewareDependencies, AppState } from './redux.typings';
 import { ofType } from './ts-action.patch';
@@ -19,14 +19,14 @@ export const fetchMapEpic: Epic<
         ignoreElements()
     );
 
-export const setLevelEpic: Epic<
+export const newGameEpic: Epic<
     AppActions,
     AppActions,
     AppState,
     EpicMiddlewareDependencies
 > = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(setLevel),
+        ofType(newGame),
         tap(({ payload }) => {
             socket$.next(socketCommand.new(payload.level));
         }),

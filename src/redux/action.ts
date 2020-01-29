@@ -2,20 +2,20 @@ import { union } from './ts-action.patch';
 import { action, payload } from 'ts-action';
 import { GameLevel, GameBoard } from './redux.typings';
 
-export const setOffline = action('[App] set offline');
-export const setLevel = action(
-    '[App] set level',
+export const setOffline = action('[Game] Set offline');
+export const newGame = action(
+    '[Game] Start new game',
     payload<{ level: GameLevel }>()
 );
-export const fetchMap = action('[App] fetch map');
+export const fetchMap = action('[Game] Fetch map');
 export const fetchMapSuccess = action(
-    '[App] fetch map success',
+    '[Game] Fetch map success',
     payload<{ board: GameBoard }>()
 );
 
 const actions = union({
     setOffline,
-    setLevel,
+    newGame,
     fetchMap,
     fetchMapSuccess,
 });
