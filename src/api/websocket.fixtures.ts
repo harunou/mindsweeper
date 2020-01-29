@@ -1,4 +1,4 @@
-import { GameBoard } from '../redux/redux.typings';
+import { GameBoard, GameCell } from '../redux/redux.typings';
 
 export const newOkResponse = 'new: OK';
 export const openOkResponse = 'open: OK';
@@ -21,3 +21,5 @@ export const mapResponseShortAsGameBoard: GameBoard = [
     ['1', '*', '□', '□'],
     ['0', '1', '□', '□'],
 ];
+export const open11Command = 'open 1 1';
+export const cell11: GameCell = { x: 1, y: 1 };

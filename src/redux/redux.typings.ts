@@ -7,6 +7,8 @@ export interface AppState {
     isLoading: boolean;
 }
 
+export type GameCell = { x: number; y: number };
+
 export type GameLevel = 1 | 2 | 3 | 4;
 
 export type GameSocket = WebSocketSubject<string>;

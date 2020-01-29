@@ -2,6 +2,7 @@ import {
     socketResponse,
     parseMapResponseToGameBoard,
     handleSuccessMessages,
+    socketCommand,
 } from './websocket.client';
 import {
     newOkResponse,
@@ -10,10 +11,12 @@ import {
     mapResponse,
     mapResponseShort,
     mapResponseShortAsGameBoard,
+    open11Command,
 } from './websocket.fixtures';
 import { fetchMap, fetchMapSuccess } from '../redux/action';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { ActionType } from 'ts-action';
+import { GameCell } from '../redux/redux.typings';
 
 describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {
@@ -29,6 +32,14 @@ describe('Websocket responses', () => {
     });
     it('should detect response: map', () => {
         expect(socketResponse.isMap(mapResponse)).toBeTruthy();
+    });
+});
+
+describe('Websocket commands', () => {
+    it('should generate correct "open X Y" command', () => {
+        const cell11: GameCell = { x: 1, y: 1 };
+        const command = socketCommand.open(cell11);
+        expect(command).toEqual(open11Command);
     });
 });
 

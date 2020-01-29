@@ -1,5 +1,10 @@
 import { webSocket } from 'rxjs/webSocket';
-import { GameLevel, GameBoard, AppState } from '../redux/redux.typings';
+import {
+    GameLevel,
+    GameBoard,
+    AppState,
+    GameCell,
+} from '../redux/redux.typings';
 import {
     AppActions,
     setOffline,
@@ -14,7 +19,7 @@ export const createSocket$ = (wsUrl: string) =>
 export const socketCommand = {
     new: (level: GameLevel) => `new ${level}`,
     map: () => `map`,
-    open: (x: number, y: number) => `open ${x} ${y}`,
+    open: (cell: GameCell) => `open ${cell.x} ${cell.y}`,
 };
 
 export const socketResponse = {
