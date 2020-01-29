@@ -4,6 +4,7 @@ import {
     setOffline,
     newGame,
     fetchMapSuccess,
+    fetchMap,
 } from './action';
 import { reducer, on } from 'ts-action';
 import { AppState } from './redux.typings';
@@ -26,6 +27,10 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
         ...state,
         board: [[]],
         level: payload.level,
+        isLoading: true,
+    })),
+    on(fetchMap, state => ({
+        ...state,
         isLoading: true,
     })),
     on(fetchMapSuccess, (state, { payload }) => ({

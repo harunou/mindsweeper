@@ -1,5 +1,10 @@
 import { appReducer } from './reducer';
-import { setOffline, newGame, fetchMapSuccess } from './action';
+import {
+    setOffline,
+    newGame,
+    fetchMapSuccess,
+    fetchMap,
+} from './action';
 import { AppState } from './redux.typings';
 import { mapResponseShortAsGameBoard } from '../api/websocket.fixtures';
 
@@ -33,10 +38,23 @@ describe('Reducer', () => {
             isLoading: true,
         });
     });
+    it('should handle "fetchMap" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, fetchMap());
+        expect(state).toEqual({
+            ...initialState,
+            isLoading: true,
+        });
+    });
     it('should handle "fetchMapSuccess" action', () => {
         const initialState: AppState = {
             board: [[]],
-            level: null,
+            level: 1,
             isLoading: true,
             isOnline: true,
         };
