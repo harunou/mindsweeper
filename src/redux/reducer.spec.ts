@@ -1,13 +1,13 @@
-import { appReducer, parseMapResponseToGameBoard } from './reducer';
+import { appReducer } from './reducer';
 import {
     connectionLost,
     levelInputClick,
     mapUpdated,
-    boardCellClick,
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
     unknownMessageReceived,
+    boardCellRightClick,
 } from './actions';
 import { AppState, GameStatus } from './reducer.typings';
 import {
@@ -15,11 +15,13 @@ import {
     cell11,
     mapResponseShort,
 } from '../api/websocket.fixtures';
+import { parseMapResponseToGameBoard } from './helpers';
 
 describe('Reducer', () => {
     it('should handle "connectionLost" action', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [],
             level: 1,
             status: null,
             isLoading: true,
@@ -35,6 +37,7 @@ describe('Reducer', () => {
     it('should handle "levelInputClick" action', () => {
         const initialState: AppState = {
             board: mapResponseShortAsGameBoard,
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: false,
@@ -47,6 +50,7 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             board: [[]],
+            flags: [],
             level: 2,
             isLoading: true,
         });
@@ -54,6 +58,7 @@ describe('Reducer', () => {
     it('should handle "mapUpdated" action', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: true,
@@ -69,9 +74,10 @@ describe('Reducer', () => {
             isLoading: false,
         });
     });
-    it('should handle "boardCellClick" action', () => {
+    it('should handle "boardCellRightClick" action with cell remove', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: false,
@@ -79,16 +85,51 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            boardCellClick({ cell: cell11 })
+            boardCellRightClick({ cell: cell11 })
         );
         expect(state).toEqual({
             ...initialState,
+            flags: [],
+        });
+    });
+    it('should handle "boardCellRightClick" action with cell add', () => {
+        const initialState: AppState = {
+            board: [[]],
+            flags: [],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(
+            initialState,
+            boardCellRightClick({ cell: cell11 })
+        );
+        expect(state).toEqual({
+            ...initialState,
+            flags: [cell11],
+        });
+    });
+    it('should handle "cellOpenedYouLose" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            flags: [cell11],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, cellOpenedYouLose());
+        expect(state).toEqual({
+            ...initialState,
+            status: GameStatus.Lose,
             isLoading: true,
         });
     });
     it('should handle "newLevelStarted" action', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: false,
@@ -103,6 +144,7 @@ describe('Reducer', () => {
     it('should handle "cellOpenedOk" action', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: false,
@@ -117,6 +159,7 @@ describe('Reducer', () => {
     it('should handle "cellOpenedYouLose" action', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: false,
@@ -132,6 +175,7 @@ describe('Reducer', () => {
     it('should handle "unknownMessageReceived" action', () => {
         const initialState: AppState = {
             board: [[]],
+            flags: [cell11],
             level: 1,
             status: null,
             isLoading: true,

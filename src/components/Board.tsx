@@ -3,16 +3,23 @@ import {
     AppState,
     GameBoard,
     GameCell,
+    GameFlags,
 } from '../redux/reducer.typings';
 import { useSelector, useDispatch } from 'react-redux';
 import CoverCell from './CoverCell';
-import { AppActions, boardCellClick } from '../redux/actions';
+import {
+    AppActions,
+    boardCellClick,
+    boardCellRightClick,
+} from '../redux/actions';
 import BombCell from './BombCell';
 import HintCell from './HintCell';
 import FlagCell from './FlagCell';
+import { isEqualCells } from '../redux/helpers';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
+    const flags: GameFlags = useSelector(selectFlags);
     const dispatch: Dispatch<AppActions> = useDispatch();
 
     const handleCellLeftClick = useCallback(
@@ -20,8 +27,9 @@ const Board: React.FC = (): JSX.Element => {
         [dispatch]
     );
     const handleCellRightClick = useCallback(
-        (cell: GameCell) => () => console.log('RightClick: ', cell),
-        []
+        (cell: GameCell) => () =>
+            dispatch(boardCellRightClick({ cell })),
+        [dispatch]
     );
 
     const boardOfElements: JSX.Element[] = board.map((row, rIndex) => (
@@ -30,7 +38,7 @@ const Board: React.FC = (): JSX.Element => {
                 const eKey = `${rIndex}${eIndex}`;
                 const cell: GameCell = { x: rIndex, y: eIndex };
                 switch (true) {
-                    case isFlag(cell):
+                    case isFlagCell(flags, cell):
                         return (
                             <FlagCell
                                 key={eKey}
@@ -66,10 +74,13 @@ const Board: React.FC = (): JSX.Element => {
 };
 
 const selectBoard = (state: AppState) => state.board;
+const selectFlags = (state: AppState) => state.flags;
 
-const isFlag = (cell: GameCell) => (cell.x + cell.y) % 2 === 0;
+const isFlagCell = (flags: GameFlags, cell: GameCell) =>
+    flags.some(c => isEqualCells(c, cell));
 const isBombCell = (element: string) => '*' === element;
 const isCoverCell = (element: string) => '□' === element;
+
 const hintStringToNumber = (hint: string): number => parseInt(hint);
 
 export default Board;

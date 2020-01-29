@@ -10,6 +10,10 @@ export const boardCellClick = action(
     '[Game] Board cell click',
     payload<{ cell: GameCell }>()
 );
+export const boardCellRightClick = action(
+    '[Game] Board cell right click',
+    payload<{ cell: GameCell }>()
+);
 
 export const connectionLost = action('[WS] Connection lost');
 export const mapUpdated = action(
@@ -26,6 +30,7 @@ export const unknownMessageReceived = action(
 const actions = union({
     levelInputClick,
     boardCellClick,
+    boardCellRightClick,
     connectionLost,
     mapUpdated,
     newLevelStarted,
