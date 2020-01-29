@@ -5,7 +5,7 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import createAppStore from './redux/store';
-import { AppActions } from './redux/action';
+import { AppActions } from './redux/actions';
 import {
     createSocket$,
     handleSuccessMessages,

@@ -13,7 +13,7 @@ import {
     mapResponseShortAsGameBoard,
     open11Command,
 } from './websocket.fixtures';
-import { fetchMap, mapUpdated, statusUpdate } from '../redux/action';
+import { fetchMap, mapUpdated, statusUpdate } from '../redux/actions';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { ActionType } from 'ts-action';
 import { GameCell, GameStatus } from '../redux/redux.typings';

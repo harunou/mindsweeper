@@ -7,7 +7,7 @@ import {
     fetchMap,
     boardCellClick,
     statusUpdate,
-} from './action';
+} from './actions';
 import { reducer, on } from 'ts-action';
 import { AppState } from './redux.typings';
 

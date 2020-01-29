@@ -6,7 +6,7 @@ import {
     fetchMap,
     boardCellClick,
     statusUpdate,
-} from './action';
+} from './actions';
 import { AppState, GameStatus } from './redux.typings';
 import {
     mapResponseShortAsGameBoard,

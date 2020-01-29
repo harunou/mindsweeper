@@ -1,6 +1,6 @@
 import { PartialObserver } from 'rxjs';
 import { AppState } from './redux/redux.typings';
-import { AppActions } from './redux/action';
+import { AppActions } from './redux/actions';
 import { Store } from 'redux';
 
 type SpyObj<T> = T &

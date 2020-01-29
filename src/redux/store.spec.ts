@@ -9,7 +9,7 @@ import {
     fetchMap,
     boardCellClick,
     statusUpdate,
-} from './action';
+} from './actions';
 import { Store } from 'redux';
 import { GameSocket, AppState, GameStatus } from './redux.typings';
 import { cell11 } from '../api/websocket.fixtures';

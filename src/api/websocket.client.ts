@@ -12,7 +12,7 @@ import {
     mapUpdated,
     statusUpdate,
     connectionLost,
-} from '../redux/action';
+} from '../redux/actions';
 import { Store } from 'redux';
 
 export const createSocket$ = (wsUrl: string) =>

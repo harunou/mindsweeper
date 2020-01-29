@@ -1,7 +1,7 @@
 import { Store, createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { appReducer } from './reducer';
-import { AppActions } from './action';
+import { AppActions } from './actions';
 import {
     combineEpics,
     createEpicMiddleware,

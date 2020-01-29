@@ -4,7 +4,7 @@ import {
     levelInputClick,
     boardCellClick,
     statusUpdate,
-} from './action';
+} from './actions';
 import { Epic } from 'redux-observable';
 import { EpicMiddlewareDependencies, AppState } from './redux.typings';
 import { ofType } from './ts-action.patch';
