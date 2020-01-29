@@ -1,6 +1,4 @@
-import { Reducer } from 'redux';
 import {
-    AppActions,
     connectionLost,
     levelInputClick,
     mapUpdated,
@@ -12,7 +10,7 @@ import {
     cellOpenedYouLose,
 } from './actions';
 import { reducer, on } from 'ts-action';
-import { AppState, GameStatus } from './redux.typings';
+import { AppState, GameStatus, AppReducer } from './reducer.typings';
 
 export const initialState: AppState = {
     level: null,
@@ -22,7 +20,7 @@ export const initialState: AppState = {
     isLoading: false,
 };
 
-export const appReducer: Reducer<AppState, AppActions> = reducer(
+export const appReducer: AppReducer = reducer(
     initialState,
     on(levelInputClick, (state, { payload }) => ({
         ...state,

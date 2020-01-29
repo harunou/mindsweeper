@@ -5,7 +5,7 @@ import {
     GameBoard,
     GameCell,
     GameStatus,
-} from './redux.typings';
+} from './reducer.typings';
 
 export const levelInputClick = action(
     '[Game] Level input click',

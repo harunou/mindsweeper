@@ -3,22 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
-import { Store } from 'redux';
 import createAppStore from './redux/store';
-import { AppActions } from './redux/actions';
 import {
     createSocket$,
     handleSuccessMessages,
     handleErrorMessages,
     handleCompleteMessages,
 } from './api/websocket.client';
-import { AppState } from './redux/redux.typings';
+import { AppStore } from './redux/store.typings';
 
 const WS_API_URL = 'ws://echo.websocket.org';
 
 const socket$ = createSocket$(WS_API_URL);
 
-const store: Store<AppState, AppActions> = createAppStore(socket$);
+const store: AppStore = createAppStore(socket$);
 
 socket$.subscribe(
     handleSuccessMessages(store),

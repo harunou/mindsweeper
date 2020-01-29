@@ -2,20 +2,16 @@ import { webSocket } from 'rxjs/webSocket';
 import {
     GameLevel,
     GameBoard,
-    AppState,
     GameCell,
-    GameStatus,
-} from '../redux/redux.typings';
+} from '../redux/reducer.typings';
 import {
-    AppActions,
     mapUpdated,
-    statusUpdate,
     connectionLost,
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
 } from '../redux/actions';
-import { Store } from 'redux';
+import { AppStore } from '../redux/store.typings';
 
 export const createSocket$ = (wsUrl: string) =>
     webSocket<string>(wsUrl);
@@ -33,9 +29,9 @@ export const socketResponse = {
     isMap: (message: string) => /^map:/.test(message),
 };
 
-export const handleSuccessMessages = (
-    store: Store<AppState, AppActions>
-) => (message: string) => {
+export const handleSuccessMessages = (store: AppStore) => (
+    message: string
+) => {
     switch (true) {
         case socketResponse.isNewOk(message):
             store.dispatch(newLevelStarted());
@@ -56,15 +52,13 @@ export const handleSuccessMessages = (
     }
 };
 
-export const handleErrorMessages = (
-    store: Store<AppState, AppActions>
-) => (error: Error) => {
+export const handleErrorMessages = (store: AppStore) => (
+    error: Error
+) => {
     store.dispatch(connectionLost());
 };
 
-export const handleCompleteMessages = (
-    store: Store<AppState, AppActions>
-) => () => {
+export const handleCompleteMessages = (store: AppStore) => () => {
     store.dispatch(connectionLost());
 };
 

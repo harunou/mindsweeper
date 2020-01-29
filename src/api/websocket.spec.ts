@@ -20,7 +20,7 @@ import {
     cellOpenedYouLose,
 } from '../redux/actions';
 import { SpyStore, createStoreSpy } from '../testing-tools';
-import { GameCell } from '../redux/redux.typings';
+import { GameCell } from '../redux/reducer.typings';
 
 describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {

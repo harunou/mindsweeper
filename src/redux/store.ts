@@ -1,34 +1,20 @@
-import { Store, createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { appReducer } from './reducer';
-import { AppActions } from './actions';
-import {
-    combineEpics,
-    createEpicMiddleware,
-    Epic,
-    EpicMiddleware,
-} from 'redux-observable';
+import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import {
     fetchMapEpic,
     levelInputClickEpic,
     boardCellClickEpic,
     sendMapCommand,
 } from './epics';
-import {
-    GameSocket,
-    EpicMiddlewareDependencies,
-    AppState,
-} from './redux.typings';
+import { AppStore, AppEpicMiddleware, AppEpic } from './store.typings';
+import { AppSocket } from '../api/websocket.typings';
 
-const createAppStore = (
-    socket$: GameSocket
-): Store<AppState, AppActions> => {
-    const epicMiddleware: EpicMiddleware<
-        AppActions,
-        AppActions,
-        AppState,
-        EpicMiddlewareDependencies
-    > = createEpicMiddleware({ dependencies: { socket$ } });
+const createAppStore = (socket$: AppSocket): AppStore => {
+    const epicMiddleware: AppEpicMiddleware = createEpicMiddleware({
+        dependencies: { socket$ },
+    });
 
     const store = createStore(
         appReducer,
@@ -40,12 +26,7 @@ const createAppStore = (
     return store;
 };
 
-const createRootEpic = (): Epic<
-    AppActions,
-    AppActions,
-    AppState,
-    EpicMiddlewareDependencies
-> =>
+const createRootEpic = (): AppEpic =>
     combineEpics(
         fetchMapEpic,
         levelInputClickEpic,

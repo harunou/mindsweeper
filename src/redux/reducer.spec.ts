@@ -10,7 +10,7 @@ import {
     cellOpenedOk,
     cellOpenedYouLose,
 } from './actions';
-import { AppState, GameStatus } from './redux.typings';
+import { AppState, GameStatus } from './reducer.typings';
 import {
     mapResponseShortAsGameBoard,
     cell11,

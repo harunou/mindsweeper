@@ -4,19 +4,19 @@ import { createObserverSpy } from '../testing-tools';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { socketCommand } from '../api/websocket.client';
 import {
-    AppActions,
     levelInputClick,
     fetchMap,
     boardCellClick,
     statusUpdate,
     newLevelStarted,
 } from './actions';
-import { Store } from 'redux';
-import { GameSocket, AppState, GameStatus } from './redux.typings';
+import { GameStatus } from './reducer.typings';
 import { cell11 } from '../api/websocket.fixtures';
+import { AppSocket } from '../api/websocket.typings';
+import { AppStore } from './store.typings';
 
-let socket$: GameSocket;
-let store: Store<AppState, AppActions>;
+let socket$: AppSocket;
+let store: AppStore;
 
 describe('Store', () => {
     beforeEach(() => {

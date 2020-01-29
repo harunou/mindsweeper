@@ -1,5 +1,4 @@
 import {
-    AppActions,
     fetchMap,
     levelInputClick,
     boardCellClick,
@@ -8,18 +7,12 @@ import {
     cellOpenedOk,
     cellOpenedYouLose,
 } from './actions';
-import { Epic } from 'redux-observable';
-import { EpicMiddlewareDependencies, AppState } from './redux.typings';
 import { ofType } from './ts-action.patch';
 import { tap, ignoreElements } from 'rxjs/operators';
 import { socketCommand } from '../api/websocket.client';
+import { AppEpic } from './store.typings';
 
-export const fetchMapEpic: Epic<
-    AppActions,
-    AppActions,
-    AppState,
-    EpicMiddlewareDependencies
-> = (action$, _, { socket$ }) =>
+export const fetchMapEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(fetchMap),
         tap(() => {
@@ -28,12 +21,7 @@ export const fetchMapEpic: Epic<
         ignoreElements()
     );
 
-export const levelInputClickEpic: Epic<
-    AppActions,
-    AppActions,
-    AppState,
-    EpicMiddlewareDependencies
-> = (action$, _, { socket$ }) =>
+export const levelInputClickEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(levelInputClick),
         tap(({ payload }) => {
@@ -42,12 +30,7 @@ export const levelInputClickEpic: Epic<
         ignoreElements()
     );
 
-export const boardCellClickEpic: Epic<
-    AppActions,
-    AppActions,
-    AppState,
-    EpicMiddlewareDependencies
-> = (action$, _, { socket$ }) =>
+export const boardCellClickEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(boardCellClick),
         tap(({ payload }) => {
@@ -56,12 +39,7 @@ export const boardCellClickEpic: Epic<
         ignoreElements()
     );
 
-export const sendMapCommand: Epic<
-    AppActions,
-    AppActions,
-    AppState,
-    EpicMiddlewareDependencies
-> = (action$, _, { socket$ }) =>
+export const sendMapCommand: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(
             statusUpdate,

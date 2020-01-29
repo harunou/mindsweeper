@@ -1,7 +1,5 @@
 import { PartialObserver } from 'rxjs';
-import { AppState } from './redux/redux.typings';
-import { AppActions } from './redux/actions';
-import { Store } from 'redux';
+import { AppStore } from './redux/store.typings';
 
 type SpyObj<T> = T &
     {
@@ -31,7 +29,7 @@ export const createObserverSpy = <T>(
     return observerSpy as SpyObserver<T>;
 };
 
-export type SpyStore = SpyObj<Store<AppState, AppActions>>;
+export type SpyStore = SpyObj<AppStore>;
 
 export const createStoreSpy = (): SpyStore => {
     const storeSpy = {

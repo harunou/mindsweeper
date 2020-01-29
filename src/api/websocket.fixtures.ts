@@ -1,4 +1,4 @@
-import { GameBoard, GameCell } from '../redux/redux.typings';
+import { GameBoard, GameCell } from '../redux/reducer.typings';
 
 export const newOkResponse = 'new: OK';
 export const openOkResponse = 'open: OK';
