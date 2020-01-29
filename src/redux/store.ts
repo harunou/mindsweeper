@@ -2,11 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { appReducer } from './reducer';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
-import {
-    levelInputClickEpic,
-    boardCellClickEpic,
-    sendMapCommand,
-} from './epics';
+import { openCommand, newCommand, mapCommand } from './epics';
 import { AppStore, AppEpicMiddleware, AppEpic } from './store.typings';
 import { AppSocket } from '../api/websocket.typings';
 
@@ -26,10 +22,6 @@ const createAppStore = (socket$: AppSocket): AppStore => {
 };
 
 const createRootEpic = (): AppEpic =>
-    combineEpics(
-        levelInputClickEpic,
-        boardCellClickEpic,
-        sendMapCommand
-    );
+    combineEpics(openCommand, mapCommand, newCommand);
 
 export default createAppStore;

@@ -10,7 +10,7 @@ import { tap, ignoreElements } from 'rxjs/operators';
 import { socketCommand } from '../api/websocket.client';
 import { AppEpic } from './store.typings';
 
-export const levelInputClickEpic: AppEpic = (action$, _, { socket$ }) =>
+export const newCommand: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(levelInputClick),
         tap(({ payload }) => {
@@ -19,7 +19,7 @@ export const levelInputClickEpic: AppEpic = (action$, _, { socket$ }) =>
         ignoreElements()
     );
 
-export const boardCellClickEpic: AppEpic = (action$, _, { socket$ }) =>
+export const openCommand: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(boardCellClick),
         tap(({ payload }) => {
@@ -28,7 +28,7 @@ export const boardCellClickEpic: AppEpic = (action$, _, { socket$ }) =>
         ignoreElements()
     );
 
-export const sendMapCommand: AppEpic = (action$, _, { socket$ }) =>
+export const mapCommand: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(newLevelStarted, cellOpenedOk, cellOpenedYouLose),
         tap(() => {
