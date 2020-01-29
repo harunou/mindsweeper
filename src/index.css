@@ -1,3 +1,16 @@
 .ms-level-input:not(:last-child) {
     margin-right: 10px;
 }
+
+.ms-board-row {
+    display: flex;
+}
+
+.ms-board-cell {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+}
+.ms-board-cell.mod-cover {
+    background-color: gray;
+}
