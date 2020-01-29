@@ -45,12 +45,15 @@ export const handleSuccessMessages = (store: AppStore) => (
                 })
             );
             break;
+        default:
+            console.log('Unknown ws message: ', message);
     }
 };
 
 export const handleErrorMessages = (store: AppStore) => (
     error: Error
 ) => {
+    console.log('Ws error: ', Error);
     store.dispatch(connectionLost());
 };
 
