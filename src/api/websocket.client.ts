@@ -44,6 +44,7 @@ export const handleSuccessMessages = (store: AppStore) => (
             store.dispatch(cellOpenedYouLose());
             break;
         case socketResponse.isMap(message):
+            console.log('Map ws message: \n', message);
             store.dispatch(
                 mapUpdated({
                     message,
