@@ -19,7 +19,7 @@ export const boardCellClick = action(
 export const connectionLost = action('[WS] Connection lost');
 export const mapUpdated = action(
     '[WS] Map updated',
-    payload<{ board: GameBoard }>()
+    payload<{ message: string }>()
 );
 export const newLevelStarted = action('[WS] New level started');
 export const cellOpenedOk = action('[WS] Cell opened ok');

@@ -1,4 +1,4 @@
-import { appReducer } from './reducer';
+import { appReducer, parseMapResponseToGameBoard } from './reducer';
 import {
     connectionLost,
     levelInputClick,
@@ -14,6 +14,7 @@ import { AppState, GameStatus } from './reducer.typings';
 import {
     mapResponseShortAsGameBoard,
     cell11,
+    mapResponseShort,
 } from '../api/websocket.fixtures';
 
 describe('Reducer', () => {
@@ -75,7 +76,7 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            mapUpdated({ board: mapResponseShortAsGameBoard })
+            mapUpdated({ message: mapResponseShort })
         );
         expect(state).toEqual({
             ...initialState,
@@ -160,5 +161,13 @@ describe('Reducer', () => {
             status: GameStatus.Lose,
             isLoading: true,
         });
+    });
+});
+
+describe('map response parser', () => {
+    it('should parse array response to 2D array of chars', () => {
+        expect(parseMapResponseToGameBoard(mapResponseShort)).toEqual(
+            mapResponseShortAsGameBoard
+        );
     });
 });

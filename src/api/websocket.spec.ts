@@ -1,6 +1,5 @@
 import {
     socketResponse,
-    parseMapResponseToGameBoard,
     handleSuccessMessages,
     socketCommand,
 } from './websocket.client';
@@ -56,11 +55,10 @@ describe('Socket success handler', () => {
         successHandler = handleSuccessMessages(store);
     });
     it('should dispatch "mapUpdated({message})" action on "map: ..." message', () => {
-        const mapUpdatedAction = mapUpdated({
-            board: mapResponseShortAsGameBoard,
-        });
         successHandler(mapResponseShort);
-        expect(store.dispatch).toHaveBeenCalledWith(mapUpdatedAction);
+        expect(store.dispatch).toHaveBeenCalledWith(
+            mapUpdated({ message: mapResponseShort })
+        );
     });
     it('should dispatch "newLevelStarted()" action on "new: OK" message', () => {
         const newLevelStartedAction = newLevelStarted();
@@ -77,14 +75,6 @@ describe('Socket success handler', () => {
         successHandler(openYouLoseResponse);
         expect(store.dispatch).toHaveBeenCalledWith(
             cellOpenedYouLose()
-        );
-    });
-});
-
-describe('map response parser', () => {
-    it('should parse array response to 2D array of chars', () => {
-        expect(parseMapResponseToGameBoard(mapResponseShort)).toEqual(
-            mapResponseShortAsGameBoard
         );
     });
 });

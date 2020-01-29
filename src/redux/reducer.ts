@@ -10,7 +10,12 @@ import {
     cellOpenedYouLose,
 } from './actions';
 import { reducer, on } from 'ts-action';
-import { AppState, GameStatus, AppReducer } from './reducer.typings';
+import {
+    AppState,
+    GameStatus,
+    AppReducer,
+    GameBoard,
+} from './reducer.typings';
 
 export const initialState: AppState = {
     level: null,
@@ -45,7 +50,7 @@ export const appReducer: AppReducer = reducer(
     })),
     on(mapUpdated, (state, { payload }) => ({
         ...state,
-        board: payload.board,
+        board: parseMapResponseToGameBoard(payload.message),
         isLoading: false,
     })),
     on(newLevelStarted, cellOpenedOk, state => ({
@@ -64,3 +69,14 @@ export const appReducer: AppReducer = reducer(
         isLoading: true,
     }))
 );
+
+export const parseMapResponseToGameBoard = (
+    message: string
+): GameBoard => {
+    return message
+        .split(/\r?\n/)
+        .slice(1)
+        .map(row => {
+            return row.split('');
+        });
+};

@@ -1,9 +1,5 @@
 import { webSocket } from 'rxjs/webSocket';
-import {
-    GameLevel,
-    GameBoard,
-    GameCell,
-} from '../redux/reducer.typings';
+import { GameLevel, GameCell } from '../redux/reducer.typings';
 import {
     mapUpdated,
     connectionLost,
@@ -45,7 +41,7 @@ export const handleSuccessMessages = (store: AppStore) => (
         case socketResponse.isMap(message):
             store.dispatch(
                 mapUpdated({
-                    board: parseMapResponseToGameBoard(message),
+                    message,
                 })
             );
             break;
@@ -60,15 +56,4 @@ export const handleErrorMessages = (store: AppStore) => (
 
 export const handleCompleteMessages = (store: AppStore) => () => {
     store.dispatch(connectionLost());
-};
-
-export const parseMapResponseToGameBoard = (
-    message: string
-): GameBoard => {
-    return message
-        .split(/\r?\n/)
-        .slice(1)
-        .map(row => {
-            return row.split('');
-        });
 };
