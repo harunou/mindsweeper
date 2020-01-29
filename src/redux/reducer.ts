@@ -31,11 +31,10 @@ export const appReducer: AppReducer = reducer(
         level: payload.level,
         isLoading: true,
     })),
-    on(boardCellClick, state => ({
+    on(newLevelStarted, cellOpenedOk, boardCellClick, state => ({
         ...state,
         isLoading: true,
     })),
-
     on(connectionLost, state => ({
         ...state,
         isOnline: false,
@@ -45,10 +44,6 @@ export const appReducer: AppReducer = reducer(
         ...state,
         board: parseMapResponseToGameBoard(payload.message),
         isLoading: false,
-    })),
-    on(newLevelStarted, cellOpenedOk, state => ({
-        ...state,
-        isLoading: true,
     })),
     on(cellOpenedYouLose, state => ({
         ...state,

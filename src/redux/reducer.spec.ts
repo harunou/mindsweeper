@@ -34,19 +34,19 @@ describe('Reducer', () => {
     it('should handle "levelInputClick" action', () => {
         const initialState: AppState = {
             board: mapResponseShortAsGameBoard,
-            level: null,
+            level: 1,
             status: null,
             isLoading: false,
             isOnline: true,
         };
         const state = appReducer(
             initialState,
-            levelInputClick({ level: 1 })
+            levelInputClick({ level: 2 })
         );
         expect(state).toEqual({
             ...initialState,
             board: [[]],
-            level: 1,
+            level: 2,
             isLoading: true,
         });
     });
