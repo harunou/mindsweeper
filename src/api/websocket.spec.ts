@@ -18,6 +18,7 @@ import {
     mapUpdated,
     statusUpdate,
     newLevelStarted,
+    cellOpenedOk,
 } from '../redux/actions';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { ActionType } from 'ts-action';
@@ -50,17 +51,11 @@ describe('Websocket commands', () => {
 
 let successHandler: (message: string) => void;
 let store: SpyStore;
-let fetchMapAction: ActionType<typeof fetchMap>;
 
 describe('Socket success handler', () => {
     beforeEach(() => {
         store = createStoreSpy();
         successHandler = handleSuccessMessages(store);
-        fetchMapAction = fetchMap();
-    });
-    it('should send "map" command on "open: ok" message', () => {
-        successHandler(openOkResponse);
-        expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
     });
     it('should dispatch "statusUpdate({status: GameStatus.Lose})" action on "open: You lose" message', () => {
         const setStatusAction = statusUpdate({
@@ -82,6 +77,10 @@ describe('Socket success handler', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
             newLevelStartedAction
         );
+    });
+    it('should dispatch "cellOpenedOk()" action on "open: OK" message', () => {
+        successHandler(openOkResponse);
+        expect(store.dispatch).toHaveBeenCalledWith(cellOpenedOk());
     });
 });
 

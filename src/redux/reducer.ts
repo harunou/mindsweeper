@@ -8,6 +8,7 @@ import {
     boardCellClick,
     statusUpdate,
     newLevelStarted,
+    cellOpenedOk,
 } from './actions';
 import { reducer, on } from 'ts-action';
 import { AppState } from './redux.typings';
@@ -48,7 +49,7 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
         board: payload.board,
         isLoading: false,
     })),
-    on(newLevelStarted, state => ({
+    on(newLevelStarted, cellOpenedOk, state => ({
         ...state,
         isLoading: true,
     })),

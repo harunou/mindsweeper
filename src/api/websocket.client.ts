@@ -8,11 +8,11 @@ import {
 } from '../redux/redux.typings';
 import {
     AppActions,
-    fetchMap,
     mapUpdated,
     statusUpdate,
     connectionLost,
     newLevelStarted,
+    cellOpenedOk,
 } from '../redux/actions';
 import { Store } from 'redux';
 
@@ -39,8 +39,8 @@ export const handleSuccessMessages = (
         case socketResponse.isNewOk(message):
             store.dispatch(newLevelStarted());
             break;
-        case socketResponse.isOpenOk(message): // store.dispatch(cellOpened())
-            store.dispatch(fetchMap());
+        case socketResponse.isOpenOk(message):
+            store.dispatch(cellOpenedOk());
             break;
         case socketResponse.isOpenYouLose(message): // store.dispatch(playerLost())
             store.dispatch(statusUpdate({ status: GameStatus.Lose }));

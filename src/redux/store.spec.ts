@@ -53,4 +53,8 @@ describe('Store', () => {
         const mapCommand = socketCommand.map();
         expect(socket$.next).toHaveBeenCalledWith(mapCommand);
     });
+    it('should send "map" command on "cellOpened()" action', () => {
+        store.dispatch(newLevelStarted());
+        expect(socket$.next).toHaveBeenCalledWith(socketCommand.map());
+    });
 });

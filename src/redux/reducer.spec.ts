@@ -7,6 +7,7 @@ import {
     boardCellClick,
     statusUpdate,
     newLevelStarted,
+    cellOpenedOk,
 } from './actions';
 import { AppState, GameStatus } from './redux.typings';
 import {
@@ -125,6 +126,20 @@ describe('Reducer', () => {
             isOnline: true,
         };
         const state = appReducer(initialState, newLevelStarted());
+        expect(state).toEqual({
+            ...initialState,
+            isLoading: true,
+        });
+    });
+    it('should handle "cellOpenedOk" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, cellOpenedOk());
         expect(state).toEqual({
             ...initialState,
             isLoading: true,
