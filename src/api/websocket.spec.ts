@@ -13,7 +13,7 @@ import {
     mapResponseShortAsGameBoard,
     open11Command,
 } from './websocket.fixtures';
-import { fetchMap, fetchMapSuccess, setStatus } from '../redux/action';
+import { fetchMap, mapUpdated, statusUpdate } from '../redux/action';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { ActionType } from 'ts-action';
 import { GameCell, GameStatus } from '../redux/redux.typings';
@@ -46,16 +46,12 @@ describe('Websocket commands', () => {
 let successHandler: (message: string) => void;
 let store: SpyStore;
 let fetchMapAction: ActionType<typeof fetchMap>;
-let fetchMapSuccessAction: ActionType<typeof fetchMapSuccess>;
 
 describe('Socket success handler', () => {
     beforeEach(() => {
         store = createStoreSpy();
         successHandler = handleSuccessMessages(store);
         fetchMapAction = fetchMap();
-        fetchMapSuccessAction = fetchMapSuccess({
-            board: mapResponseShortAsGameBoard,
-        });
     });
     it('should dispatch "fetchMap" command on "new: ok" message', () => {
         successHandler(newOkResponse);
@@ -65,16 +61,19 @@ describe('Socket success handler', () => {
         successHandler(openOkResponse);
         expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
     });
-    it('should dispatch "setStatus({status: GameStatus.Lose})" action on "open: You lose" message', () => {
-        const setStatusAction = setStatus({ status: GameStatus.Lose });
+    it('should dispatch "statusUpdate({status: GameStatus.Lose})" action on "open: You lose" message', () => {
+        const setStatusAction = statusUpdate({
+            status: GameStatus.Lose,
+        });
         successHandler(openYouLoseResponse);
         expect(store.dispatch).toHaveBeenCalledWith(setStatusAction);
     });
-    it('should send "fetchMapSuccess" command on "map: ..." message', () => {
+    it('should send "mapUpdated" action on "map: ..." message', () => {
+        const mapUpdatedAction = mapUpdated({
+            board: mapResponseShortAsGameBoard,
+        });
         successHandler(mapResponseShort);
-        expect(store.dispatch).toHaveBeenCalledWith(
-            fetchMapSuccessAction
-        );
+        expect(store.dispatch).toHaveBeenCalledWith(mapUpdatedAction);
     });
 });
 

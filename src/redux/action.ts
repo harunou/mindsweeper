@@ -7,32 +7,32 @@ import {
     GameStatus,
 } from './redux.typings';
 
-export const setOffline = action('[Game] Set offline');
-export const newGame = action(
-    '[Game] Start new game',
+export const connectionLost = action('[WS] Connection lost');
+export const levelInputClick = action(
+    '[Game] Level input click',
     payload<{ level: GameLevel }>()
 );
 export const fetchMap = action('[Game] Fetch map');
-export const fetchMapSuccess = action(
-    '[Game] Fetch map success',
+export const mapUpdated = action(
+    '[WS] Map updated',
     payload<{ board: GameBoard }>()
 );
-export const openCell = action(
-    '[Game] Open cell',
+export const boardCellClick = action(
+    '[Game] Board cell click',
     payload<{ cell: GameCell }>()
 );
-export const setStatus = action(
-    '[Game] Set status',
+export const statusUpdate = action(
+    '[WS] Status update',
     payload<{ status: GameStatus }>()
 );
 
 const actions = union({
-    setOffline,
-    newGame,
+    connectionLost,
+    levelInputClick,
     fetchMap,
-    fetchMapSuccess,
-    openCell,
-    setStatus,
+    mapUpdated,
+    boardCellClick,
+    statusUpdate,
 });
 
 export type AppActions = typeof actions;

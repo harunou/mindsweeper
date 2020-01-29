@@ -1,12 +1,12 @@
 import { Reducer } from 'redux';
 import {
     AppActions,
-    setOffline,
-    newGame,
-    fetchMapSuccess,
+    connectionLost,
+    levelInputClick,
+    mapUpdated,
     fetchMap,
-    openCell,
-    setStatus,
+    boardCellClick,
+    statusUpdate,
 } from './action';
 import { reducer, on } from 'ts-action';
 import { AppState } from './redux.typings';
@@ -21,12 +21,12 @@ export const initialState: AppState = {
 
 export const appReducer: Reducer<AppState, AppActions> = reducer(
     initialState,
-    on(setOffline, state => ({
+    on(connectionLost, state => ({
         ...state,
         isOnline: false,
         isLoading: false,
     })),
-    on(newGame, (state, { payload }) => ({
+    on(levelInputClick, (state, { payload }) => ({
         ...state,
         board: [[]],
         level: payload.level,
@@ -36,16 +36,16 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
         ...state,
         isLoading: true,
     })),
-    on(fetchMapSuccess, (state, { payload }) => ({
+    on(mapUpdated, (state, { payload }) => ({
         ...state,
         board: payload.board,
         isLoading: false,
     })),
-    on(openCell, state => ({
+    on(boardCellClick, state => ({
         ...state,
         isLoading: true,
     })),
-    on(setStatus, (state, { payload }) => ({
+    on(statusUpdate, (state, { payload }) => ({
         ...state,
         status: payload.status,
         isLoading: true,

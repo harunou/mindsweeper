@@ -10,9 +10,9 @@ import {
 } from 'redux-observable';
 import {
     fetchMapEpic,
-    newGameEpic,
-    openCellEpic,
-    setStatusEpic,
+    levelInputClickEpic,
+    boardCellClickEpic,
+    statusUpdateEpic,
 } from './epics';
 import {
     GameSocket,
@@ -48,9 +48,9 @@ const createRootEpic = (): Epic<
 > =>
     combineEpics(
         fetchMapEpic,
-        newGameEpic,
-        openCellEpic,
-        setStatusEpic
+        levelInputClickEpic,
+        boardCellClickEpic,
+        statusUpdateEpic
     );
 
 export default createAppStore;

@@ -1,11 +1,11 @@
 import { appReducer } from './reducer';
 import {
-    setOffline,
-    newGame,
-    fetchMapSuccess,
+    connectionLost,
+    levelInputClick,
+    mapUpdated,
     fetchMap,
-    openCell,
-    setStatus,
+    boardCellClick,
+    statusUpdate,
 } from './action';
 import { AppState, GameStatus } from './redux.typings';
 import {
@@ -14,7 +14,7 @@ import {
 } from '../api/websocket.fixtures';
 
 describe('Reducer', () => {
-    it('should handle "setOffline" action', () => {
+    it('should handle "connectionLost" action', () => {
         const initialState: AppState = {
             board: [[]],
             level: null,
@@ -22,14 +22,14 @@ describe('Reducer', () => {
             isLoading: true,
             isOnline: true,
         };
-        const state = appReducer(initialState, setOffline());
+        const state = appReducer(initialState, connectionLost());
         expect(state).toEqual({
             ...initialState,
             isLoading: false,
             isOnline: false,
         });
     });
-    it('should handle "newGame" action', () => {
+    it('should handle "levelInputClick" action', () => {
         const initialState: AppState = {
             board: mapResponseShortAsGameBoard,
             level: null,
@@ -37,7 +37,10 @@ describe('Reducer', () => {
             isLoading: false,
             isOnline: true,
         };
-        const state = appReducer(initialState, newGame({ level: 1 }));
+        const state = appReducer(
+            initialState,
+            levelInputClick({ level: 1 })
+        );
         expect(state).toEqual({
             ...initialState,
             board: [[]],
@@ -59,7 +62,7 @@ describe('Reducer', () => {
             isLoading: true,
         });
     });
-    it('should handle "fetchMapSuccess" action', () => {
+    it('should handle "mapUpdated" action', () => {
         const initialState: AppState = {
             board: [[]],
             level: 1,
@@ -69,7 +72,7 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            fetchMapSuccess({ board: mapResponseShortAsGameBoard })
+            mapUpdated({ board: mapResponseShortAsGameBoard })
         );
         expect(state).toEqual({
             ...initialState,
@@ -77,7 +80,7 @@ describe('Reducer', () => {
             isLoading: false,
         });
     });
-    it('should handle "openCell" action', () => {
+    it('should handle "boardCellClick" action', () => {
         const initialState: AppState = {
             board: [[]],
             level: 1,
@@ -87,14 +90,14 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            openCell({ cell: cell11 })
+            boardCellClick({ cell: cell11 })
         );
         expect(state).toEqual({
             ...initialState,
             isLoading: true,
         });
     });
-    it('should handle "setStatus" action', () => {
+    it('should handle "statusUpdate" action', () => {
         const initialState: AppState = {
             board: [[]],
             level: 1,
@@ -104,7 +107,7 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            setStatus({ status: GameStatus.Lose })
+            statusUpdate({ status: GameStatus.Lose })
         );
         expect(state).toEqual({
             ...initialState,

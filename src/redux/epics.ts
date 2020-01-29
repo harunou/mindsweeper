@@ -1,9 +1,9 @@
 import {
     AppActions,
     fetchMap,
-    newGame,
-    openCell,
-    setStatus,
+    levelInputClick,
+    boardCellClick,
+    statusUpdate,
 } from './action';
 import { Epic } from 'redux-observable';
 import { EpicMiddlewareDependencies, AppState } from './redux.typings';
@@ -25,42 +25,42 @@ export const fetchMapEpic: Epic<
         ignoreElements()
     );
 
-export const newGameEpic: Epic<
+export const levelInputClickEpic: Epic<
     AppActions,
     AppActions,
     AppState,
     EpicMiddlewareDependencies
 > = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(newGame),
+        ofType(levelInputClick),
         tap(({ payload }) => {
             socket$.next(socketCommand.new(payload.level));
         }),
         ignoreElements()
     );
 
-export const openCellEpic: Epic<
+export const boardCellClickEpic: Epic<
     AppActions,
     AppActions,
     AppState,
     EpicMiddlewareDependencies
 > = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(openCell),
+        ofType(boardCellClick),
         tap(({ payload }) => {
             socket$.next(socketCommand.open(payload.cell));
         }),
         ignoreElements()
     );
 
-export const setStatusEpic: Epic<
+export const statusUpdateEpic: Epic<
     AppActions,
     AppActions,
     AppState,
     EpicMiddlewareDependencies
 > = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(setStatus),
+        ofType(statusUpdate),
         tap(() => {
             socket$.next(socketCommand.map());
         }),
