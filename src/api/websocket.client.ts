@@ -10,8 +10,12 @@ import {
 } from '../redux/actions';
 import { AppStore } from '../redux/store.typings';
 
-export const createSocket$ = (wsUrl: string) =>
-    webSocket<string>(wsUrl);
+export const createSocket$ = (url: string) =>
+    webSocket<string>({
+        url,
+        deserializer: (e: MessageEvent) => e.data,
+        serializer: (v: string) => v,
+    });
 
 export const socketCommand = {
     new: (level: GameLevel) => `new ${level}`,
