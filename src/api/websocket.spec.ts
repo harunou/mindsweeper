@@ -9,7 +9,6 @@ import {
     openYouLoseResponse,
     mapResponse,
     mapResponseShort,
-    mapResponseShortAsGameBoard,
     open11Command,
 } from './websocket.fixtures';
 import {
@@ -17,6 +16,7 @@ import {
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
+    unknownMessageReceived,
 } from '../redux/actions';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { GameCell } from '../redux/reducer.typings';
@@ -72,6 +72,12 @@ describe('Socket success handler', () => {
         successHandler(mapResponseShort);
         expect(store.dispatch).toHaveBeenCalledWith(
             mapUpdated({ message: mapResponseShort })
+        );
+    });
+    it('should dispatch "unknownMessageReceived()" action on "unknown" message', () => {
+        successHandler('unknown message');
+        expect(store.dispatch).toHaveBeenCalledWith(
+            unknownMessageReceived()
         );
     });
 });

@@ -6,6 +6,7 @@ import {
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
+    unknownMessageReceived,
 } from '../redux/actions';
 import { AppStore } from '../redux/store.typings';
 
@@ -47,6 +48,7 @@ export const handleSuccessMessages = (store: AppStore) => (
             break;
         default:
             console.log('Unknown ws message: ', message);
+            store.dispatch(unknownMessageReceived());
     }
 };
 

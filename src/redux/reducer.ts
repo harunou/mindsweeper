@@ -6,6 +6,7 @@ import {
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
+    unknownMessageReceived,
 } from './actions';
 import { reducer, on } from 'ts-action';
 import {
@@ -16,7 +17,7 @@ import {
 } from './reducer.typings';
 
 export const initialState: AppState = {
-    level: null,
+    level: 1,
     board: [[]],
     status: null,
     isOnline: true,
@@ -49,6 +50,10 @@ export const appReducer: AppReducer = reducer(
         ...state,
         status: GameStatus.Lose,
         isLoading: true,
+    })),
+    on(unknownMessageReceived, state => ({
+        ...state,
+        isLoading: false,
     }))
 );
 

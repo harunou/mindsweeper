@@ -7,6 +7,7 @@ import {
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
+    unknownMessageReceived,
 } from './actions';
 import { AppState, GameStatus } from './reducer.typings';
 import {
@@ -19,7 +20,7 @@ describe('Reducer', () => {
     it('should handle "connectionLost" action', () => {
         const initialState: AppState = {
             board: [[]],
-            level: null,
+            level: 1,
             status: null,
             isLoading: true,
             isOnline: true,
@@ -126,6 +127,23 @@ describe('Reducer', () => {
             ...initialState,
             status: GameStatus.Lose,
             isLoading: true,
+        });
+    });
+    it('should handle "unknownMessageReceived" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            status: null,
+            isLoading: true,
+            isOnline: true,
+        };
+        const state = appReducer(
+            initialState,
+            unknownMessageReceived()
+        );
+        expect(state).toEqual({
+            ...initialState,
+            isLoading: false,
         });
     });
 });
