@@ -1,6 +1,11 @@
 import { union } from './ts-action.patch';
 import { action, payload } from 'ts-action';
-import { GameLevel, GameBoard, GameCell } from './redux.typings';
+import {
+    GameLevel,
+    GameBoard,
+    GameCell,
+    GameStatus,
+} from './redux.typings';
 
 export const setOffline = action('[Game] Set offline');
 export const newGame = action(
@@ -16,6 +21,10 @@ export const openCell = action(
     '[Game] Open cell',
     payload<{ cell: GameCell }>()
 );
+export const setStatus = action(
+    '[Game] Set status',
+    payload<{ status: GameStatus }>()
+);
 
 const actions = union({
     setOffline,
@@ -23,6 +32,7 @@ const actions = union({
     fetchMap,
     fetchMapSuccess,
     openCell,
+    setStatus,
 });
 
 export type AppActions = typeof actions;

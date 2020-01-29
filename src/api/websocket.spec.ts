@@ -13,10 +13,10 @@ import {
     mapResponseShortAsGameBoard,
     open11Command,
 } from './websocket.fixtures';
-import { fetchMap, fetchMapSuccess } from '../redux/action';
+import { fetchMap, fetchMapSuccess, setStatus } from '../redux/action';
 import { SpyStore, createStoreSpy } from '../testing-tools';
 import { ActionType } from 'ts-action';
-import { GameCell } from '../redux/redux.typings';
+import { GameCell, GameStatus } from '../redux/redux.typings';
 
 describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {
@@ -65,9 +65,10 @@ describe('Socket success handler', () => {
         successHandler(openOkResponse);
         expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
     });
-    it('should send "map" command on "open: You lose" message', () => {
+    it('should dispatch "setStatus({status: GameStatus.Lose})" action on "open: You lose" message', () => {
+        const setStatusAction = setStatus({ status: GameStatus.Lose });
         successHandler(openYouLoseResponse);
-        expect(store.dispatch).toHaveBeenCalledWith(fetchMapAction);
+        expect(store.dispatch).toHaveBeenCalledWith(setStatusAction);
     });
     it('should send "fetchMapSuccess" command on "map: ..." message', () => {
         successHandler(mapResponseShort);

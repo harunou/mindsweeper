@@ -4,12 +4,14 @@ import {
     GameBoard,
     AppState,
     GameCell,
+    GameStatus,
 } from '../redux/redux.typings';
 import {
     AppActions,
     setOffline,
     fetchMap,
     fetchMapSuccess,
+    setStatus,
 } from '../redux/action';
 import { Store } from 'redux';
 
@@ -35,8 +37,10 @@ export const handleSuccessMessages = (
     switch (true) {
         case socketResponse.isNewOk(message):
         case socketResponse.isOpenOk(message):
-        case socketResponse.isOpenYouLose(message):
             store.dispatch(fetchMap());
+            break;
+        case socketResponse.isOpenYouLose(message):
+            store.dispatch(setStatus({ status: GameStatus.Lose }));
             break;
         case socketResponse.isMap(message):
             store.dispatch(

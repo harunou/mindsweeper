@@ -6,6 +6,7 @@ import {
     fetchMapSuccess,
     fetchMap,
     openCell,
+    setStatus,
 } from './action';
 import { reducer, on } from 'ts-action';
 import { AppState } from './redux.typings';
@@ -13,6 +14,7 @@ import { AppState } from './redux.typings';
 export const initialState: AppState = {
     level: null,
     board: [[]],
+    status: null,
     isOnline: true,
     isLoading: false,
 };
@@ -41,6 +43,11 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
     })),
     on(openCell, state => ({
         ...state,
+        isLoading: true,
+    })),
+    on(setStatus, (state, { payload }) => ({
+        ...state,
+        status: payload.status,
         isLoading: true,
     }))
 );

@@ -5,8 +5,9 @@ import {
     fetchMapSuccess,
     fetchMap,
     openCell,
+    setStatus,
 } from './action';
-import { AppState } from './redux.typings';
+import { AppState, GameStatus } from './redux.typings';
 import {
     mapResponseShortAsGameBoard,
     cell11,
@@ -17,6 +18,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: [[]],
             level: null,
+            status: null,
             isLoading: true,
             isOnline: true,
         };
@@ -31,6 +33,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: mapResponseShortAsGameBoard,
             level: null,
+            status: null,
             isLoading: false,
             isOnline: true,
         };
@@ -46,6 +49,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: [[]],
             level: 1,
+            status: null,
             isLoading: false,
             isOnline: true,
         };
@@ -59,6 +63,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: [[]],
             level: 1,
+            status: null,
             isLoading: true,
             isOnline: true,
         };
@@ -76,6 +81,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: [[]],
             level: 1,
+            status: null,
             isLoading: false,
             isOnline: true,
         };
@@ -85,6 +91,24 @@ describe('Reducer', () => {
         );
         expect(state).toEqual({
             ...initialState,
+            isLoading: true,
+        });
+    });
+    it('should handle "setStatus" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(
+            initialState,
+            setStatus({ status: GameStatus.Lose })
+        );
+        expect(state).toEqual({
+            ...initialState,
+            status: GameStatus.Lose,
             isLoading: true,
         });
     });

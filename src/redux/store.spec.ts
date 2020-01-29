@@ -3,9 +3,15 @@ import { initialState } from './reducer';
 import { createObserverSpy } from '../testing-tools';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { socketCommand } from '../api/websocket.client';
-import { AppActions, newGame, fetchMap, openCell } from './action';
+import {
+    AppActions,
+    newGame,
+    fetchMap,
+    openCell,
+    setStatus,
+} from './action';
 import { Store } from 'redux';
-import { GameSocket, AppState } from './redux.typings';
+import { GameSocket, AppState, GameStatus } from './redux.typings';
 import { cell11 } from '../api/websocket.fixtures';
 
 let socket$: GameSocket;
@@ -35,5 +41,10 @@ describe('Store', () => {
         store.dispatch(openCell({ cell: cell11 }));
         const open11Command = socketCommand.open(cell11);
         expect(socket$.next).toHaveBeenCalledWith(open11Command);
+    });
+    it('should send "map" command on "setStatus({status: GameStatus})" action', () => {
+        store.dispatch(setStatus({ status: GameStatus.Lose }));
+        const mapCommand = socketCommand.map();
+        expect(socket$.next).toHaveBeenCalledWith(mapCommand);
     });
 });

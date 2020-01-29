@@ -3,8 +3,13 @@ import { WebSocketSubject } from 'rxjs/webSocket';
 export interface AppState {
     level: GameLevel | null;
     board: GameBoard;
+    status: GameStatus | null;
     isOnline: boolean;
     isLoading: boolean;
+}
+
+export enum GameStatus {
+    Lose = 'Lose',
 }
 
 export type GameCell = { x: number; y: number };

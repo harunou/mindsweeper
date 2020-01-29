@@ -8,7 +8,12 @@ import {
     Epic,
     EpicMiddleware,
 } from 'redux-observable';
-import { fetchMapEpic, newGameEpic, openCellEpic } from './epics';
+import {
+    fetchMapEpic,
+    newGameEpic,
+    openCellEpic,
+    setStatusEpic,
+} from './epics';
 import {
     GameSocket,
     EpicMiddlewareDependencies,
@@ -40,6 +45,12 @@ const createRootEpic = (): Epic<
     AppActions,
     AppState,
     EpicMiddlewareDependencies
-> => combineEpics(fetchMapEpic, newGameEpic, openCellEpic);
+> =>
+    combineEpics(
+        fetchMapEpic,
+        newGameEpic,
+        openCellEpic,
+        setStatusEpic
+    );
 
 export default createAppStore;
