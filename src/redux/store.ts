@@ -3,7 +3,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { appReducer } from './reducer';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import {
-    fetchMapEpic,
     levelInputClickEpic,
     boardCellClickEpic,
     sendMapCommand,
@@ -28,7 +27,6 @@ const createAppStore = (socket$: AppSocket): AppStore => {
 
 const createRootEpic = (): AppEpic =>
     combineEpics(
-        fetchMapEpic,
         levelInputClickEpic,
         boardCellClickEpic,
         sendMapCommand

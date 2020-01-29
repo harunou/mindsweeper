@@ -2,9 +2,7 @@ import {
     connectionLost,
     levelInputClick,
     mapUpdated,
-    fetchMap,
     boardCellClick,
-    statusUpdate,
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
@@ -38,11 +36,6 @@ export const appReducer: AppReducer = reducer(
         isLoading: true,
     })),
 
-    on(fetchMap, state => ({
-        ...state,
-        isLoading: true,
-    })),
-
     on(connectionLost, state => ({
         ...state,
         isOnline: false,
@@ -60,12 +53,6 @@ export const appReducer: AppReducer = reducer(
     on(cellOpenedYouLose, state => ({
         ...state,
         status: GameStatus.Lose,
-        isLoading: true,
-    })),
-
-    on(statusUpdate, (state, { payload }) => ({
-        ...state,
-        status: payload.status,
         isLoading: true,
     }))
 );

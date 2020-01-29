@@ -54,18 +54,9 @@ describe('Socket success handler', () => {
         store = createStoreSpy();
         successHandler = handleSuccessMessages(store);
     });
-    it('should dispatch "mapUpdated({message})" action on "map: ..." message', () => {
-        successHandler(mapResponseShort);
-        expect(store.dispatch).toHaveBeenCalledWith(
-            mapUpdated({ message: mapResponseShort })
-        );
-    });
     it('should dispatch "newLevelStarted()" action on "new: OK" message', () => {
-        const newLevelStartedAction = newLevelStarted();
         successHandler(newOkResponse);
-        expect(store.dispatch).toHaveBeenCalledWith(
-            newLevelStartedAction
-        );
+        expect(store.dispatch).toHaveBeenCalledWith(newLevelStarted());
     });
     it('should dispatch "cellOpenedOk()" action on "open: OK" message', () => {
         successHandler(openOkResponse);
@@ -75,6 +66,12 @@ describe('Socket success handler', () => {
         successHandler(openYouLoseResponse);
         expect(store.dispatch).toHaveBeenCalledWith(
             cellOpenedYouLose()
+        );
+    });
+    it('should dispatch "mapUpdated({message})" action on "map: ..." message', () => {
+        successHandler(mapResponseShort);
+        expect(store.dispatch).toHaveBeenCalledWith(
+            mapUpdated({ message: mapResponseShort })
         );
     });
 });

@@ -3,9 +3,7 @@ import {
     connectionLost,
     levelInputClick,
     mapUpdated,
-    fetchMap,
     boardCellClick,
-    statusUpdate,
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
@@ -52,20 +50,6 @@ describe('Reducer', () => {
             isLoading: true,
         });
     });
-    it('should handle "fetchMap" action', () => {
-        const initialState: AppState = {
-            board: [[]],
-            level: 1,
-            status: null,
-            isLoading: false,
-            isOnline: true,
-        };
-        const state = appReducer(initialState, fetchMap());
-        expect(state).toEqual({
-            ...initialState,
-            isLoading: true,
-        });
-    });
     it('should handle "mapUpdated" action', () => {
         const initialState: AppState = {
             board: [[]],
@@ -98,24 +82,6 @@ describe('Reducer', () => {
         );
         expect(state).toEqual({
             ...initialState,
-            isLoading: true,
-        });
-    });
-    it('should handle "statusUpdate" action', () => {
-        const initialState: AppState = {
-            board: [[]],
-            level: 1,
-            status: null,
-            isLoading: false,
-            isOnline: true,
-        };
-        const state = appReducer(
-            initialState,
-            statusUpdate({ status: GameStatus.Lose })
-        );
-        expect(state).toEqual({
-            ...initialState,
-            status: GameStatus.Lose,
             isLoading: true,
         });
     });

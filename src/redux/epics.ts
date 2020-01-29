@@ -1,8 +1,6 @@
 import {
-    fetchMap,
     levelInputClick,
     boardCellClick,
-    statusUpdate,
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
@@ -11,15 +9,6 @@ import { ofType } from './ts-action.patch';
 import { tap, ignoreElements } from 'rxjs/operators';
 import { socketCommand } from '../api/websocket.client';
 import { AppEpic } from './store.typings';
-
-export const fetchMapEpic: AppEpic = (action$, _, { socket$ }) =>
-    action$.pipe(
-        ofType(fetchMap),
-        tap(() => {
-            socket$.next(socketCommand.map());
-        }),
-        ignoreElements()
-    );
 
 export const levelInputClickEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
@@ -41,12 +30,7 @@ export const boardCellClickEpic: AppEpic = (action$, _, { socket$ }) =>
 
 export const sendMapCommand: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(
-            statusUpdate,
-            newLevelStarted,
-            cellOpenedOk,
-            cellOpenedYouLose
-        ),
+        ofType(newLevelStarted, cellOpenedOk, cellOpenedYouLose),
         tap(() => {
             socket$.next(socketCommand.map());
         }),
