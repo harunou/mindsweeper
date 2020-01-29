@@ -37,7 +37,7 @@ describe('Reducer', () => {
     it('should handle "levelInputClick" action', () => {
         const initialState: AppState = {
             board: mapResponseShortAsGameBoard,
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: false,
@@ -58,7 +58,7 @@ describe('Reducer', () => {
     it('should handle "mapUpdated" action', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: true,
@@ -77,7 +77,7 @@ describe('Reducer', () => {
     it('should handle "boardCellRightClick" action with cell remove', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: false,
@@ -107,13 +107,13 @@ describe('Reducer', () => {
         );
         expect(state).toEqual({
             ...initialState,
-            flags: [cell11],
+            flags: ['11'],
         });
     });
     it('should handle "cellOpenedYouLose" action', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: false,
@@ -129,7 +129,7 @@ describe('Reducer', () => {
     it('should handle "newLevelStarted" action', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: false,
@@ -144,7 +144,7 @@ describe('Reducer', () => {
     it('should handle "cellOpenedOk" action', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: false,
@@ -159,7 +159,7 @@ describe('Reducer', () => {
     it('should handle "cellOpenedYouLose" action', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: false,
@@ -175,7 +175,7 @@ describe('Reducer', () => {
     it('should handle "unknownMessageReceived" action', () => {
         const initialState: AppState = {
             board: [[]],
-            flags: [cell11],
+            flags: ['11'],
             level: 1,
             status: null,
             isLoading: true,

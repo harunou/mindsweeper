@@ -22,4 +22,4 @@ export type GameLevel = 1 | 2 | 3 | 4;
 
 export type GameBoard = Array<string[]>;
 
-export type GameFlags = GameCell[];
+export type GameFlags = string[];

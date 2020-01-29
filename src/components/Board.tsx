@@ -15,7 +15,7 @@ import {
 import BombCell from './BombCell';
 import HintCell from './HintCell';
 import FlagCell from './FlagCell';
-import { isEqualCells } from '../redux/helpers';
+import { hasFlagAt } from '../redux/helpers';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
@@ -38,7 +38,7 @@ const Board: React.FC = (): JSX.Element => {
                 const eKey = `${rIndex}${eIndex}`;
                 const cell: GameCell = { x: rIndex, y: eIndex };
                 switch (true) {
-                    case isFlagCell(flags, cell):
+                    case hasFlagAt(cell, flags):
                         return (
                             <FlagCell
                                 key={eKey}
@@ -76,8 +76,6 @@ const Board: React.FC = (): JSX.Element => {
 const selectBoard = (state: AppState) => state.board;
 const selectFlags = (state: AppState) => state.flags;
 
-const isFlagCell = (flags: GameFlags, cell: GameCell) =>
-    flags.some(c => isEqualCells(c, cell));
 const isBombCell = (element: string) => '*' === element;
 const isCoverCell = (element: string) => '□' === element;
 

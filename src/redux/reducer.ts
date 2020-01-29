@@ -12,7 +12,7 @@ import {
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
 import { mapResponse } from '../api/websocket.fixtures';
-import { parseMapResponseToGameBoard, isEqualCells } from './helpers';
+import { parseMapResponseToGameBoard, toggleFlagAt } from './helpers';
 
 export const initialState: AppState = {
     level: null,
@@ -28,8 +28,7 @@ export const appReducer: AppReducer = reducer(
     on(levelInputClick, (state, { payload }) => {
         return {
             ...state,
-            board: (false &&
-                parseMapResponseToGameBoard(mapResponse)) || [[]],
+            board: parseMapResponseToGameBoard(mapResponse) || [[]],
             flags: [],
             level: payload.level,
             isLoading: true,
@@ -40,16 +39,9 @@ export const appReducer: AppReducer = reducer(
         isLoading: true,
     })),
     on(boardCellRightClick, (state, { payload }) => {
-        const hasFlag = state.flags.some(cell =>
-            isEqualCells(cell, payload.cell)
-        );
         return {
             ...state,
-            flags: hasFlag
-                ? state.flags.filter(
-                      cell => !isEqualCells(cell, payload.cell)
-                  )
-                : state.flags.concat(payload.cell),
+            flags: toggleFlagAt(payload.cell, state.flags),
         };
     }),
     on(connectionLost, state => ({

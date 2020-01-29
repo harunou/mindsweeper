@@ -1,4 +1,4 @@
-import { GameBoard, GameCell } from './reducer.typings';
+import { GameBoard, GameCell, GameFlags } from './reducer.typings';
 
 export const parseMapResponseToGameBoard = (
     message: string
@@ -11,5 +11,25 @@ export const parseMapResponseToGameBoard = (
         });
 };
 
-export const isEqualCells = (c1: GameCell, c2: GameCell): boolean =>
-    c1.x === c2.x && c1.y === c2.y;
+export const toggleFlagAt = (
+    cell: GameCell,
+    flags: GameFlags
+): GameFlags => {
+    return hasFlagAt(cell, flags)
+        ? removeFlagAt(cell, flags)
+        : flags.concat(cellToFlag(cell));
+};
+export const hasFlagAt = (
+    cell: GameCell,
+    flags: GameFlags
+): boolean => {
+    return flags.includes(cellToFlag(cell));
+};
+const cellToFlag = (cell: GameCell): string => `${cell.x}${cell.y}`;
+const removeFlagAt = (cell: GameCell, flags: GameFlags): GameFlags => {
+    const index = flags.indexOf(cellToFlag(cell));
+    if (index === -1) {
+        return { ...flags };
+    }
+    return [...flags.slice(0, index), ...flags.slice(index + 1)];
+};
