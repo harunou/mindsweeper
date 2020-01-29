@@ -7,10 +7,24 @@
 }
 
 .ms-board-cell {
-    width: 20px;
-    height: 20px;
-    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border: 1px solid lightgray;
+    cursor: default;
 }
+
 .ms-board-cell.mod-cover {
     background-color: gray;
+}
+
+.ms-board-cell.mod-bomb {
+    background-color: pink;
+}
+
+.ms-board-cell.mod-flag {
+    color: white;
+    background-color: grey;
 }

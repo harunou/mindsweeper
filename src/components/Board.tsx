@@ -7,6 +7,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import CoverCell from './CoverCell';
 import { AppActions, boardCellClick } from '../redux/actions';
+import BombCell from './BombCell';
+import HintCell from './HintCell';
+import FlagCell from './FlagCell';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
@@ -28,12 +31,20 @@ const Board: React.FC = (): JSX.Element => {
                 const cell: GameCell = { x: rIndex, y: eIndex };
                 switch (true) {
                     case isFlag(cell):
-                        return <span key={eKey}>F</span>;
+                        return (
+                            <FlagCell
+                                key={eKey}
+                                onRightClick={handleCellRightClick(
+                                    cell
+                                )}
+                            />
+                        );
                     case isBombCell(element):
-                        return <span>B</span>;
+                        return <BombCell key={eKey} />;
                     case isCoverCell(element):
                         return (
                             <CoverCell
+                                key={eKey}
                                 onLeftClick={handleCellLeftClick(cell)}
                                 onRightClick={handleCellRightClick(
                                     cell
@@ -41,7 +52,12 @@ const Board: React.FC = (): JSX.Element => {
                             />
                         );
                     default:
-                        return <span>{element}</span>;
+                        return (
+                            <HintCell
+                                key={eKey}
+                                hint={hintStringToNumber(element)}
+                            />
+                        );
                 }
             })}
         </div>
@@ -51,8 +67,9 @@ const Board: React.FC = (): JSX.Element => {
 
 const selectBoard = (state: AppState) => state.board;
 
-const isFlag = (cell: GameCell) => false;
+const isFlag = (cell: GameCell) => (cell.x + cell.y) % 2 === 0;
 const isBombCell = (element: string) => '*' === element;
 const isCoverCell = (element: string) => '□' === element;
+const hintStringToNumber = (hint: string): number => parseInt(hint);
 
 export default Board;
