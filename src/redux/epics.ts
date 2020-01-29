@@ -1,4 +1,4 @@
-import { AppActions, fetchMap, newGame } from './action';
+import { AppActions, fetchMap, newGame, openCell } from './action';
 import { Epic } from 'redux-observable';
 import { EpicMiddlewareDependencies, AppState } from './redux.typings';
 import { ofType } from './ts-action.patch';
@@ -29,6 +29,20 @@ export const newGameEpic: Epic<
         ofType(newGame),
         tap(({ payload }) => {
             socket$.next(socketCommand.new(payload.level));
+        }),
+        ignoreElements()
+    );
+
+export const openCellEpic: Epic<
+    AppActions,
+    AppActions,
+    AppState,
+    EpicMiddlewareDependencies
+> = (action$, _, { socket$ }) =>
+    action$.pipe(
+        ofType(openCell),
+        tap(({ payload }) => {
+            socket$.next(socketCommand.open(payload.cell));
         }),
         ignoreElements()
     );

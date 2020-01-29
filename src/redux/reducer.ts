@@ -5,6 +5,7 @@ import {
     newGame,
     fetchMapSuccess,
     fetchMap,
+    openCell,
 } from './action';
 import { reducer, on } from 'ts-action';
 import { AppState } from './redux.typings';
@@ -37,5 +38,9 @@ export const appReducer: Reducer<AppState, AppActions> = reducer(
         ...state,
         board: payload.board,
         isLoading: false,
+    })),
+    on(openCell, state => ({
+        ...state,
+        isLoading: true,
     }))
 );

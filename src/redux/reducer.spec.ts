@@ -4,9 +4,13 @@ import {
     newGame,
     fetchMapSuccess,
     fetchMap,
+    openCell,
 } from './action';
 import { AppState } from './redux.typings';
-import { mapResponseShortAsGameBoard } from '../api/websocket.fixtures';
+import {
+    mapResponseShortAsGameBoard,
+    cell11,
+} from '../api/websocket.fixtures';
 
 describe('Reducer', () => {
     it('should handle "setOffline" action', () => {
@@ -66,6 +70,22 @@ describe('Reducer', () => {
             ...initialState,
             board: mapResponseShortAsGameBoard,
             isLoading: false,
+        });
+    });
+    it('should handle "openCell" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            level: 1,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(
+            initialState,
+            openCell({ cell: cell11 })
+        );
+        expect(state).toEqual({
+            ...initialState,
+            isLoading: true,
         });
     });
 });
