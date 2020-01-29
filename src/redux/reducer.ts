@@ -17,7 +17,7 @@ import {
 } from './reducer.typings';
 
 export const initialState: AppState = {
-    level: 1,
+    level: null,
     board: [[]],
     status: null,
     isOnline: true,
@@ -62,7 +62,7 @@ export const parseMapResponseToGameBoard = (
 ): GameBoard => {
     return message
         .split(/\r?\n/)
-        .slice(1)
+        .slice(1, -1)
         .map(row => {
             return row.split('');
         });

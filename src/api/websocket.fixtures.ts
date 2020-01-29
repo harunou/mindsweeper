@@ -13,10 +13,12 @@ export const mapResponse = `map:
 012□□□□□□□
 01□□□□□□□□
 02□□□□□□□□
-01□□□□□□□□`;
+01□□□□□□□□
+`;
 export const mapResponseShort = `map:
 1*□□
-01□□`;
+01□□
+`;
 export const mapResponseShortAsGameBoard: GameBoard = [
     ['1', '*', '□', '□'],
     ['0', '1', '□', '□'],
