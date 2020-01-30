@@ -11,7 +11,6 @@ import {
     handleCompleteMessages,
 } from './api/websocket.client';
 import { AppStore } from './redux/store/store.typings';
-import { levelInputClick } from './redux/actions';
 
 const WS_API_URL = 'ws://echo.websocket.org';
 // const WS_API_URL = 'wss://hometask.eg1236.com/game1/';
@@ -25,8 +24,6 @@ socket$.subscribe(
     handleErrorMessages(store),
     handleCompleteMessages(store)
 );
-
-store.dispatch(levelInputClick({ level: 1 }));
 
 ReactDOM.render(
     <React.StrictMode>
