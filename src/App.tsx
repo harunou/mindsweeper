@@ -18,14 +18,20 @@ const App: React.FC = (): React.ReactElement => {
 
     return (
         <>
-            <div>Minesweeper</div>
-            <LevelSelector />
-            <div>
-                Is online: {isOnline ? 'true' : 'false. reload the app'}
+            <div className='ms-vertical-block'>Minesweeper</div>
+            <div className='ms-vertical-block'>
+                <LevelSelector />
             </div>
-            <div>Is loading: {`${isLoading}`}</div>
-            <div>Active level: {gameLevel || 'not set'}</div>
-            <div>Win/lose: {gameStatus}</div>
+            <div className='ms-vertical-block'>
+                Is online: {isOnline ? 'true' : 'false. reload the app'}
+                <br />
+                Is loading: {`${isLoading}`}
+                <br />
+                Active level: {gameLevel || 'not set'}
+                <br />
+                Win/lose: {gameStatus}
+                <br />
+            </div>
             <Board />
         </>
     );

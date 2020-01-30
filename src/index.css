@@ -1,4 +1,16 @@
-.ms-level-input:not(:last-child) {
+.ms-vertical-block:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.ms-inline-block:not(:last-child) {
+    margin-right: 10px;
+}
+
+.ms-level-input {
+    padding-right: 10px;
+}
+
+.ms-inline-radio:not(:last-child) {
     margin-right: 10px;
 }
 
@@ -8,6 +20,7 @@
 
 .ms-board-cell {
     display: flex;
+    flex: none;
     justify-content: center;
     align-items: center;
     width: 25px;

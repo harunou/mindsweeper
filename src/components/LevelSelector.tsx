@@ -34,7 +34,10 @@ const LevelSelector: React.FC = (): JSX.Element => {
     const radioButtonInputs: JSX.Element[] = levels.map(
         (level: GameLevel) => {
             return (
-                <label key={level} className='ms-level-input'>
+                <label
+                    key={level}
+                    className='ms-level-input ms-inline-block'
+                >
                     <input
                         type='radio'
                         name='level'
@@ -50,7 +53,7 @@ const LevelSelector: React.FC = (): JSX.Element => {
     return (
         <fieldset>
             <legend>Select level</legend>
-            {radioButtonInputs}
+            <div className='ms-vertical-block'>{radioButtonInputs}</div>
             <div>
                 <button onClick={handleOnClick}>Start</button>
             </div>
