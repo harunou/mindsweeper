@@ -41,3 +41,7 @@
     color: white;
     background-color: grey;
 }
+
+.ms-board-cell.mod-hint {
+    background-color: wheat;
+}
