@@ -1,4 +1,8 @@
-import { GameBoard, GameCell, GameFlags } from './reducer/reducer.typings';
+import {
+    GameBoard,
+    GameCell,
+    GameFlags,
+} from './reducer/reducer.typings';
 
 export const parseMapResponseToGameBoard = (
     message: string
@@ -25,7 +29,7 @@ export const hasFlagAt = (
 ): boolean => {
     return flags.includes(cellToFlag(cell));
 };
-const cellToFlag = (cell: GameCell): string => `${cell.x}${cell.y}`;
+const cellToFlag = (cell: GameCell): string => `${cell.x},${cell.y}`;
 const removeFlagAt = (cell: GameCell, flags: GameFlags): GameFlags => {
     const index = flags.indexOf(cellToFlag(cell));
     if (index === -1) {

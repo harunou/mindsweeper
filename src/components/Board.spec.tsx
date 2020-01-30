@@ -25,7 +25,7 @@ describe('Board component', () => {
                 ['1', '*', '□', '□'],
                 ['0', '1', '□', '□'], // last cell(3,1) in the row is flagged
             ],
-            flags: ['31'],
+            flags: ['3,1'],
             status: null,
             isOnline: true,
             isLoading: false,
