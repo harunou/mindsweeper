@@ -1,6 +1,6 @@
 import { union } from './ts-action.patch';
 import { action, payload } from 'ts-action';
-import { GameLevel, GameCell } from './reducer.typings';
+import { GameLevel, GameCell } from './reducer/reducer.typings';
 
 export const levelInputClick = action(
     '[Game] Level input click',

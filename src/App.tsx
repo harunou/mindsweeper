@@ -1,5 +1,5 @@
 import React, { useCallback, Dispatch } from 'react';
-import { GameLevel, AppState } from './redux/reducer.typings';
+import { GameLevel, AppState } from './redux/reducer/reducer.typings';
 import { useSelector, useDispatch } from 'react-redux';
 import { levelInputClick, AppActions } from './redux/actions';
 import Board from './components/Board';

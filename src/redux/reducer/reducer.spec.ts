@@ -8,14 +8,14 @@ import {
     cellOpenedYouLose,
     unknownMessageReceived,
     boardCellRightClick,
-} from './actions';
+} from '../actions';
 import { AppState, GameStatus } from './reducer.typings';
 import {
     mapResponseShortAsGameBoard,
     cell11,
     mapResponseShort,
-} from '../api/websocket.fixtures';
-import { parseMapResponseToGameBoard } from './helpers';
+} from '../../api/websocket.fixtures';
+import { parseMapResponseToGameBoard } from '../helpers';
 
 describe('Reducer', () => {
     it('should handle "connectionLost" action', () => {

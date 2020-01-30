@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
-import createAppStore from './redux/store';
+import createAppStore from './redux/store/store';
 import {
     createSocket$,
     handleSuccessMessages,
     handleErrorMessages,
     handleCompleteMessages,
 } from './api/websocket.client';
-import { AppStore } from './redux/store.typings';
+import { AppStore } from './redux/store/store.typings';
 import { levelInputClick } from './redux/actions';
 
 const WS_API_URL = 'ws://echo.websocket.org';

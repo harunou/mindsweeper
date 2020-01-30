@@ -8,11 +8,11 @@ import {
     cellOpenedYouLose,
     unknownMessageReceived,
     boardCellRightClick,
-} from './actions';
+} from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
-import { mapResponse } from '../api/websocket.fixtures';
-import { parseMapResponseToGameBoard, toggleFlagAt } from './helpers';
+import { mapResponse } from '../../api/websocket.fixtures';
+import { parseMapResponseToGameBoard, toggleFlagAt } from '../helpers';
 
 export const initialState: AppState = {
     level: null,

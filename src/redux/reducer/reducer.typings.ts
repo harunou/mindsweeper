@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { AppActions } from './actions';
+import { AppActions } from '../actions';
 
 export interface AppState {
     level: GameLevel | null;

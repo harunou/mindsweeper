@@ -1,15 +1,15 @@
 import createAppStore from './store';
-import { initialState } from './reducer';
-import { createObserverSpy } from '../testing-tools';
+import { initialState } from '../reducer/reducer';
+import { createObserverSpy } from '../../testing-tools';
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { socketCommand } from '../api/websocket.client';
+import { socketCommand } from '../../api/websocket.client';
 import {
     levelInputClick,
     boardCellClick,
     newLevelStarted,
-} from './actions';
-import { cell11 } from '../api/websocket.fixtures';
-import { AppSocket } from '../api/websocket.typings';
+} from '../actions';
+import { cell11 } from '../../api/websocket.fixtures';
+import { AppSocket } from '../../api/websocket.typings';
 import { AppStore } from './store.typings';
 
 let socket$: AppSocket;

@@ -19,7 +19,7 @@ import {
     unknownMessageReceived,
 } from '../redux/actions';
 import { SpyStore, createStoreSpy } from '../testing-tools';
-import { GameCell } from '../redux/reducer.typings';
+import { GameCell } from '../redux/reducer/reducer.typings';
 
 describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {

@@ -1,5 +1,5 @@
 import { webSocket } from 'rxjs/webSocket';
-import { GameLevel, GameCell } from '../redux/reducer.typings';
+import { GameLevel, GameCell } from '../redux/reducer/reducer.typings';
 import {
     mapUpdated,
     connectionLost,
@@ -8,7 +8,7 @@ import {
     cellOpenedYouLose,
     unknownMessageReceived,
 } from '../redux/actions';
-import { AppStore } from '../redux/store.typings';
+import { AppStore } from '../redux/store/store.typings';
 
 export const createSocket$ = (url: string) =>
     webSocket<string>({

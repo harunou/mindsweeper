@@ -8,7 +8,7 @@ import {
 import { ofType } from './ts-action.patch';
 import { tap, ignoreElements } from 'rxjs/operators';
 import { socketCommand } from '../api/websocket.client';
-import { AppEpic } from './store.typings';
+import { AppEpic } from './store/store.typings';
 
 export const newCommand: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(

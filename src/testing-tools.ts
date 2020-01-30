@@ -1,5 +1,5 @@
 import { PartialObserver } from 'rxjs';
-import { AppStore } from './redux/store.typings';
+import { AppStore } from './redux/store/store.typings';
 
 type SpyObj<T> = T &
     {

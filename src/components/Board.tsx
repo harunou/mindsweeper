@@ -4,7 +4,7 @@ import {
     GameBoard,
     GameCell,
     GameFlags,
-} from '../redux/reducer.typings';
+} from '../redux/reducer/reducer.typings';
 import { useSelector, useDispatch } from 'react-redux';
 import CoverCell from './CoverCell';
 import {

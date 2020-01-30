@@ -1,4 +1,4 @@
-import { GameBoard, GameCell, GameFlags } from './reducer.typings';
+import { GameBoard, GameCell, GameFlags } from './reducer/reducer.typings';
 
 export const parseMapResponseToGameBoard = (
     message: string
