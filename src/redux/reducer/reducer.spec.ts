@@ -210,11 +210,3 @@ describe('Reducer', () => {
         });
     });
 });
-
-describe('map response parser', () => {
-    it('should parse array response to 2D array of chars', () => {
-        expect(parseMapResponseToGameBoard(mapResponseShort)).toEqual(
-            mapResponseShortAsGameBoard
-        );
-    });
-});
