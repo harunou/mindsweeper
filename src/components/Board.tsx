@@ -1,6 +1,5 @@
 import React, { Dispatch, useCallback } from 'react';
 import {
-    AppState,
     GameBoard,
     GameCell,
     GameFlags,
@@ -16,6 +15,12 @@ import BombCell from './BombCell';
 import HintCell from './HintCell';
 import FlagCell from './FlagCell';
 import { hasFlagAt } from '../redux/helpers';
+import { selectBoard, selectFlags } from '../redux/selectors';
+
+const isBombCell = (element: string) => '*' === element;
+const isCoverCell = (element: string) => '□' === element;
+
+const hintStringToNumber = (hint: string): number => parseInt(hint);
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
@@ -32,11 +37,11 @@ const Board: React.FC = (): JSX.Element => {
         [dispatch]
     );
 
-    const boardOfElements: JSX.Element[] = board.map((row, rIndex) => (
-        <div key={rIndex} className='ms-board-row'>
-            {row.map((element, eIndex) => {
-                const eKey = `${rIndex}${eIndex}`;
-                const cell: GameCell = { x: rIndex, y: eIndex };
+    const boardOfElements: JSX.Element[] = board.map((row, y) => (
+        <div key={y} className='ms-board-row'>
+            {row.map((element, x) => {
+                const eKey = `${x}${y}`;
+                const cell: GameCell = { x, y };
                 switch (true) {
                     case hasFlagAt(cell, flags):
                         return (
@@ -72,13 +77,5 @@ const Board: React.FC = (): JSX.Element => {
     ));
     return <div>{boardOfElements}</div>;
 };
-
-const selectBoard = (state: AppState) => state.board;
-const selectFlags = (state: AppState) => state.flags;
-
-const isBombCell = (element: string) => '*' === element;
-const isCoverCell = (element: string) => '□' === element;
-
-const hintStringToNumber = (hint: string): number => parseInt(hint);
 
 export default Board;
