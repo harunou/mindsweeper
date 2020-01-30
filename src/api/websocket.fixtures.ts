@@ -3,6 +3,7 @@ import { GameBoard, GameCell } from '../redux/reducer/reducer.typings';
 export const newOkResponse = 'new: OK';
 export const openOkResponse = 'open: OK';
 export const openYouLoseResponse = 'open: You lose';
+export const openYouWinResponse = 'open: You win';
 export const mapResponse = `map:
 1*□□□□□□□□
 112□□□□□□□

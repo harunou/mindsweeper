@@ -112,6 +112,12 @@ Open `X`, `Y` with bomb cell
 open: You lose
 ```
 
+Open `X`, `Y` resolves the game
+
+```text
+open: You win. The password for this level is: ThisWasEasy
+```
+
 `Unknown command`
 
 ```text

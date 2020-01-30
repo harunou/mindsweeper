@@ -23,6 +23,7 @@ export const mapUpdated = action(
 export const newLevelStarted = action('[WS] New level started');
 export const cellOpenedOk = action('[WS] Cell opened ok');
 export const cellOpenedYouLose = action('[WS] Cell opened you lose');
+export const cellOpenedYouWin = action('[WS] Cell opened you win');
 export const unknownMessageReceived = action(
     '[WS] Unknown message received'
 );
@@ -36,6 +37,7 @@ const actions = union({
     newLevelStarted,
     cellOpenedOk,
     cellOpenedYouLose,
+    cellOpenedYouWin,
     unknownMessageReceived,
 });
 

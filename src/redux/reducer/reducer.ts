@@ -8,6 +8,7 @@ import {
     cellOpenedYouLose,
     unknownMessageReceived,
     boardCellRightClick,
+    cellOpenedYouWin,
 } from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
@@ -31,8 +32,8 @@ export const appReducer: AppReducer = reducer(
     on(levelInputClick, (state, { payload }) => {
         return {
             ...state,
-            board: (true &&
-                parseMapResponseToGameBoard(mapResponse)) || [[]],
+            board: (false &&
+                parseMapResponseToGameBoard(mapResponseLong)) || [[]],
             flags: [],
             status: null,
             level: payload.level,
@@ -62,6 +63,11 @@ export const appReducer: AppReducer = reducer(
     on(cellOpenedYouLose, state => ({
         ...state,
         status: GameStatus.Lose,
+        isLoading: true,
+    })),
+    on(cellOpenedYouWin, state => ({
+        ...state,
+        status: GameStatus.Win,
         isLoading: true,
     })),
     on(unknownMessageReceived, state => ({

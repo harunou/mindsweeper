@@ -10,6 +10,7 @@ import {
     mapResponse,
     mapResponseShort,
     open11Command,
+    openYouWinResponse,
 } from './websocket.fixtures';
 import {
     mapUpdated,
@@ -31,6 +32,11 @@ describe('Websocket responses', () => {
     it('should detect response: cell open is lose', () => {
         expect(
             socketResponse.isOpenYouLose(openYouLoseResponse)
+        ).toBeTruthy();
+    });
+    it('should detect response: cell open is win', () => {
+        expect(
+            socketResponse.isOpenYouWin(openYouWinResponse)
         ).toBeTruthy();
     });
     it('should detect response: map', () => {

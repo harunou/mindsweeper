@@ -14,6 +14,7 @@ export type AppReducer = Reducer<AppState, AppActions>;
 
 export enum GameStatus {
     Lose = 'Lose',
+    Win = 'Win',
 }
 
 export type GameCell = { x: number; y: number };

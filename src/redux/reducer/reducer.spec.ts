@@ -160,6 +160,21 @@ describe('Reducer', () => {
             isLoading: true,
         });
     });
+    it('should handle "cellOpenedOk" action', () => {
+        const initialState: AppState = {
+            board: [[]],
+            flags: ['1,1'],
+            level: 1,
+            status: null,
+            isLoading: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, cellOpenedOk());
+        expect(state).toEqual({
+            ...initialState,
+            isLoading: true,
+        });
+    });
     it('should handle "cellOpenedYouLose" action', () => {
         const initialState: AppState = {
             board: [[]],

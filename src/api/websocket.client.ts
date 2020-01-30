@@ -7,6 +7,7 @@ import {
     cellOpenedOk,
     cellOpenedYouLose,
     unknownMessageReceived,
+    cellOpenedYouWin,
 } from '../redux/actions';
 import { AppStore } from '../redux/store/store.typings';
 
@@ -27,6 +28,7 @@ export const socketResponse = {
     isNewOk: (message: string) => /^new: OK/.test(message),
     isOpenOk: (message: string) => /^open: OK/.test(message),
     isOpenYouLose: (message: string) => /^open: You lose/.test(message),
+    isOpenYouWin: (message: string) => /^open: You win/.test(message),
     isMap: (message: string) => /^map:/.test(message),
 };
 
@@ -42,6 +44,10 @@ export const handleSuccessMessages = (store: AppStore) => (
             break;
         case socketResponse.isOpenYouLose(message):
             store.dispatch(cellOpenedYouLose());
+            break;
+        case socketResponse.isOpenYouWin(message):
+            console.log('Open ws message: ', message);
+            store.dispatch(cellOpenedYouWin());
             break;
         case socketResponse.isMap(message):
             console.log('Map ws message: \n', message);
