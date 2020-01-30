@@ -1,32 +1,28 @@
-import React, { useCallback } from 'react';
+import React, { memo } from 'react';
 
 export interface CoverCellProps {
-    onLeftClick(): void;
-    onRightClick(): void;
+    x: number;
+    y: number;
+    onLeftClick(x: number, y: number): void;
+    onRightClick(x: number, y: number): void;
 }
 
 const CoverCell: React.FC<CoverCellProps> = ({
+    x,
+    y,
     onLeftClick,
     onRightClick,
 }): JSX.Element => {
-    const handleLeftClick = useCallback(() => {
-        onLeftClick();
-    }, [onLeftClick]);
-    const handleContextMenu = useCallback(
-        (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            e.preventDefault();
-            onRightClick();
-        },
-        [onRightClick]
-    );
-
     return (
         <div
             className='ms-board-cell mod-cover'
-            onClick={handleLeftClick}
-            onContextMenu={handleContextMenu}
+            onClick={() => onLeftClick(x, y)}
+            onContextMenu={(e: React.MouseEvent) => {
+                e.preventDefault();
+                onRightClick(x, y);
+            }}
         ></div>
     );
 };
 
-export default CoverCell;
+export default memo(CoverCell);

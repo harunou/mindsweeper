@@ -1,18 +1,22 @@
 import React, { useCallback } from 'react';
 
 interface FlagCellProps {
-    onRightClick(): void;
+    x: number;
+    y: number;
+    onRightClick(x: number, y: number): void;
 }
 
 const FlagCell: React.FC<FlagCellProps> = ({
+    x,
+    y,
     onRightClick,
 }): JSX.Element => {
     const handleContextMenu = useCallback(
         (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             e.preventDefault();
-            onRightClick();
+            onRightClick(x, y);
         },
-        [onRightClick]
+        [onRightClick, x, y]
     );
 
     return (

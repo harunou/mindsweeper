@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 const BombCell: React.FC = (): JSX.Element => {
     return (
@@ -10,4 +10,4 @@ const BombCell: React.FC = (): JSX.Element => {
     );
 };
 
-export default BombCell;
+export default memo(BombCell);

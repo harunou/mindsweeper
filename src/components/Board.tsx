@@ -1,9 +1,5 @@
 import React, { Dispatch, useCallback } from 'react';
-import {
-    GameBoard,
-    GameCell,
-    GameFlags,
-} from '../redux/reducer/reducer.typings';
+import { GameBoard, GameFlags } from '../redux/reducer/reducer.typings';
 import { useSelector, useDispatch } from 'react-redux';
 import CoverCell from './CoverCell';
 import {
@@ -20,57 +16,46 @@ import { selectBoard, selectFlags } from '../redux/selectors';
 const isBombCell = (element: string) => '*' === element;
 const isCoverCell = (element: string) => '□' === element;
 
-const hintStringToNumber = (hint: string): number => parseInt(hint);
-
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
     const flags: GameFlags = useSelector(selectFlags);
     const dispatch: Dispatch<AppActions> = useDispatch();
 
     const handleCellLeftClick = useCallback(
-        (cell: GameCell) => () => dispatch(boardCellClick({ cell })),
+        (x: number, y: number) =>
+            dispatch(boardCellClick({ cell: { x, y } })),
         [dispatch]
     );
     const handleCellRightClick = useCallback(
-        (cell: GameCell) => () =>
-            dispatch(boardCellRightClick({ cell })),
+        (x: number, y: number) =>
+            dispatch(boardCellRightClick({ cell: { x, y } })),
         [dispatch]
     );
 
     const boardOfElements: JSX.Element[] = board.map((row, y) => (
         <div key={y} className='ms-board-row'>
             {row.map((element, x) => {
-                const eKey = `${x}${y}`;
-                const cell: GameCell = { x, y };
+                const key = `${x}${y}`;
                 switch (true) {
-                    case hasFlagAt(cell, flags):
+                    case hasFlagAt({ x, y }, flags):
                         return (
                             <FlagCell
-                                key={eKey}
-                                onRightClick={handleCellRightClick(
-                                    cell
-                                )}
+                                {...{ x, y, key }}
+                                onRightClick={handleCellRightClick}
                             />
                         );
                     case isBombCell(element):
-                        return <BombCell key={eKey} />;
+                        return <BombCell key={key} />;
                     case isCoverCell(element):
                         return (
                             <CoverCell
-                                key={eKey}
-                                onLeftClick={handleCellLeftClick(cell)}
-                                onRightClick={handleCellRightClick(
-                                    cell
-                                )}
+                                {...{ x, y, key }}
+                                onLeftClick={handleCellLeftClick}
+                                onRightClick={handleCellRightClick}
                             />
                         );
                     default:
-                        return (
-                            <HintCell
-                                key={eKey}
-                                hint={hintStringToNumber(element)}
-                            />
-                        );
+                        return <HintCell key={key} hint={element} />;
                 }
             })}
         </div>

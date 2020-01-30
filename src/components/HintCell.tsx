@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 export interface HintCellProps {
-    hint: number;
+    hint: string;
 }
 
 const HintCell: React.FC<HintCellProps> = ({ hint }): JSX.Element => {
-    return <div className='ms-board-cell mod-hint'>{hint || ''}</div>;
+    return (
+        <div className='ms-board-cell mod-hint'>
+            {hint === '0' || hint}
+        </div>
+    );
 };
 
-export default HintCell;
+export default memo(HintCell);
