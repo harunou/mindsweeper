@@ -39,7 +39,7 @@ describe('Reducer', () => {
             board: mapResponseShortAsGameBoard,
             flags: ['11'],
             level: 1,
-            status: null,
+            status: GameStatus.Lose,
             isLoading: false,
             isOnline: true,
         };
@@ -52,6 +52,8 @@ describe('Reducer', () => {
             board: [[]],
             flags: [],
             level: 2,
+            status: null,
+            isOnline: true,
             isLoading: true,
         });
     });

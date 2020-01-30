@@ -28,8 +28,10 @@ export const appReducer: AppReducer = reducer(
     on(levelInputClick, (state, { payload }) => {
         return {
             ...state,
-            board: parseMapResponseToGameBoard(mapResponse) || [[]],
+            board: (false &&
+                parseMapResponseToGameBoard(mapResponse)) || [[]],
             flags: [],
+            status: null,
             level: payload.level,
             isLoading: true,
         };
