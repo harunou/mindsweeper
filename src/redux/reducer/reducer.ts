@@ -12,15 +12,12 @@ import {
 } from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
-import {
-    mapResponse,
-    mapResponseLong,
-} from '../../api/websocket.fixtures';
-import { parseMapResponseToGameBoard, toggleFlagAt } from '../helpers';
+import { toggleFlagAt, parseMapResponseToBoard } from '../helpers';
+import { mapResponseLong } from '../../api/websocket.fixtures';
 
 export const initialState: AppState = {
     level: null,
-    board: [[]],
+    board: '',
     flags: [],
     status: null,
     isOnline: true,
@@ -32,8 +29,9 @@ export const appReducer: AppReducer = reducer(
     on(levelInputClick, (state, { payload }) => {
         return {
             ...state,
-            board: (false &&
-                parseMapResponseToGameBoard(mapResponseLong)) || [[]],
+            board:
+                (true && parseMapResponseToBoard(mapResponseLong)) ||
+                '',
             flags: [],
             status: null,
             level: payload.level,
@@ -57,7 +55,7 @@ export const appReducer: AppReducer = reducer(
     })),
     on(mapUpdated, (state, { payload }) => ({
         ...state,
-        board: parseMapResponseToGameBoard(payload.message),
+        board: parseMapResponseToBoard(payload.message),
         isLoading: false,
     })),
     on(cellOpenedYouLose, state => ({

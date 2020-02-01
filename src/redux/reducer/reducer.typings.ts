@@ -21,6 +21,6 @@ export type GameCell = { x: number; y: number };
 
 export type GameLevel = 1 | 2 | 3 | 4;
 
-export type GameBoard = Array<string[]>;
+export type GameBoard = string;
 
 export type GameFlags = string[];

@@ -16,12 +16,11 @@ import {
     cell11,
     mapResponseShort,
 } from '../../api/websocket.fixtures';
-import { parseMapResponseToGameBoard } from '../helpers';
 
 describe('Reducer', () => {
     it('should handle "connectionLost" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: [],
             level: 1,
             status: null,
@@ -48,19 +47,20 @@ describe('Reducer', () => {
             initialState,
             levelInputClick({ level: 2 })
         );
-        expect(state).toEqual({
+        const expected: AppState = {
             ...initialState,
-            board: [[]],
+            board: '',
             flags: [],
             level: 2,
             status: null,
             isOnline: true,
             isLoading: true,
-        });
+        };
+        expect(state).toEqual(expected);
     });
     it('should handle "mapUpdated" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: '',
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -79,7 +79,7 @@ describe('Reducer', () => {
     });
     it('should handle "boardCellRightClick" action with cell remove', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -97,7 +97,7 @@ describe('Reducer', () => {
     });
     it('should handle "boardCellRightClick" action with cell add', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: [],
             level: 1,
             status: null,
@@ -115,7 +115,7 @@ describe('Reducer', () => {
     });
     it('should handle "cellOpenedYouLose" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -131,7 +131,7 @@ describe('Reducer', () => {
     });
     it('should handle "cellOpenedYouWin" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -147,7 +147,7 @@ describe('Reducer', () => {
     });
     it('should handle "newLevelStarted" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -162,7 +162,7 @@ describe('Reducer', () => {
     });
     it('should handle "cellOpenedOk" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -177,7 +177,7 @@ describe('Reducer', () => {
     });
     it('should handle "cellOpenedYouLose" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,
@@ -193,7 +193,7 @@ describe('Reducer', () => {
     });
     it('should handle "unknownMessageReceived" action', () => {
         const initialState: AppState = {
-            board: [[]],
+            board: mapResponseShortAsGameBoard,
             flags: ['1,1'],
             level: 1,
             status: null,

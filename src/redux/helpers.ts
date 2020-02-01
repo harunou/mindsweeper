@@ -4,15 +4,8 @@ import {
     GameFlags,
 } from './reducer/reducer.typings';
 
-export const parseMapResponseToGameBoard = (
-    message: string
-): GameBoard => {
-    return message
-        .split(/\r?\n/)
-        .slice(1, -1)
-        .map(row => {
-            return row.split('');
-        });
+export const parseMapResponseToBoard = (message: string): GameBoard => {
+    return message.slice(message.indexOf('\n') + 1, -1);
 };
 
 export const toggleFlagAt = (

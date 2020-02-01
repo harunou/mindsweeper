@@ -32,9 +32,9 @@ const Board: React.FC = (): JSX.Element => {
         [dispatch]
     );
 
-    const boardOfElements: JSX.Element[] = board.map((row, y) => (
+    const rows: JSX.Element[] = board.split('\n').map((row, y) => (
         <div key={y} className='ms-board-row'>
-            {row.map((element, x) => {
+            {row.split('').map((element, x) => {
                 const key = `${x}${y}`;
                 switch (true) {
                     case hasFlagAt({ x, y }, flags):
@@ -60,7 +60,7 @@ const Board: React.FC = (): JSX.Element => {
             })}
         </div>
     ));
-    return <div>{boardOfElements}</div>;
+    return <div>{rows}</div>;
 };
 
 export default Board;

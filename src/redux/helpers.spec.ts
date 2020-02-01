@@ -1,7 +1,7 @@
 import {
-    parseMapResponseToGameBoard,
     toggleFlagAt,
     hasFlagAt,
+    parseMapResponseToBoard,
 } from './helpers';
 import {
     mapResponseShort,
@@ -12,8 +12,8 @@ import {
 const flag11 = '1,1';
 
 describe('Helper functions', () => {
-    it('should parse array response to 2D array of chars', () => {
-        expect(parseMapResponseToGameBoard(mapResponseShort)).toEqual(
+    it('should parse map response to map value', () => {
+        expect(parseMapResponseToBoard(mapResponseShort)).toEqual(
             mapResponseShortAsGameBoard
         );
     });

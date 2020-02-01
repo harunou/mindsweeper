@@ -19,12 +19,11 @@ describe('Board component', () => {
         container = null!;
     });
     it('should render correct amount and type of cells', () => {
+        const board = `1*□□
+01□□`;
         const stateMock: AppState = {
             level: 1,
-            board: [
-                ['1', '*', '□', '□'],
-                ['0', '1', '□', '□'], // last cell(3,1) in the row is flagged
-            ],
+            board,
             flags: ['3,1'],
             status: null,
             isOnline: true,
