@@ -12,9 +12,7 @@ import HintCell from './HintCell';
 import FlagCell from './FlagCell';
 import { hasFlagAt } from '../redux/helpers';
 import { selectBoard, selectFlags } from '../redux/selectors';
-
-const isBombCell = (element: string) => '*' === element;
-const isCoverCell = (element: string) => '□' === element;
+import { isBombCell, isCoverCell } from './helpers';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
