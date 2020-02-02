@@ -3,15 +3,15 @@ import { action, payload } from 'ts-action';
 import { GameLevel, GameCell } from './reducer/reducer.typings';
 
 export const levelInputClick = action(
-    '[Game] Level input click',
+    '[User] Level input click',
     payload<{ level: GameLevel }>()
 );
 export const boardCellClick = action(
-    '[Game] Board cell click',
+    '[User] Board cell click',
     payload<{ cell: GameCell }>()
 );
 export const boardCellRightClick = action(
-    '[Game] Board cell right click',
+    '[User] Board cell right click',
     payload<{ cell: GameCell }>()
 );
 
