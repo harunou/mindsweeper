@@ -16,6 +16,16 @@ export const mapResponse = `map:
 02□□□□□□□□
 01□□□□□□□□
 `;
+export const mapResponseAsGameBoard = `1*□□□□□□□□
+112□□□□□□□
+00111112□□
+00000001□□
+00001111□□
+00112□□□□□
+012□□□□□□□
+01□□□□□□□□
+02□□□□□□□□
+01□□□□□□□□`;
 export const mapResponseShort = `map:
 1*□□
 01□□
