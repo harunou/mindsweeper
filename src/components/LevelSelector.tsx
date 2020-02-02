@@ -36,7 +36,7 @@ const LevelSelector: React.FC = (): JSX.Element => {
             return (
                 <label
                     key={level}
-                    className='ms-level-input ms-inline-block'
+                    className='ms-radio-input ms-inline-block'
                 >
                     <input
                         type='radio'

@@ -6,12 +6,12 @@
     margin-right: 10px;
 }
 
-.ms-level-input {
-    padding-right: 10px;
+.ms-settings {
+    display: flex;
 }
 
-.ms-inline-radio:not(:last-child) {
-    margin-right: 10px;
+.ms-radio-input {
+    padding-right: 10px;
 }
 
 .ms-board-row {
@@ -23,8 +23,9 @@
     flex: none;
     justify-content: center;
     align-items: center;
-    width: 25px;
-    height: 25px;
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
     border: 1px solid lightgray;
     cursor: default;
 }
