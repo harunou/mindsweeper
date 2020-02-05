@@ -57,23 +57,21 @@ describe('Epics', () => {
         epicObserver = createObserverSpy();
     });
     describe('newCommandEpic', () => {
-        it('should send "new" command if "isProcessing: false"', () => {
-            const epic = newCommandEpic(action$, state$, { socket$ });
+        beforeEach(() => {
+            epic = newCommandEpic(action$, state$, { socket$ });
             epic.subscribe(epicObserver);
+        });
+        it('should send "new" command if "isProcessing: false"', () => {
             actionSubject.next(levelInputClick({ level: 1 }));
             expect(socket$.next).toBeCalledWith(socketCommand.new(1));
         });
         it('should not send "new" command if "isProcessing: true"', () => {
             state = { ...state, isProcessing: true };
             stateBehaviorSubject.next(state);
-            const epic = newCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(levelInputClick({ level: 1 }));
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "processingStarted" action"', () => {
-            const epic = newCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(levelInputClick({ level: 1 }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
@@ -81,28 +79,26 @@ describe('Epics', () => {
         });
     });
     describe('openCommandEpic', () => {
+        beforeEach(() => {
+            epic = openCommandEpic(action$, state$, { socket$ });
+            epic.subscribe(epicObserver);
+        });
         it('should send "open" command if "isProcessing: false"', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            const epic = openCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(boardCellClick({ cell: cell10 }));
             expect(socket$.next).toBeCalledWith(
                 socketCommand.open(cell10)
             );
         });
         it('should not send "open" command if "isProcessing: true"', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
             state = { ...state, isProcessing: true };
             stateBehaviorSubject.next(state);
-            const cell10: GameCell = { x: 1, y: 0 };
-            const epic = openCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(boardCellClick({ cell: cell10 }));
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "processingStarted" action"', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            const epic = openCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(boardCellClick({ cell: cell10 }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
@@ -110,27 +106,23 @@ describe('Epics', () => {
         });
     });
     describe('mapCommandEpic', () => {
-        it('should handle "newLevelStarted" action', () => {
-            const epic = mapCommandEpic(action$, state$, { socket$ });
+        beforeEach(() => {
+            epic = mapCommandEpic(action$, state$, { socket$ });
             epic.subscribe(epicObserver);
+        });
+        it('should handle "newLevelStarted" action', () => {
             actionSubject.next(newLevelStarted());
             expect(epicObserver.next).toBeCalled();
         });
         it('should handle "cellOpenedOk" action', () => {
-            const epic = mapCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(cellOpenedOk());
             expect(epicObserver.next).toBeCalled();
         });
         it('should send "map" command', () => {
-            const epic = mapCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(newLevelStarted());
             expect(socket$.next).toBeCalledWith(socketCommand.map());
         });
         it('should return "processingStarted" action"', () => {
-            const epic = mapCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
             actionSubject.next(newLevelStarted());
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
@@ -138,9 +130,11 @@ describe('Epics', () => {
         });
     });
     describe('mapUpdatedEpic', () => {
-        it('should return "processingFinished" action"', () => {
-            const epic = mapUpdatedEpic(action$, state$, { socket$ });
+        beforeEach(() => {
+            epic = mapUpdatedEpic(action$, state$, { socket$ });
             epic.subscribe(epicObserver);
+        });
+        it('should return "processingFinished" action"', () => {
             actionSubject.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
