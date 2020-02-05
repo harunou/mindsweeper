@@ -9,6 +9,8 @@ import {
     unknownMessageReceived,
     boardCellRightClick,
     cellOpenedYouWin,
+    processingStarted,
+    processingFinished,
 } from '../actions';
 import {
     AppState,
@@ -195,6 +197,36 @@ describe('Reducer', () => {
             initialState,
             unknownMessageReceived()
         );
+        expect(state).toEqual({
+            ...initialState,
+            isProcessing: false,
+        });
+    });
+    it('should handle "processingStarted" action', () => {
+        const initialState: AppState = {
+            board: gameBoardShort,
+            flags: [flag10],
+            level: 1,
+            status: null,
+            isProcessing: false,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, processingStarted());
+        expect(state).toEqual({
+            ...initialState,
+            isProcessing: true,
+        });
+    });
+    it('should handle "processingFinished" action', () => {
+        const initialState: AppState = {
+            board: gameBoardShort,
+            flags: [flag10],
+            level: 1,
+            status: null,
+            isProcessing: true,
+            isOnline: true,
+        };
+        const state = appReducer(initialState, processingFinished());
         expect(state).toEqual({
             ...initialState,
             isProcessing: false,

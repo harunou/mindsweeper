@@ -27,6 +27,8 @@ export const cellOpenedYouWin = action('[WS] Cell opened you win');
 export const unknownMessageReceived = action(
     '[WS] Unknown message received'
 );
+export const processingStarted = action('[WS] Processing started');
+export const processingFinished = action('[WS] Processing finished');
 
 const actions = union({
     levelInputClick,
@@ -39,6 +41,8 @@ const actions = union({
     cellOpenedYouLose,
     cellOpenedYouWin,
     unknownMessageReceived,
+    processingStarted,
+    processingFinished,
 });
 
 export type AppActions = typeof actions;

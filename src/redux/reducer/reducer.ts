@@ -9,6 +9,8 @@ import {
     unknownMessageReceived,
     boardCellRightClick,
     cellOpenedYouWin,
+    processingStarted,
+    processingFinished,
 } from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
@@ -90,6 +92,20 @@ export const appReducer: AppReducer = reducer(
         return newState;
     }),
     on(unknownMessageReceived, state => {
+        const newState: AppState = {
+            ...state,
+            isProcessing: false,
+        };
+        return newState;
+    }),
+    on(processingStarted, state => {
+        const newState: AppState = {
+            ...state,
+            isProcessing: true,
+        };
+        return newState;
+    }),
+    on(processingFinished, state => {
         const newState: AppState = {
             ...state,
             isProcessing: false,
