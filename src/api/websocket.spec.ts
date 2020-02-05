@@ -7,7 +7,7 @@ import {
     newOkResponse,
     openOkResponse,
     openYouLoseResponse,
-    mapResponse,
+    mapResponseLevel1,
     mapResponseShort,
     open11Command,
     openYouWinResponse,
@@ -40,7 +40,7 @@ describe('Websocket responses', () => {
         ).toBeTruthy();
     });
     it('should detect response: map', () => {
-        expect(socketResponse.isMap(mapResponse)).toBeTruthy();
+        expect(socketResponse.isMap(mapResponseLevel1)).toBeTruthy();
     });
 });
 

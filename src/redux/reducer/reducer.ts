@@ -13,7 +13,7 @@ import {
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
 import { toggleFlagAt, parseMapResponseToBoard } from '../helpers';
-import { mapResponseLong } from '../../api/websocket.fixtures';
+import { mapResponseLevel4 } from '../../api/websocket.fixtures';
 
 export const initialState: AppState = {
     level: null,
@@ -30,7 +30,7 @@ export const appReducer: AppReducer = reducer(
         return {
             ...state,
             board:
-                (true && parseMapResponseToBoard(mapResponseLong)) ||
+                (false && parseMapResponseToBoard(mapResponseLevel4)) ||
                 '',
             flags: [],
             status: null,

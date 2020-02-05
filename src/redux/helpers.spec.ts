@@ -5,16 +5,17 @@ import {
 } from './helpers';
 import {
     mapResponseShort,
-    mapResponseShortAsGameBoard,
-    cell11,
+    gameBoardShort,
 } from '../api/websocket.fixtures';
+import { GameCell } from './reducer/reducer.typings';
 
+const cell11: GameCell = { x: 1, y: 1 };
 const flag11 = '1,1';
 
 describe('Helper functions', () => {
     it('should parse map response to map value', () => {
         expect(parseMapResponseToBoard(mapResponseShort)).toEqual(
-            mapResponseShortAsGameBoard
+            gameBoardShort
         );
     });
     it('should add cell to flags array if not presented', () => {

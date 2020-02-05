@@ -8,10 +8,11 @@ import {
     boardCellClick,
     newLevelStarted,
 } from '../actions';
-import { cell11 } from '../../api/websocket.fixtures';
 import { AppSocket } from '../../api/websocket.typings';
 import { AppStore } from './store.typings';
+import { GameCell } from '../reducer/reducer.typings';
 
+const cell11: GameCell = { x: 1, y: 1 };
 let socket$: AppSocket;
 let store: AppStore;
 
