@@ -16,10 +16,18 @@ import { tap, map, filter } from 'rxjs/operators';
 import { socketCommand } from '../../api/websocket.client';
 import { AppEpic } from '../store/store.typings';
 import { solve } from '../../solver/solver';
-import { getSafeCells, getBombCells } from '../../helpers';
+import {
+    getSafeCells,
+    getBombCells,
+    isGameOver,
+    hasFlagAt,
+} from '../../helpers';
 
 export const newCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
     action$.pipe(
+        filter(() => {
+            return !isGameOver(state$.value);
+        }),
         filter(() => !state$.value.isProcessing),
         ofType(levelInputClick),
         tap(({ payload }) => {
@@ -34,6 +42,9 @@ export const openCommandEpic: AppEpic = (
     { socket$ }
 ) =>
     action$.pipe(
+        filter(() => {
+            return !isGameOver(state$.value);
+        }),
         filter(() => !state$.value.isProcessing),
         ofType(boardCellClick),
         tap(({ payload }) => {
@@ -44,7 +55,10 @@ export const openCommandEpic: AppEpic = (
 
 export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
     action$.pipe(
-        ofType(newLevelStarted, cellOpenedOk),
+        filter(() => {
+            return !isGameOver(state$.value);
+        }),
+        ofType(newLevelStarted, cellOpenedOk, bombCellsFound),
         map(() => {
             const [, ...safe] = state$.value.safe;
             if (safe.length) {
@@ -57,10 +71,13 @@ export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
 
 export const safeCellOpenCommandEpic: AppEpic = (
     action$,
-    _,
+    state$,
     { socket$ }
 ) =>
     action$.pipe(
+        filter(() => {
+            return !isGameOver(state$.value);
+        }),
         ofType(safeCellsFound),
         map(({ payload }) => {
             const [cell] = payload.cells;
@@ -82,13 +99,19 @@ export const mapUpdatedEpic: AppEpic = (action$, state$) =>
     action$.pipe(
         ofType(mapUpdated),
         map(() => {
+            if (isGameOver(state$.value)) {
+                return processingFinished();
+            }
             const solved = solve(state$.value.board);
             const safeCells = getSafeCells(solved);
             const bombCells = getBombCells(solved);
+            const hasNewBombs = bombCells.some(
+                c => !hasFlagAt(c, state$.value.flags)
+            );
             switch (true) {
                 case safeCells.length > 0:
                     return safeCellsFound({ cells: safeCells });
-                case bombCells.length > 0:
+                case hasNewBombs:
                     return bombCellsFound({ cells: bombCells });
                 default:
                     return processingFinished();

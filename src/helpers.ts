@@ -2,6 +2,8 @@ import {
     GameCell,
     GameBoard,
     GameFlag,
+    AppState,
+    GameStatus,
 } from './redux/reducer/reducer.typings';
 
 export const bombCellChar = '*';
@@ -91,5 +93,12 @@ export const mergeFlagsAt = (cells: GameCell[], flags: GameFlag[]) => {
             return [...f, cellToFlag(cell)];
         },
         [...flags]
+    );
+};
+
+export const isGameOver = (state: AppState): boolean => {
+    return (
+        state.status === GameStatus.Lose ||
+        state.status === GameStatus.Win
     );
 };

@@ -14,7 +14,11 @@ import {
     bombCellsFound,
 } from '../actions';
 import { ActionsObservable, StateObservable } from 'redux-observable';
-import { AppState, GameCell } from '../reducer/reducer.typings';
+import {
+    AppState,
+    GameCell,
+    GameStatus,
+} from '../reducer/reducer.typings';
 import { createObserverSpy, SpyObserver } from '../../testing-tools';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import {
@@ -108,6 +112,21 @@ describe('Epics', () => {
                 processingStarted()
             );
         });
+        it('should not be called if Win or Lose status', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            stateBehaviorSubject.next({
+                ...state,
+                status: GameStatus.Win,
+            });
+            actionSubject.next(boardCellClick({ cell: cell10 }));
+            expect(epicObserver.next).not.toBeCalled();
+            stateBehaviorSubject.next({
+                ...state,
+                status: GameStatus.Lose,
+            });
+            actionSubject.next(boardCellClick({ cell: cell10 }));
+            expect(epicObserver.next).not.toBeCalled();
+        });
     });
     describe('mapCommandEpic', () => {
         beforeEach(() => {
@@ -120,6 +139,11 @@ describe('Epics', () => {
         });
         it('should handle "cellOpenedOk" action', () => {
             actionSubject.next(cellOpenedOk());
+            expect(epicObserver.next).toBeCalled();
+        });
+        it('should handle "bombCellsFound" action', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            actionSubject.next(bombCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).toBeCalled();
         });
         it('should send "map" command', () => {
@@ -149,6 +173,20 @@ describe('Epics', () => {
             expect(epicObserver.next).toBeCalledWith(
                 safeCellsFound({ cells: [cell12] })
             );
+        });
+        it('should not be called if Win or Lose status', () => {
+            stateBehaviorSubject.next({
+                ...state,
+                status: GameStatus.Win,
+            });
+            actionSubject.next(newLevelStarted());
+            expect(epicObserver.next).not.toBeCalled();
+            stateBehaviorSubject.next({
+                ...state,
+                status: GameStatus.Lose,
+            });
+            actionSubject.next(newLevelStarted());
+            expect(epicObserver.next).not.toBeCalled();
         });
     });
     describe('mapUpdatedEpic', () => {
@@ -203,6 +241,32 @@ describe('Epics', () => {
                 bombCellsFound({ cells: bombCells })
             );
         });
+        it('should return "processingFinished" action if solver did not find new bomb cells', () => {
+            const board = `3□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□`;
+            // const bombCells = [
+            //     { x: 1, y: 0 },
+            //     { x: 0, y: 1 },
+            //     { x: 1, y: 1 },
+            // ];
+            stateBehaviorSubject.next({
+                ...state,
+                board,
+                flags: ['1,0', '0,1', '1,1'],
+            });
+            actionSubject.next(mapUpdated({ message: '' }));
+            expect(epicObserver.next).toBeCalledWith(
+                processingFinished()
+            );
+        });
         it('should return "processingFinished" action if solver found nothing', () => {
             const board = `□□□□□□□□□□
 □□□□□□□□□□
@@ -215,6 +279,36 @@ describe('Epics', () => {
 □□□□□□□□□□
 □□□□□□□□□□`;
             stateBehaviorSubject.next({ ...state, board });
+            actionSubject.next(mapUpdated({ message: '' }));
+            expect(epicObserver.next).toBeCalledWith(
+                processingFinished()
+            );
+        });
+        it('should return "processingFinished" if Win or Lose status', () => {
+            const board = `□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□`;
+            stateBehaviorSubject.next({
+                ...state,
+                board,
+                status: GameStatus.Win,
+            });
+            actionSubject.next(mapUpdated({ message: '' }));
+            expect(epicObserver.next).toBeCalledWith(
+                processingFinished()
+            );
+            stateBehaviorSubject.next({
+                ...state,
+                board,
+                status: GameStatus.Lose,
+            });
             actionSubject.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
@@ -265,6 +359,21 @@ describe('Epics', () => {
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
+        });
+        it('should not be called if Win or Lose status', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            stateBehaviorSubject.next({
+                ...state,
+                status: GameStatus.Win,
+            });
+            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            expect(epicObserver.next).not.toBeCalled();
+            stateBehaviorSubject.next({
+                ...state,
+                status: GameStatus.Lose,
+            });
+            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            expect(epicObserver.next).not.toBeCalled();
         });
     });
 });
