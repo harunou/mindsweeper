@@ -10,6 +10,7 @@ import {
     cellOpenedYouWin,
     processingFinished,
     mapUpdated,
+    safeCellsFound,
 } from '../actions';
 import { ActionsObservable, StateObservable } from 'redux-observable';
 import { AppState, GameCell } from '../reducer/reducer.typings';
@@ -127,6 +128,24 @@ describe('Epics', () => {
             actionSubject.next(newLevelStarted());
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
+            );
+        });
+        it('should not send "map" command if tail "state.safe" is not empty', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            const cell12: GameCell = { x: 1, y: 2 };
+            state = { ...state, safe: [cell10, cell12] };
+            stateBehaviorSubject.next(state);
+            actionSubject.next(newLevelStarted());
+            expect(socket$.next).not.toBeCalled();
+        });
+        it('should return "safeCellsFound" if tail "state.safe" is not empty', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            const cell12: GameCell = { x: 1, y: 2 };
+            state = { ...state, safe: [cell10, cell12] };
+            stateBehaviorSubject.next(state);
+            actionSubject.next(cellOpenedOk());
+            expect(epicObserver.next).toBeCalledWith(
+                safeCellsFound({ cells: [cell12] })
             );
         });
     });

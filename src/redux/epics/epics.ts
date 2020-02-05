@@ -8,6 +8,7 @@ import {
     processingFinished,
     cellOpenedYouWin,
     mapUpdated,
+    safeCellsFound,
 } from '../actions';
 import { ofType } from '../ts-action.patch';
 import { tap, map, filter } from 'rxjs/operators';
@@ -38,13 +39,17 @@ export const openCommandEpic: AppEpic = (
         map(() => processingStarted())
     );
 
-export const mapCommandEpic: AppEpic = (action$, _, { socket$ }) =>
+export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
     action$.pipe(
         ofType(newLevelStarted, cellOpenedOk),
-        tap(() => {
+        map(() => {
+            const [, ...safe] = state$.value.safe;
+            if (safe.length) {
+                return safeCellsFound({ cells: safe });
+            }
             socket$.next(socketCommand.map());
-        }),
-        map(() => processingStarted())
+            return processingStarted();
+        })
     );
 
 export const gameOverEpic: AppEpic = (action$, _, { socket$ }) =>
