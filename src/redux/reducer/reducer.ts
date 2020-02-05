@@ -14,7 +14,11 @@ import {
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
 import { gameBoardLevel1 } from '../../api/websocket.fixtures';
-import { parseMapResponseToBoard, toggleFlagAt, mergeFlagsAt } from '../../helpers';
+import {
+    parseMapResponseToBoard,
+    toggleFlagAt,
+    mergeFlagsAt,
+} from '../../helpers';
 
 export const initialState: AppState = {
     level: null,
@@ -79,6 +83,7 @@ export const appReducer: AppReducer = reducer(
     on(cellOpenedYouWin, state => {
         const newState: AppState = {
             ...state,
+            flags: [],
             status: GameStatus.Win,
         };
         return newState;
@@ -114,7 +119,7 @@ export const appReducer: AppReducer = reducer(
     on(bombCellsFound, (state, { payload }) => {
         const newState: AppState = {
             ...state,
-            flags: mergeFlagsAt(payload.cells, state.flags)
+            flags: mergeFlagsAt(payload.cells, state.flags),
         };
         return newState;
     })

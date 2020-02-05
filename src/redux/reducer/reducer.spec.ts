@@ -157,6 +157,7 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             status: GameStatus.Win,
+            flags: [],
         });
     });
     it('should handle "newLevelStarted" action', () => {
