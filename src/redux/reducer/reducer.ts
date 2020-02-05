@@ -12,7 +12,7 @@ import {
 } from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
-import { mapResponseLevel4 } from '../../api/websocket.fixtures';
+import { gameBoardLevel1 } from '../../api/websocket.fixtures';
 import { parseMapResponseToBoard, toggleFlagAt } from '../../helpers';
 
 export const initialState: AppState = {
@@ -21,55 +21,79 @@ export const initialState: AppState = {
     flags: [],
     status: null,
     isOnline: true,
-    isLoading: false,
+    isProcessing: false,
 };
 
 export const appReducer: AppReducer = reducer(
     initialState,
+    // NOTE(harunou): 'on' needs to be patched as it does not interfere type of returning value
+    // on(newLevelStarted, cellOpenedOk, boardCellClick, state => ({
+    //     ...state,
+    //     isProcessing: true,
+    //     dummyFlag: true // <-- ts does not catch, but should?
+    // })),
     on(levelInputClick, (state, { payload }) => {
-        return {
+        const newState: AppState = {
             ...state,
-            board:
-                (false && parseMapResponseToBoard(mapResponseLevel4)) ||
-                '',
+            board: (false && gameBoardLevel1) || '',
             flags: [],
             status: null,
             level: payload.level,
-            isLoading: true,
+            isProcessing: true,
         };
+        return newState;
     }),
-    on(newLevelStarted, cellOpenedOk, boardCellClick, state => ({
-        ...state,
-        isLoading: true,
-    })),
+    on(newLevelStarted, cellOpenedOk, boardCellClick, state => {
+        const newState: AppState = {
+            ...state,
+            isProcessing: true,
+        };
+        return newState;
+    }),
     on(boardCellRightClick, (state, { payload }) => {
-        return {
+        const newState: AppState = {
             ...state,
             flags: toggleFlagAt(payload.cell, state.flags),
         };
+        return newState;
     }),
-    on(connectionLost, state => ({
-        ...state,
-        isOnline: false,
-        isLoading: false,
-    })),
-    on(mapUpdated, (state, { payload }) => ({
-        ...state,
-        board: parseMapResponseToBoard(payload.message),
-        isLoading: false,
-    })),
-    on(cellOpenedYouLose, state => ({
-        ...state,
-        status: GameStatus.Lose,
-        isLoading: true,
-    })),
-    on(cellOpenedYouWin, state => ({
-        ...state,
-        status: GameStatus.Win,
-        isLoading: true,
-    })),
-    on(unknownMessageReceived, state => ({
-        ...state,
-        isLoading: false,
-    }))
+    on(connectionLost, state => {
+        const newState: AppState = {
+            ...state,
+            isOnline: false,
+            isProcessing: false,
+        };
+        return newState;
+    }),
+    on(mapUpdated, (state, { payload }) => {
+        const newState: AppState = {
+            ...state,
+            board: parseMapResponseToBoard(payload.message),
+            isProcessing: false,
+        };
+        return newState;
+    }),
+    on(cellOpenedYouLose, state => {
+        const newState: AppState = {
+            ...state,
+            status: GameStatus.Lose,
+            isProcessing: true,
+        };
+        return newState;
+    }),
+    on(cellOpenedYouWin, state => {
+        const newState: AppState = {
+            ...state,
+            status: GameStatus.Win,
+            isProcessing: true,
+        };
+        return newState;
+    }),
+    on(unknownMessageReceived, state => {
+        const newState: AppState = {
+            ...state,
+            isProcessing: false,
+        };
+        return newState;
+    })
 );

@@ -7,14 +7,14 @@ import {
     selectGameLevel,
     selectIsOnline,
     selectGameStatus,
-    selectIsLoading,
+    selectIsProcessing,
 } from './redux/selectors';
 
 const App: React.FC = (): React.ReactElement => {
     const gameLevel: GameLevel | null = useSelector(selectGameLevel);
     const isOnline: boolean = useSelector(selectIsOnline);
     const gameStatus: GameStatus | null = useSelector(selectGameStatus);
-    const isLoading: boolean = useSelector(selectIsLoading);
+    const isProcessing: boolean = useSelector(selectIsProcessing);
 
     return (
         <>
@@ -27,7 +27,7 @@ const App: React.FC = (): React.ReactElement => {
                     Is online:{' '}
                     {isOnline ? 'true' : 'false. reload the app'}
                     <br />
-                    Is loading: {`${isLoading}`}
+                    Is processing: {`${isProcessing}`}
                     <br />
                     Active level: {gameLevel || 'not set'}
                     <br />

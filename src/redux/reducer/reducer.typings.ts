@@ -7,7 +7,7 @@ export interface AppState {
     flags: GameFlag[];
     status: GameStatus | null;
     isOnline: boolean;
-    isLoading: boolean;
+    isProcessing: boolean;
 }
 
 export type AppReducer = Reducer<AppState, AppActions>;

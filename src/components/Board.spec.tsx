@@ -27,7 +27,7 @@ describe('Board component', () => {
             flags: ['3,1'],
             status: null,
             isOnline: true,
-            isLoading: false,
+            isProcessing: false,
         };
         const storeMock: AppStore = createStore(() => {
             return stateMock;
