@@ -22,6 +22,7 @@ import {
     mapCommandEpic,
     mapUpdatedEpic,
     gameOverEpic,
+    safeCellOpenCommandEpic,
 } from './epics';
 import { socketCommand } from '../../api/websocket.client';
 
@@ -180,6 +181,28 @@ describe('Epics', () => {
         });
         it('should return "processingStarted" action"', () => {
             actionSubject.next(cellOpenedYouWin());
+            expect(epicObserver.next).toBeCalledWith(
+                processingStarted()
+            );
+        });
+    });
+    describe('safeCellOpenCommandEpic', () => {
+        beforeEach(() => {
+            epic = safeCellOpenCommandEpic(action$, state$, {
+                socket$,
+            });
+            epic.subscribe(epicObserver);
+        });
+        it('should send "open" command', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            expect(socket$.next).toBeCalledWith(
+                socketCommand.open(cell10)
+            );
+        });
+        it('should return "processingStarted" action"', () => {
+            const cell10: GameCell = { x: 1, y: 0 };
+            actionSubject.next(safeCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );

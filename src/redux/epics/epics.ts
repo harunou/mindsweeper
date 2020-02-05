@@ -52,6 +52,20 @@ export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
         })
     );
 
+export const safeCellOpenCommandEpic: AppEpic = (
+    action$,
+    state$,
+    { socket$ }
+) =>
+    action$.pipe(
+        ofType(safeCellsFound),
+        map(({ payload }) => {
+            const [cell] = payload.cells;
+            socket$.next(socketCommand.open(cell));
+            return processingStarted();
+        })
+    );
+
 export const gameOverEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(cellOpenedYouWin, cellOpenedYouLose),
