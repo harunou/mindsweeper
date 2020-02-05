@@ -8,7 +8,8 @@ import {
     openCommandEpic,
     mapCommandEpic,
     newCommandEpic,
-} from '../epics';
+    mapUpdatedEpic,
+} from '../epics/epics';
 
 const createAppStore = (socket$: AppSocket): AppStore => {
     const epicMiddleware: AppEpicMiddleware = createEpicMiddleware({
@@ -26,6 +27,11 @@ const createAppStore = (socket$: AppSocket): AppStore => {
 };
 
 const createRootEpic = (): AppEpic =>
-    combineEpics(openCommandEpic, mapCommandEpic, newCommandEpic);
+    combineEpics(
+        openCommandEpic,
+        mapCommandEpic,
+        newCommandEpic,
+        mapUpdatedEpic
+    );
 
 export default createAppStore;

@@ -62,8 +62,6 @@ describe('Reducer', () => {
             flags: [],
             level: 2,
             status: null,
-            isOnline: true,
-            isProcessing: true,
         };
         expect(state).toEqual(expected);
     });
@@ -83,7 +81,6 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             board: gameBoardShort,
-            isProcessing: false,
         });
     });
     it('should handle "boardCellRightClick" action with cell remove', () => {
@@ -135,7 +132,6 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             status: GameStatus.Lose,
-            isProcessing: true,
         });
     });
     it('should handle "cellOpenedYouWin" action', () => {
@@ -151,7 +147,6 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             status: GameStatus.Win,
-            isProcessing: true,
         });
     });
     it('should handle "newLevelStarted" action', () => {
@@ -166,7 +161,6 @@ describe('Reducer', () => {
         const state = appReducer(initialState, newLevelStarted());
         expect(state).toEqual({
             ...initialState,
-            isProcessing: true,
         });
     });
     it('should handle "cellOpenedOk" action', () => {
@@ -181,7 +175,6 @@ describe('Reducer', () => {
         const state = appReducer(initialState, cellOpenedOk());
         expect(state).toEqual({
             ...initialState,
-            isProcessing: true,
         });
     });
     it('should handle "unknownMessageReceived" action', () => {

@@ -2,9 +2,6 @@ import {
     connectionLost,
     levelInputClick,
     mapUpdated,
-    boardCellClick,
-    newLevelStarted,
-    cellOpenedOk,
     cellOpenedYouLose,
     unknownMessageReceived,
     boardCellRightClick,
@@ -35,20 +32,15 @@ export const appReducer: AppReducer = reducer(
     //     dummyFlag: true // <-- ts does not catch, but should?
     // })),
     on(levelInputClick, (state, { payload }) => {
+        if (state.isProcessing) {
+            return { ...state };
+        }
         const newState: AppState = {
             ...state,
             board: (false && gameBoardLevel1) || '',
             flags: [],
             status: null,
             level: payload.level,
-            isProcessing: true,
-        };
-        return newState;
-    }),
-    on(newLevelStarted, cellOpenedOk, boardCellClick, state => {
-        const newState: AppState = {
-            ...state,
-            isProcessing: true,
         };
         return newState;
     }),
@@ -71,7 +63,6 @@ export const appReducer: AppReducer = reducer(
         const newState: AppState = {
             ...state,
             board: parseMapResponseToBoard(payload.message),
-            isProcessing: false,
         };
         return newState;
     }),
@@ -79,7 +70,6 @@ export const appReducer: AppReducer = reducer(
         const newState: AppState = {
             ...state,
             status: GameStatus.Lose,
-            isProcessing: true,
         };
         return newState;
     }),
@@ -87,7 +77,6 @@ export const appReducer: AppReducer = reducer(
         const newState: AppState = {
             ...state,
             status: GameStatus.Win,
-            isProcessing: true,
         };
         return newState;
     }),
