@@ -4,7 +4,7 @@ import { AppActions } from '../actions';
 export interface AppState {
     level: GameLevel | null;
     board: GameBoard;
-    flags: GameFlags;
+    flags: GameFlag[];
     status: GameStatus | null;
     isOnline: boolean;
     isLoading: boolean;
@@ -23,4 +23,4 @@ export type GameLevel = 1 | 2 | 3 | 4;
 
 export type GameBoard = string;
 
-export type GameFlags = string[];
+export type GameFlag = string;

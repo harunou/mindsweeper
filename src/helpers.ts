@@ -1,7 +1,7 @@
 import {
     GameCell,
     GameBoard,
-    GameFlags,
+    GameFlag,
 } from './redux/reducer/reducer.typings';
 
 export const bombCellChar = '*';
@@ -56,8 +56,8 @@ export const parseMapResponseToBoard = (message: string): GameBoard => {
 
 export const toggleFlagAt = (
     cell: GameCell,
-    flags: GameFlags
-): GameFlags => {
+    flags: GameFlag[]
+): GameFlag[] => {
     return hasFlagAt(cell, flags)
         ? removeFlagAt(cell, flags)
         : flags.concat(cellToFlag(cell));
@@ -65,13 +65,16 @@ export const toggleFlagAt = (
 
 export const hasFlagAt = (
     cell: GameCell,
-    flags: GameFlags
+    flags: GameFlag[]
 ): boolean => {
     return flags.includes(cellToFlag(cell));
 };
 
 const cellToFlag = (cell: GameCell): string => `${cell.x},${cell.y}`;
-const removeFlagAt = (cell: GameCell, flags: GameFlags): GameFlags => {
+const removeFlagAt = (
+    cell: GameCell,
+    flags: GameFlag[]
+): GameFlag[] => {
     const index = flags.indexOf(cellToFlag(cell));
     if (index === -1) {
         return [...flags];

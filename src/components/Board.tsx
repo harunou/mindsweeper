@@ -1,5 +1,5 @@
 import React, { Dispatch, useCallback } from 'react';
-import { GameBoard, GameFlags } from '../redux/reducer/reducer.typings';
+import { GameBoard, GameFlag } from '../redux/reducer/reducer.typings';
 import { useSelector, useDispatch } from 'react-redux';
 import CoverCell from './CoverCell';
 import {
@@ -15,7 +15,7 @@ import { isBombCell, isCoverCell, hasFlagAt } from '../helpers';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
-    const flags: GameFlags = useSelector(selectFlags);
+    const flags: GameFlag[] = useSelector(selectFlags);
     const dispatch: Dispatch<AppActions> = useDispatch();
 
     const handleCellLeftClick = useCallback(
