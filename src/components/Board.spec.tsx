@@ -25,6 +25,7 @@ describe('Board component', () => {
             level: 1,
             board,
             flags: ['3,1'],
+            safe: [],
             status: null,
             isOnline: true,
             isProcessing: false,

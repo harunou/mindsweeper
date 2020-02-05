@@ -8,16 +8,19 @@ import {
     cellOpenedYouWin,
     processingStarted,
     processingFinished,
+    safeCellsFound,
+    bombCellsFound,
 } from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
 import { gameBoardLevel1 } from '../../api/websocket.fixtures';
-import { parseMapResponseToBoard, toggleFlagAt } from '../../helpers';
+import { parseMapResponseToBoard, toggleFlagAt, mergeFlagsAt } from '../../helpers';
 
 export const initialState: AppState = {
     level: null,
     board: '',
     flags: [],
+    safe: [],
     status: null,
     isOnline: true,
     isProcessing: false,
@@ -98,6 +101,20 @@ export const appReducer: AppReducer = reducer(
         const newState: AppState = {
             ...state,
             isProcessing: false,
+        };
+        return newState;
+    }),
+    on(safeCellsFound, (state, { payload }) => {
+        const newState: AppState = {
+            ...state,
+            safe: payload.cells,
+        };
+        return newState;
+    }),
+    on(bombCellsFound, (state, { payload }) => {
+        const newState: AppState = {
+            ...state,
+            flags: mergeFlagsAt(payload.cells, state.flags)
         };
         return newState;
     })

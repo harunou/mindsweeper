@@ -81,3 +81,15 @@ const removeFlagAt = (
     }
     return [...flags.slice(0, index), ...flags.slice(index + 1)];
 };
+
+export const mergeFlagsAt = (cells: GameCell[], flags: GameFlag[]) => {
+    return cells.reduce(
+        (f: GameFlag[], cell: GameCell) => {
+            if (hasFlagAt(cell, flags)) {
+                return [...f];
+            }
+            return [...f, cellToFlag(cell)];
+        },
+        [...flags]
+    );
+};

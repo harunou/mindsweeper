@@ -8,7 +8,6 @@ import {
     processingFinished,
     cellOpenedYouWin,
     mapUpdated,
-    connectionLost,
 } from '../actions';
 import { ofType } from '../ts-action.patch';
 import { tap, map, filter } from 'rxjs/operators';

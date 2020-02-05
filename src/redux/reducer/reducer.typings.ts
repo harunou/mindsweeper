@@ -5,6 +5,7 @@ export interface AppState {
     level: GameLevel | null;
     board: GameBoard;
     flags: GameFlag[];
+    safe: GameCell[];
     status: GameStatus | null;
     isOnline: boolean;
     isProcessing: boolean;

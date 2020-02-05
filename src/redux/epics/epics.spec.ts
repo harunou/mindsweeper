@@ -38,6 +38,7 @@ describe('Epics', () => {
         state = {
             board: '',
             flags: [],
+            safe: [],
             level: 1,
             status: null,
             isProcessing: false,

@@ -30,6 +30,15 @@ export const unknownMessageReceived = action(
 export const processingStarted = action('[WS] Processing started');
 export const processingFinished = action('[WS] Processing finished');
 
+export const safeCellsFound = action(
+    '[Solver] Safe cells found',
+    payload<{ cells: GameCell[] }>()
+);
+export const bombCellsFound = action(
+    '[Solver] Bomb cells found',
+    payload<{ cells: GameCell[] }>()
+);
+
 const actions = union({
     levelInputClick,
     boardCellClick,
@@ -43,6 +52,8 @@ const actions = union({
     unknownMessageReceived,
     processingStarted,
     processingFinished,
+    safeCellsFound,
+    bombCellsFound,
 });
 
 export type AppActions = typeof actions;

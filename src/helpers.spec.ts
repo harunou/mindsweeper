@@ -4,12 +4,13 @@ import {
     parseMapResponseToBoard,
     toggleFlagAt,
     hasFlagAt,
+    mergeFlagsAt,
 } from './helpers';
 import {
     mapResponseShort,
     gameBoardShort,
 } from './api/websocket.fixtures';
-import { GameCell } from './redux/reducer/reducer.typings';
+import { GameCell, GameFlag } from './redux/reducer/reducer.typings';
 
 const boardSolved = `0001□□□□□□
 0001□□□□□□
@@ -58,5 +59,12 @@ describe('App helper functions', () => {
     it('should find cell within flags array if presented', () => {
         expect(hasFlagAt(cell11, [flag11])).toBeTruthy();
         expect(hasFlagAt(cell11, [])).toBeFalsy();
+    });
+    it('should merge new flags into flags array', () => {
+        const cell12: GameCell = { x: 1, y: 2 };
+        const flag12: GameFlag = '1,2';
+        expect(
+            mergeFlagsAt([cell11, cell12], [flag11, flag12])
+        ).toBeTruthy();
     });
 });

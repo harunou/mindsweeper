@@ -11,6 +11,8 @@ import {
     cellOpenedYouWin,
     processingStarted,
     processingFinished,
+    safeCellsFound,
+    bombCellsFound,
 } from '../actions';
 import {
     AppState,
@@ -31,6 +33,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [],
+            safe: [],
             level: 1,
             status: null,
             isProcessing: true,
@@ -47,6 +50,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: GameStatus.Lose,
             isOnline: true,
@@ -60,6 +64,7 @@ describe('Reducer', () => {
             ...initialState,
             board: '',
             flags: [],
+            safe: [],
             level: 2,
             status: null,
         };
@@ -69,6 +74,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: '',
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -87,6 +93,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -105,6 +112,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -123,6 +131,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -138,6 +147,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -153,6 +163,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -167,6 +178,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isOnline: true,
@@ -181,6 +193,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isProcessing: true,
@@ -199,6 +212,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isProcessing: false,
@@ -214,6 +228,7 @@ describe('Reducer', () => {
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],
+            safe: [],
             level: 1,
             status: null,
             isProcessing: true,
@@ -223,6 +238,46 @@ describe('Reducer', () => {
         expect(state).toEqual({
             ...initialState,
             isProcessing: false,
+        });
+    });
+    it('should handle "safeCellsFound" action', () => {
+        const initialState: AppState = {
+            board: gameBoardShort,
+            flags: [flag10],
+            safe: [],
+            level: 1,
+            status: null,
+            isProcessing: true,
+            isOnline: true,
+        };
+        const state = appReducer(
+            initialState,
+            safeCellsFound({ cells: [cell10] })
+        );
+        expect(state).toEqual({
+            ...initialState,
+            safe: [cell10],
+        });
+    });
+    it('should handle "bombCellsFound" action', () => {
+        const cell12: GameCell = { x: 1, y: 2 };
+        const flag12: GameFlag = '1,2';
+        const initialState: AppState = {
+            board: gameBoardShort,
+            flags: [flag10],
+            safe: [],
+            level: 1,
+            status: null,
+            isProcessing: true,
+            isOnline: true,
+        };
+        const state = appReducer(
+            initialState,
+            bombCellsFound({ cells: [cell10, cell12] })
+        );
+        expect(state).toEqual({
+            ...initialState,
+            flags: [flag10, flag12],
         });
     });
 });
