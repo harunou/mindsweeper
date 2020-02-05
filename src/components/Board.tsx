@@ -10,9 +10,8 @@ import {
 import BombCell from './BombCell';
 import HintCell from './HintCell';
 import FlagCell from './FlagCell';
-import { hasFlagAt } from '../redux/helpers';
 import { selectBoard, selectFlags } from '../redux/selectors';
-import { isBombCell, isCoverCell } from './helpers';
+import { isBombCell, isCoverCell, hasFlagAt } from '../helpers';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);

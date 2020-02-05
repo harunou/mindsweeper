@@ -1,8 +1,10 @@
-import { isCoverCell } from '../components/helpers';
-
-const safeCellChar = '.';
-const bombCellChar = '*';
-const isSafeCell = (char: string) => safeCellChar === char;
+import {
+    isCoverCell,
+    isSafeCell,
+    safeCellChar,
+    bombCellChar,
+    getBoardWidth,
+} from '../helpers';
 
 const setCharAt = (
     i: number,
@@ -53,7 +55,7 @@ const checkHint = (hintIndex: number, rowWidth: number) => (
 };
 
 export const solve = (board: string): string => {
-    const rowWidth = board.indexOf('\n');
+    const rowWidth = getBoardWidth(board);
     let map = board.replace(/\n/g, '');
     const hintIndexes = map
         .split('')

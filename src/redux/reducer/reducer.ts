@@ -12,8 +12,8 @@ import {
 } from '../actions';
 import { reducer, on } from 'ts-action';
 import { AppState, GameStatus, AppReducer } from './reducer.typings';
-import { toggleFlagAt, parseMapResponseToBoard } from '../helpers';
 import { mapResponseLevel4 } from '../../api/websocket.fixtures';
+import { parseMapResponseToBoard, toggleFlagAt } from '../../helpers';
 
 export const initialState: AppState = {
     level: null,
