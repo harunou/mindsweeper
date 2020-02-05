@@ -10,6 +10,7 @@ import {
     newCommandEpic,
     mapUpdatedEpic,
     gameOverEpic,
+    safeCellOpenCommandEpic,
 } from '../epics/epics';
 
 const createAppStore = (socket$: AppSocket): AppStore => {
@@ -32,8 +33,9 @@ const createRootEpic = (): AppEpic =>
         newCommandEpic,
         openCommandEpic,
         mapCommandEpic,
-        gameOverEpic,
-        mapUpdatedEpic
+        safeCellOpenCommandEpic,
+        mapUpdatedEpic,
+        gameOverEpic
     );
 
 export default createAppStore;

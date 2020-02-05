@@ -57,7 +57,7 @@ export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
 
 export const safeCellOpenCommandEpic: AppEpic = (
     action$,
-    state$,
+    _,
     { socket$ }
 ) =>
     action$.pipe(
