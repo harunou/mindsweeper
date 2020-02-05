@@ -8,6 +8,7 @@ import {
     processingFinished,
     cellOpenedYouWin,
     mapUpdated,
+    connectionLost,
 } from '../actions';
 import { ofType } from '../ts-action.patch';
 import { tap, map, filter } from 'rxjs/operators';
@@ -40,12 +41,16 @@ export const openCommandEpic: AppEpic = (
 
 export const mapCommandEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
-        ofType(
-            newLevelStarted,
-            cellOpenedOk,
-            cellOpenedYouLose,
-            cellOpenedYouWin
-        ),
+        ofType(newLevelStarted, cellOpenedOk),
+        tap(() => {
+            socket$.next(socketCommand.map());
+        }),
+        map(() => processingStarted())
+    );
+
+export const gameOverEpic: AppEpic = (action$, _, { socket$ }) =>
+    action$.pipe(
+        ofType(cellOpenedYouWin, cellOpenedYouLose),
         tap(() => {
             socket$.next(socketCommand.map());
         }),

@@ -1,4 +1,4 @@
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import {
     AppActions,
     newLevelStarted,
@@ -20,6 +20,7 @@ import {
     openCommandEpic,
     mapCommandEpic,
     mapUpdatedEpic,
+    gameOverEpic,
 } from './epics';
 import { socketCommand } from '../../api/websocket.client';
 
@@ -30,6 +31,7 @@ let stateBehaviorSubject: BehaviorSubject<AppState>;
 let state$: StateObservable<AppState>;
 let socket$: WebSocketSubject<string>;
 let epicObserver: SpyObserver<AppActions>;
+let epic: Observable<AppActions>;
 
 describe('Epics', () => {
     beforeEach(() => {
@@ -112,25 +114,13 @@ describe('Epics', () => {
             const epic = mapCommandEpic(action$, state$, { socket$ });
             epic.subscribe(epicObserver);
             actionSubject.next(newLevelStarted());
-            expect(socket$.next).toBeCalled();
+            expect(epicObserver.next).toBeCalled();
         });
         it('should handle "cellOpenedOk" action', () => {
             const epic = mapCommandEpic(action$, state$, { socket$ });
             epic.subscribe(epicObserver);
             actionSubject.next(cellOpenedOk());
-            expect(socket$.next).toBeCalled();
-        });
-        it('should handle "cellOpenedYouLose" action', () => {
-            const epic = mapCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
-            actionSubject.next(cellOpenedYouLose());
-            expect(socket$.next).toBeCalled();
-        });
-        it('should handle "cellOpenedYouWin" action', () => {
-            const epic = mapCommandEpic(action$, state$, { socket$ });
-            epic.subscribe(epicObserver);
-            actionSubject.next(cellOpenedYouWin());
-            expect(socket$.next).toBeCalled();
+            expect(epicObserver.next).toBeCalled();
         });
         it('should send "map" command', () => {
             const epic = mapCommandEpic(action$, state$, { socket$ });
@@ -154,6 +144,30 @@ describe('Epics', () => {
             actionSubject.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
+            );
+        });
+    });
+    describe('gameOverEpic', () => {
+        beforeEach(() => {
+            epic = gameOverEpic(action$, state$, { socket$ });
+            epic.subscribe(epicObserver);
+        });
+        it('should handle "cellOpenedYouLose" action', () => {
+            actionSubject.next(cellOpenedYouLose());
+            expect(epicObserver.next).toBeCalled();
+        });
+        it('should handle "cellOpenedYouWin" action', () => {
+            actionSubject.next(cellOpenedYouWin());
+            expect(epicObserver.next).toBeCalled();
+        });
+        it('should send "map" command', () => {
+            actionSubject.next(cellOpenedYouWin());
+            expect(socket$.next).toBeCalledWith(socketCommand.map());
+        });
+        it('should return "processingStarted" action"', () => {
+            actionSubject.next(cellOpenedYouWin());
+            expect(epicObserver.next).toBeCalledWith(
+                processingStarted()
             );
         });
     });
