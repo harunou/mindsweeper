@@ -9,11 +9,14 @@ import {
     cellOpenedYouWin,
     mapUpdated,
     safeCellsFound,
+    bombCellsFound,
 } from '../actions';
 import { ofType } from '../ts-action.patch';
 import { tap, map, filter } from 'rxjs/operators';
 import { socketCommand } from '../../api/websocket.client';
 import { AppEpic } from '../store/store.typings';
+import { solve } from '../../solver/solver';
+import { getSafeCells, getBombCells } from '../../helpers';
 
 export const newCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
     action$.pipe(
@@ -75,8 +78,20 @@ export const gameOverEpic: AppEpic = (action$, _, { socket$ }) =>
         map(() => processingStarted())
     );
 
-export const mapUpdatedEpic: AppEpic = action$ =>
+export const mapUpdatedEpic: AppEpic = (action$, state$) =>
     action$.pipe(
         ofType(mapUpdated),
-        map(() => processingFinished())
+        map(() => {
+            const solved = solve(state$.value.board);
+            const safeCells = getSafeCells(solved);
+            const bombCells = getBombCells(solved);
+            switch (true) {
+                case safeCells.length > 0:
+                    return safeCellsFound({ cells: safeCells });
+                case bombCells.length > 0:
+                    return bombCellsFound({ cells: bombCells });
+                default:
+                    return processingFinished();
+            }
+        })
     );

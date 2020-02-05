@@ -13,7 +13,8 @@ export const mapResponseLevel1 = `map:
 001□□□□□□□
 001□□□□□□□
 001112□□□□
-000001□□□□`;
+000001□□□□
+`;
 export const gameBoardLevel1 = `0001□□□□□□
 0012□□□□□□
 001□□□□□□□

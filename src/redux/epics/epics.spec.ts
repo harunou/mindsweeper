@@ -11,6 +11,7 @@ import {
     processingFinished,
     mapUpdated,
     safeCellsFound,
+    bombCellsFound,
 } from '../actions';
 import { ActionsObservable, StateObservable } from 'redux-observable';
 import { AppState, GameCell } from '../reducer/reducer.typings';
@@ -155,7 +156,65 @@ describe('Epics', () => {
             epic = mapUpdatedEpic(action$, state$, { socket$ });
             epic.subscribe(epicObserver);
         });
-        it('should return "processingFinished" action"', () => {
+        it('should return "safeCellsFound" action if solver find safe cells', () => {
+            const board = `0001□□□□□□
+0012□□□□□□
+001□□□□□□□
+012□□□□□□□
+01□□□□□□□□
+011□□□□□□□
+001□□□□□□□
+001□□□□□□□
+001112□□□□
+000001□□□□`;
+            const safeCells = [
+                { x: 3, y: 3 },
+                { x: 3, y: 4 },
+                { x: 3, y: 5 },
+                { x: 3, y: 6 },
+                { x: 4, y: 7 },
+                { x: 5, y: 7 },
+            ];
+            stateBehaviorSubject.next({ ...state, board });
+            actionSubject.next(mapUpdated({ message: '' }));
+            expect(epicObserver.next).toBeCalledWith(
+                safeCellsFound({ cells: safeCells })
+            );
+        });
+        it('should return "bombCellsFound" action if solver found only bomb cells', () => {
+            const board = `3□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□`;
+            const bombCells = [
+                { x: 1, y: 0 },
+                { x: 0, y: 1 },
+                { x: 1, y: 1 },
+            ];
+            stateBehaviorSubject.next({ ...state, board });
+            actionSubject.next(mapUpdated({ message: '' }));
+            expect(epicObserver.next).toBeCalledWith(
+                bombCellsFound({ cells: bombCells })
+            );
+        });
+        it('should return "processingFinished" action if solver found nothing', () => {
+            const board = `□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□
+□□□□□□□□□□`;
+            stateBehaviorSubject.next({ ...state, board });
             actionSubject.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
