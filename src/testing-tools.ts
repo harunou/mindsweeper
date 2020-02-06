@@ -1,19 +1,22 @@
-import { PartialObserver } from 'rxjs';
+import { Observer, Subject } from 'rxjs';
 import { AppStore } from './redux/store/store.typings';
+import { AppState } from './redux/reducer/reducer.typings';
+import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
+import { StateObservable } from 'redux-observable';
 
-type SpyObj<T> = T &
+type SpyObject<T> = T &
     {
         [k in keyof T]: T[k] extends (...args: any[]) => any
             ? T[k] & jest.SpyInstance<T[k], jest.ArgsType<T[k]>>
             : T[k];
     };
 
-export type SpyObserver<T> = SpyObj<PartialObserver<T>>;
+export type SpyObserver<T> = SpyObject<Observer<T>>;
 
-export const createObserverSpy = <T>(
-    observer?: Partial<SpyObserver<T>>
+export const createSpyObserver = <T>(
+    observer?: Partial<Observer<T>>
 ): SpyObserver<T> => {
-    const observerSpy: PartialObserver<T> = {
+    const observerSpy: Observer<T> = {
         next(value?: T): void {},
         error(error?: object): void {
             fail(
@@ -29,12 +32,56 @@ export const createObserverSpy = <T>(
     return observerSpy as SpyObserver<T>;
 };
 
-export type SpyStore = SpyObj<AppStore>;
+export type SpyWebSocketSubject<T> = SpyObject<WebSocketSubject<T>>;
 
-export const createStoreSpy = (): SpyStore => {
-    const storeSpy = {
-        dispatch: () => {},
+export const createSpyWebSocketSubject = <
+    T
+>(): SpyWebSocketSubject<T> => {
+    const ws = webSocket<T>('dummyWebSocketUrl');
+    jest.spyOn(ws, 'next').mockImplementation(() => {});
+    jest.spyOn(ws, 'subscribe');
+    return ws as SpyWebSocketSubject<T>;
+};
+
+export type SpyStore = SpyObject<AppStore>;
+
+export const createStoreSpy = (state?: Partial<AppState>): SpyStore => {
+    const initialState: AppState = {
+        level: null,
+        board: '',
+        flags: [],
+        safe: [],
+        status: null,
+        isOnline: true,
+        isProcessing: false,
+        ...state,
+    };
+    const storeSpy: Partial<AppStore> = {
+        dispatch: <AppActions>(a: AppActions) => a,
+        getState: () => initialState,
     };
     jest.spyOn(storeSpy, 'dispatch');
-    return (storeSpy as unknown) as SpyStore;
+    jest.spyOn(storeSpy, 'getState');
+    return storeSpy as SpyStore;
+};
+
+export type StateObservableSpy = SpyObject<StateObservable<AppState>>;
+
+export const createStateObservableSpy = (state?: Partial<AppState>) => {
+    const initialState: AppState = {
+        level: null,
+        board: '',
+        flags: [],
+        safe: [],
+        status: null,
+        isOnline: true,
+        isProcessing: false,
+        ...state,
+    };
+    const stateSource$ = new Subject<AppState>();
+    const state$ = new StateObservable(
+        stateSource$,
+        initialState
+    ) as StateObservableSpy;
+    return { state$, stateSource$ };
 };

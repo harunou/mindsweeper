@@ -1,26 +1,25 @@
 import createAppStore from './store';
 import { initialState } from '../reducer/reducer';
-import { createObserverSpy } from '../../testing-tools';
-import { WebSocketSubject } from 'rxjs/webSocket';
+import {
+    createSpyWebSocketSubject,
+    SpyWebSocketSubject,
+} from '../../testing-tools';
 import { socketCommand } from '../../api/websocket.client';
 import {
     levelInputClick,
     boardCellClick,
     newLevelStarted,
 } from '../actions';
-import { AppSocket } from '../../api/websocket.typings';
 import { AppStore } from './store.typings';
 import { GameCell } from '../reducer/reducer.typings';
 
 const cell11: GameCell = { x: 1, y: 1 };
-let socket$: AppSocket;
+let socket$: SpyWebSocketSubject<string>;
 let store: AppStore;
 
 describe('Store', () => {
     beforeEach(() => {
-        socket$ = (createObserverSpy() as unknown) as WebSocketSubject<
-            string
-        >;
+        socket$ = createSpyWebSocketSubject<string>();
         store = createAppStore(socket$);
     });
     it('should create store with initial state', () => {
