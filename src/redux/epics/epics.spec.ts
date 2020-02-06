@@ -24,7 +24,8 @@ import {
     SpyWebSocketSubject,
     createSpyWebSocketSubject,
     createSpyObserver,
-    createStateObservableSpy,
+    createStateObservableMock,
+    createActionsObservableMock,
 } from '../../testing-tools';
 import {
     newCommandEpic,
@@ -37,8 +38,8 @@ import {
 import { socketCommand } from '../../api/websocket.client';
 
 let state: AppState;
-let actionSubject: Subject<AppActions>;
-let action$: ActionsObservable<AppActions>;
+let actions$: ActionsObservable<AppActions>;
+let actionsSource$: Subject<AppActions>;
 let state$: StateObservable<AppState>;
 let stateSource$: Subject<AppState>;
 let socket$: SpyWebSocketSubject<string>;
@@ -56,31 +57,28 @@ describe('Epics', () => {
             isProcessing: false,
             isOnline: true,
         };
-        actionSubject = new Subject();
-        action$ = actionSubject.asObservable() as ActionsObservable<
-            AppActions
-        >;
-        ({ state$, stateSource$ } = createStateObservableSpy());
+        ({ actions$, actionsSource$ } = createActionsObservableMock());
+        ({ state$, stateSource$ } = createStateObservableMock());
         socket$ = createSpyWebSocketSubject<string>();
         epicObserver = createSpyObserver();
     });
     describe('newCommandEpic', () => {
         beforeEach(() => {
-            epic = newCommandEpic(action$, state$, { socket$ });
+            epic = newCommandEpic(actions$, state$, { socket$ });
             epic.subscribe(epicObserver);
         });
         it('should send "new" command if "isProcessing: false"', () => {
-            actionSubject.next(levelInputClick({ level: 1 }));
+            actionsSource$.next(levelInputClick({ level: 1 }));
             expect(socket$.next).toBeCalledWith(socketCommand.new(1));
         });
         it('should not send "new" command if "isProcessing: true"', () => {
             state = { ...state, isProcessing: true };
             stateSource$.next(state);
-            actionSubject.next(levelInputClick({ level: 1 }));
+            actionsSource$.next(levelInputClick({ level: 1 }));
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "processingStarted" action"', () => {
-            actionSubject.next(levelInputClick({ level: 1 }));
+            actionsSource$.next(levelInputClick({ level: 1 }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
@@ -88,12 +86,12 @@ describe('Epics', () => {
     });
     describe('openCommandEpic', () => {
         beforeEach(() => {
-            epic = openCommandEpic(action$, state$, { socket$ });
+            epic = openCommandEpic(actions$, state$, { socket$ });
             epic.subscribe(epicObserver);
         });
         it('should send "open" command if "isProcessing: false"', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            actionSubject.next(boardCellClick({ cell: cell10 }));
+            actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(socket$.next).toBeCalledWith(
                 socketCommand.open(cell10)
             );
@@ -102,12 +100,12 @@ describe('Epics', () => {
             const cell10: GameCell = { x: 1, y: 0 };
             state = { ...state, isProcessing: true };
             stateSource$.next(state);
-            actionSubject.next(boardCellClick({ cell: cell10 }));
+            actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "processingStarted" action"', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            actionSubject.next(boardCellClick({ cell: cell10 }));
+            actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
@@ -118,40 +116,40 @@ describe('Epics', () => {
                 ...state,
                 status: GameStatus.Win,
             });
-            actionSubject.next(boardCellClick({ cell: cell10 }));
+            actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(epicObserver.next).not.toBeCalled();
             stateSource$.next({
                 ...state,
                 status: GameStatus.Lose,
             });
-            actionSubject.next(boardCellClick({ cell: cell10 }));
+            actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(epicObserver.next).not.toBeCalled();
         });
     });
     describe('mapCommandEpic', () => {
         beforeEach(() => {
-            epic = mapCommandEpic(action$, state$, { socket$ });
+            epic = mapCommandEpic(actions$, state$, { socket$ });
             epic.subscribe(epicObserver);
         });
         it('should handle "newLevelStarted" action', () => {
-            actionSubject.next(newLevelStarted());
+            actionsSource$.next(newLevelStarted());
             expect(epicObserver.next).toBeCalled();
         });
         it('should handle "cellOpenedOk" action', () => {
-            actionSubject.next(cellOpenedOk());
+            actionsSource$.next(cellOpenedOk());
             expect(epicObserver.next).toBeCalled();
         });
         it('should handle "bombCellsFound" action', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            actionSubject.next(bombCellsFound({ cells: [cell10] }));
+            actionsSource$.next(bombCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).toBeCalled();
         });
         it('should send "map" command', () => {
-            actionSubject.next(newLevelStarted());
+            actionsSource$.next(newLevelStarted());
             expect(socket$.next).toBeCalledWith(socketCommand.map());
         });
         it('should return "processingStarted" action"', () => {
-            actionSubject.next(newLevelStarted());
+            actionsSource$.next(newLevelStarted());
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
@@ -161,7 +159,7 @@ describe('Epics', () => {
             const cell12: GameCell = { x: 1, y: 2 };
             state = { ...state, safe: [cell10, cell12] };
             stateSource$.next(state);
-            actionSubject.next(newLevelStarted());
+            actionsSource$.next(newLevelStarted());
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "safeCellsFound" if tail "state.safe" is not empty', () => {
@@ -169,7 +167,7 @@ describe('Epics', () => {
             const cell12: GameCell = { x: 1, y: 2 };
             state = { ...state, safe: [cell10, cell12] };
             stateSource$.next(state);
-            actionSubject.next(cellOpenedOk());
+            actionsSource$.next(cellOpenedOk());
             expect(epicObserver.next).toBeCalledWith(
                 safeCellsFound({ cells: [cell12] })
             );
@@ -179,19 +177,19 @@ describe('Epics', () => {
                 ...state,
                 status: GameStatus.Win,
             });
-            actionSubject.next(newLevelStarted());
+            actionsSource$.next(newLevelStarted());
             expect(epicObserver.next).not.toBeCalled();
             stateSource$.next({
                 ...state,
                 status: GameStatus.Lose,
             });
-            actionSubject.next(newLevelStarted());
+            actionsSource$.next(newLevelStarted());
             expect(epicObserver.next).not.toBeCalled();
         });
     });
     describe('mapUpdatedEpic', () => {
         beforeEach(() => {
-            epic = mapUpdatedEpic(action$, state$, { socket$ });
+            epic = mapUpdatedEpic(actions$, state$, { socket$ });
             epic.subscribe(epicObserver);
         });
         it('should return "safeCellsFound" action if solver find safe cells', () => {
@@ -214,7 +212,7 @@ describe('Epics', () => {
                 { x: 5, y: 7 },
             ];
             stateSource$.next({ ...state, board });
-            actionSubject.next(mapUpdated({ message: '' }));
+            actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 safeCellsFound({ cells: safeCells })
             );
@@ -236,7 +234,7 @@ describe('Epics', () => {
                 { x: 1, y: 1 },
             ];
             stateSource$.next({ ...state, board });
-            actionSubject.next(mapUpdated({ message: '' }));
+            actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 bombCellsFound({ cells: bombCells })
             );
@@ -262,7 +260,7 @@ describe('Epics', () => {
                 board,
                 flags: ['1,0', '0,1', '1,1'],
             });
-            actionSubject.next(mapUpdated({ message: '' }));
+            actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
             );
@@ -279,7 +277,7 @@ describe('Epics', () => {
 □□□□□□□□□□
 □□□□□□□□□□`;
             stateSource$.next({ ...state, board });
-            actionSubject.next(mapUpdated({ message: '' }));
+            actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
             );
@@ -300,7 +298,7 @@ describe('Epics', () => {
                 board,
                 status: GameStatus.Win,
             });
-            actionSubject.next(mapUpdated({ message: '' }));
+            actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
             );
@@ -309,7 +307,7 @@ describe('Epics', () => {
                 board,
                 status: GameStatus.Lose,
             });
-            actionSubject.next(mapUpdated({ message: '' }));
+            actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
                 processingFinished()
             );
@@ -317,23 +315,23 @@ describe('Epics', () => {
     });
     describe('gameOverEpic', () => {
         beforeEach(() => {
-            epic = gameOverEpic(action$, state$, { socket$ });
+            epic = gameOverEpic(actions$, state$, { socket$ });
             epic.subscribe(epicObserver);
         });
         it('should handle "cellOpenedYouLose" action', () => {
-            actionSubject.next(cellOpenedYouLose());
+            actionsSource$.next(cellOpenedYouLose());
             expect(epicObserver.next).toBeCalled();
         });
         it('should handle "cellOpenedYouWin" action', () => {
-            actionSubject.next(cellOpenedYouWin());
+            actionsSource$.next(cellOpenedYouWin());
             expect(epicObserver.next).toBeCalled();
         });
         it('should send "map" command', () => {
-            actionSubject.next(cellOpenedYouWin());
+            actionsSource$.next(cellOpenedYouWin());
             expect(socket$.next).toBeCalledWith(socketCommand.map());
         });
         it('should return "processingStarted" action"', () => {
-            actionSubject.next(cellOpenedYouWin());
+            actionsSource$.next(cellOpenedYouWin());
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
@@ -341,21 +339,21 @@ describe('Epics', () => {
     });
     describe('safeCellOpenCommandEpic', () => {
         beforeEach(() => {
-            epic = safeCellOpenCommandEpic(action$, state$, {
+            epic = safeCellOpenCommandEpic(actions$, state$, {
                 socket$,
             });
             epic.subscribe(epicObserver);
         });
         it('should send "open" command', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
             expect(socket$.next).toBeCalledWith(
                 socketCommand.open(cell10)
             );
         });
         it('should return "processingStarted" action"', () => {
             const cell10: GameCell = { x: 1, y: 0 };
-            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
@@ -366,13 +364,13 @@ describe('Epics', () => {
                 ...state,
                 status: GameStatus.Win,
             });
-            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).not.toBeCalled();
             stateSource$.next({
                 ...state,
                 status: GameStatus.Lose,
             });
-            actionSubject.next(safeCellsFound({ cells: [cell10] }));
+            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).not.toBeCalled();
         });
     });

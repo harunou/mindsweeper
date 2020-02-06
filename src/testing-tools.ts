@@ -2,7 +2,8 @@ import { Observer, Subject } from 'rxjs';
 import { AppStore } from './redux/store/store.typings';
 import { AppState } from './redux/reducer/reducer.typings';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
-import { StateObservable } from 'redux-observable';
+import { StateObservable, ActionsObservable } from 'redux-observable';
+import { AppActions } from './redux/actions';
 
 type SpyObject<T> = T &
     {
@@ -65,9 +66,9 @@ export const createStoreSpy = (state?: Partial<AppState>): SpyStore => {
     return storeSpy as SpyStore;
 };
 
-export type StateObservableSpy = SpyObject<StateObservable<AppState>>;
-
-export const createStateObservableSpy = (state?: Partial<AppState>) => {
+export const createStateObservableMock = (
+    state?: Partial<AppState>
+) => {
     const initialState: AppState = {
         level: null,
         board: '',
@@ -79,9 +80,12 @@ export const createStateObservableSpy = (state?: Partial<AppState>) => {
         ...state,
     };
     const stateSource$ = new Subject<AppState>();
-    const state$ = new StateObservable(
-        stateSource$,
-        initialState
-    ) as StateObservableSpy;
+    const state$ = new StateObservable(stateSource$, initialState);
     return { state$, stateSource$ };
+};
+
+export const createActionsObservableMock = () => {
+    const actionsSource$ = new Subject<AppActions>();
+    const actions$ = new ActionsObservable(actionsSource$);
+    return { actions$, actionsSource$ };
 };
