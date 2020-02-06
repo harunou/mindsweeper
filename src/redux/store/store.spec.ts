@@ -13,7 +13,7 @@ import {
 import { AppStore } from './store.typings';
 import { GameCell } from '../reducer/reducer.typings';
 
-const cell11: GameCell = { x: 1, y: 1 };
+const cell10: GameCell = { x: 1, y: 0 };
 let socket$: SpyWebSocketSubject<string>;
 let store: AppStore;
 
@@ -29,10 +29,10 @@ describe('Store', () => {
         store.dispatch(levelInputClick({ level: 1 }));
         expect(socket$.next).toHaveBeenCalledWith(socketCommand.new(1));
     });
-    it('should send "open 1 1" command on "boardCellClick({cell: {x: 1, y: 1}})" action', () => {
-        store.dispatch(boardCellClick({ cell: cell11 }));
+    it('should send "open 1 0" command on "boardCellClick({cell: {x: 1, y: 0}})" action', () => {
+        store.dispatch(boardCellClick({ cell: cell10 }));
         expect(socket$.next).toHaveBeenCalledWith(
-            socketCommand.open(cell11)
+            socketCommand.open(cell10)
         );
     });
     it('should send "map" command on "newLevelStarted()" action', () => {

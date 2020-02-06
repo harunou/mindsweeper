@@ -35,8 +35,8 @@ const bombCells = [
     { x: 2, y: 4 },
     { x: 3, y: 7 },
 ];
-const cell11: GameCell = { x: 1, y: 1 };
-const flag11 = '1,1';
+const cell10: GameCell = { x: 1, y: 0 };
+const flag10 = '1,0';
 
 describe('App helper functions', () => {
     it('should output array of safe cells from resolved board', () => {
@@ -51,20 +51,20 @@ describe('App helper functions', () => {
         );
     });
     it('should add cell to flags array if not presented', () => {
-        expect(toggleFlagAt(cell11, [])).toEqual([flag11]);
+        expect(toggleFlagAt(cell10, [])).toEqual([flag10]);
     });
     it('should remove cell from flags array if presented', () => {
-        expect(toggleFlagAt(cell11, [flag11])).toEqual([]);
+        expect(toggleFlagAt(cell10, [flag10])).toEqual([]);
     });
     it('should find cell within flags array if presented', () => {
-        expect(hasFlagAt(cell11, [flag11])).toBeTruthy();
-        expect(hasFlagAt(cell11, [])).toBeFalsy();
+        expect(hasFlagAt(cell10, [flag10])).toBeTruthy();
+        expect(hasFlagAt(cell10, [])).toBeFalsy();
     });
     it('should merge new flags into flags array', () => {
         const cell12: GameCell = { x: 1, y: 2 };
         const flag12: GameFlag = '1,2';
         expect(
-            mergeFlagsAt([cell11, cell12], [flag11, flag12])
+            mergeFlagsAt([cell10, cell12], [flag10, flag12])
         ).toBeTruthy();
     });
 });

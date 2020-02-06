@@ -2,7 +2,7 @@ export const newOkResponse = 'new: OK';
 export const openOkResponse = 'open: OK';
 export const openYouLoseResponse = 'open: You lose';
 export const openYouWinResponse = 'open: You win';
-export const open11Command = 'open 1 1';
+export const open10Command = 'open 1 0';
 export const mapResponseLevel1 = `map:
 0001□□□□□□
 0012□□□□□□

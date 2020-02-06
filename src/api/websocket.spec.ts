@@ -9,7 +9,7 @@ import {
     openYouLoseResponse,
     mapResponseLevel1,
     mapResponseShort,
-    open11Command,
+    open10Command,
     openYouWinResponse,
 } from './websocket.fixtures';
 import {
@@ -46,9 +46,9 @@ describe('Websocket responses', () => {
 
 describe('Websocket commands', () => {
     it('should generate correct "open X Y" command', () => {
-        const cell11: GameCell = { x: 1, y: 1 };
-        const command = socketCommand.open(cell11);
-        expect(command).toEqual(open11Command);
+        const cell10: GameCell = { x: 1, y: 0 };
+        const command = socketCommand.open(cell10);
+        expect(command).toEqual(open10Command);
     });
 });
 
