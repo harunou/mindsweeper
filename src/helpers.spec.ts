@@ -10,7 +10,7 @@ import {
     mapResponseShort,
     gameBoardShort,
 } from './api/websocket.fixtures';
-import { GameCell, GameFlag } from './redux/reducer/reducer.typings';
+import { createCellStub, createFlagStub } from './testing-tools';
 
 const boardSolved = `0001□□□□□□
 0001□□□□□□
@@ -23,20 +23,22 @@ const boardSolved = `0001□□□□□□
 000002□□□□
 000001□□□□`;
 const safeCells = [
-    { x: 3, y: 3 },
-    { x: 3, y: 4 },
-    { x: 3, y: 5 },
-    { x: 3, y: 6 },
-    { x: 4, y: 7 },
-    { x: 5, y: 7 },
+    createCellStub(3, 3),
+    createCellStub(3, 4),
+    createCellStub(3, 5),
+    createCellStub(3, 6),
+    createCellStub(4, 7),
+    createCellStub(5, 7),
 ];
 const bombCells = [
-    { x: 3, y: 2 },
-    { x: 2, y: 4 },
-    { x: 3, y: 7 },
+    createCellStub(3, 2),
+    createCellStub(2, 4),
+    createCellStub(3, 7),
 ];
-const cell10: GameCell = { x: 1, y: 0 };
-const flag10 = '1,0';
+const cell10 = createCellStub(1, 0);
+const cell12 = createCellStub(1, 2);
+const flag10 = createFlagStub(1, 0);
+const flag12 = createFlagStub(1, 2);
 
 describe('App helper functions', () => {
     it('should output array of safe cells from resolved board', () => {
@@ -61,8 +63,6 @@ describe('App helper functions', () => {
         expect(hasFlagAt(cell10, [])).toBeFalsy();
     });
     it('should merge new flags into flags array', () => {
-        const cell12: GameCell = { x: 1, y: 2 };
-        const flag12: GameFlag = '1,2';
         expect(
             mergeFlagsAt([cell10, cell12], [flag10, flag12])
         ).toBeTruthy();

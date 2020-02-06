@@ -1,9 +1,20 @@
 import { Observer, Subject } from 'rxjs';
 import { AppStore } from './redux/store/store.typings';
-import { AppState } from './redux/reducer/reducer.typings';
+import {
+    AppState,
+    GameCell,
+    GameFlag,
+} from './redux/reducer/reducer.typings';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 import { StateObservable, ActionsObservable } from 'redux-observable';
 import { AppActions } from './redux/actions';
+
+export const createCellStub = (x: number, y: number): GameCell => ({
+    x,
+    y,
+});
+export const createFlagStub = (x: number, y: number): GameFlag =>
+    `${x},${y}`;
 
 type SpyObject<T> = T &
     {

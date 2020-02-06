@@ -14,19 +14,17 @@ import {
     safeCellsFound,
     bombCellsFound,
 } from '../actions';
-import {
-    AppState,
-    GameStatus,
-    GameCell,
-    GameFlag,
-} from './reducer.typings';
+import { AppState, GameStatus } from './reducer.typings';
 import {
     gameBoardShort,
     mapResponseShort,
 } from '../../api/websocket.fixtures';
+import { createCellStub, createFlagStub } from '../../testing-tools';
 
-const cell10: GameCell = { x: 1, y: 0 };
-const flag10: GameFlag = '1,0';
+const cell10 = createCellStub(1, 0);
+const flag10 = createFlagStub(1, 0);
+const cell12 = createCellStub(1, 2);
+const flag12 = createFlagStub(1, 2);
 
 describe('Reducer', () => {
     it('should handle "connectionLost" action', () => {
@@ -261,8 +259,6 @@ describe('Reducer', () => {
         });
     });
     it('should handle "bombCellsFound" action', () => {
-        const cell12: GameCell = { x: 1, y: 2 };
-        const flag12: GameFlag = '1,2';
         const initialState: AppState = {
             board: gameBoardShort,
             flags: [flag10],

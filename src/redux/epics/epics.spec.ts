@@ -14,11 +14,7 @@ import {
     bombCellsFound,
 } from '../actions';
 import { ActionsObservable, StateObservable } from 'redux-observable';
-import {
-    AppState,
-    GameCell,
-    GameStatus,
-} from '../reducer/reducer.typings';
+import { AppState, GameStatus } from '../reducer/reducer.typings';
 import {
     SpyObserver,
     SpyWebSocketSubject,
@@ -26,6 +22,8 @@ import {
     createSpyObserver,
     createStateObservableMock,
     createActionsObservableMock,
+    createCellStub,
+    createFlagStub,
 } from '../../testing-tools';
 import {
     newCommandEpic,
@@ -90,28 +88,28 @@ describe('Epics', () => {
             epic.subscribe(epicObserver);
         });
         it('should send "open" command if "isProcessing: false"', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(socket$.next).toBeCalledWith(
                 socketCommand.open(cell10)
             );
         });
         it('should not send "open" command if "isProcessing: true"', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             state = { ...state, isProcessing: true };
             stateSource$.next(state);
             actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "processingStarted" action"', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             actionsSource$.next(boardCellClick({ cell: cell10 }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
         });
         it('should not be called if Win or Lose status', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             stateSource$.next({
                 ...state,
                 status: GameStatus.Win,
@@ -140,7 +138,7 @@ describe('Epics', () => {
             expect(epicObserver.next).toBeCalled();
         });
         it('should handle "bombCellsFound" action', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             actionsSource$.next(bombCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).toBeCalled();
         });
@@ -155,16 +153,16 @@ describe('Epics', () => {
             );
         });
         it('should not send "map" command if tail "state.safe" is not empty', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
-            const cell12: GameCell = { x: 1, y: 2 };
+            const cell10 = createCellStub(1, 0);
+            const cell12 = createCellStub(1, 2);
             state = { ...state, safe: [cell10, cell12] };
             stateSource$.next(state);
             actionsSource$.next(newLevelStarted());
             expect(socket$.next).not.toBeCalled();
         });
         it('should return "safeCellsFound" if tail "state.safe" is not empty', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
-            const cell12: GameCell = { x: 1, y: 2 };
+            const cell10 = createCellStub(1, 0);
+            const cell12 = createCellStub(1, 2);
             state = { ...state, safe: [cell10, cell12] };
             stateSource$.next(state);
             actionsSource$.next(cellOpenedOk());
@@ -204,12 +202,12 @@ describe('Epics', () => {
 001112□□□□
 000001□□□□`;
             const safeCells = [
-                { x: 3, y: 3 },
-                { x: 3, y: 4 },
-                { x: 3, y: 5 },
-                { x: 3, y: 6 },
-                { x: 4, y: 7 },
-                { x: 5, y: 7 },
+                createCellStub(3, 3),
+                createCellStub(3, 4),
+                createCellStub(3, 5),
+                createCellStub(3, 6),
+                createCellStub(4, 7),
+                createCellStub(5, 7),
             ];
             stateSource$.next({ ...state, board });
             actionsSource$.next(mapUpdated({ message: '' }));
@@ -229,9 +227,9 @@ describe('Epics', () => {
 □□□□□□□□□□
 □□□□□□□□□□`;
             const bombCells = [
-                { x: 1, y: 0 },
-                { x: 0, y: 1 },
-                { x: 1, y: 1 },
+                createCellStub(1, 0),
+                createCellStub(0, 1),
+                createCellStub(1, 1),
             ];
             stateSource$.next({ ...state, board });
             actionsSource$.next(mapUpdated({ message: '' }));
@@ -258,7 +256,11 @@ describe('Epics', () => {
             stateSource$.next({
                 ...state,
                 board,
-                flags: ['1,0', '0,1', '1,1'],
+                flags: [
+                    createFlagStub(1, 0),
+                    createFlagStub(0, 1),
+                    createFlagStub(1, 1),
+                ],
             });
             actionsSource$.next(mapUpdated({ message: '' }));
             expect(epicObserver.next).toBeCalledWith(
@@ -345,21 +347,21 @@ describe('Epics', () => {
             epic.subscribe(epicObserver);
         });
         it('should send "open" command', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             actionsSource$.next(safeCellsFound({ cells: [cell10] }));
             expect(socket$.next).toBeCalledWith(
                 socketCommand.open(cell10)
             );
         });
         it('should return "processingStarted" action"', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             actionsSource$.next(safeCellsFound({ cells: [cell10] }));
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
         });
         it('should not be called if Win or Lose status', () => {
-            const cell10: GameCell = { x: 1, y: 0 };
+            const cell10 = createCellStub(1, 0);
             stateSource$.next({
                 ...state,
                 status: GameStatus.Win,

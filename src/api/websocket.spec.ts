@@ -19,8 +19,11 @@ import {
     cellOpenedYouLose,
     unknownMessageReceived,
 } from '../redux/actions';
-import { SpyStore, createStoreSpy } from '../testing-tools';
-import { GameCell } from '../redux/reducer/reducer.typings';
+import {
+    SpyStore,
+    createStoreSpy,
+    createCellStub,
+} from '../testing-tools';
 
 describe('Websocket responses', () => {
     it('should detect response: new game is set', () => {
@@ -46,8 +49,7 @@ describe('Websocket responses', () => {
 
 describe('Websocket commands', () => {
     it('should generate correct "open X Y" command', () => {
-        const cell10: GameCell = { x: 1, y: 0 };
-        const command = socketCommand.open(cell10);
+        const command = socketCommand.open(createCellStub(1, 0));
         expect(command).toEqual(open10Command);
     });
 });

@@ -3,6 +3,7 @@ import { initialState } from '../reducer/reducer';
 import {
     createSpyWebSocketSubject,
     SpyWebSocketSubject,
+    createCellStub,
 } from '../../testing-tools';
 import { socketCommand } from '../../api/websocket.client';
 import {
@@ -11,9 +12,8 @@ import {
     newLevelStarted,
 } from '../actions';
 import { AppStore } from './store.typings';
-import { GameCell } from '../reducer/reducer.typings';
 
-const cell10: GameCell = { x: 1, y: 0 };
+const cell10 = createCellStub(1, 0);
 let socket$: SpyWebSocketSubject<string>;
 let store: AppStore;
 
