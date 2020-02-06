@@ -32,95 +32,111 @@ export const initialState: AppState = {
 
 export const appReducer: AppReducer = reducer(
     initialState,
-    // NOTE(harunou): 'on' needs to be patched as it does not interfere type of returning value
-    // on(newLevelStarted, cellOpenedOk, boardCellClick, state => ({
-    //     ...state,
-    //     isProcessing: true,
-    //     dummyFlag: true // <-- ts does not catch, but should?
-    // })),
-    on(levelInputClick, (state, { payload }) => {
-        if (state.isProcessing) {
-            return { ...state };
+    on(
+        levelInputClick,
+        (state, { payload }): AppState => {
+            if (state.isProcessing) {
+                return { ...state };
+            }
+            return {
+                ...state,
+                board: (false && gameBoardLevel1) || '',
+                flags: [],
+                status: null,
+                level: payload.level,
+            };
         }
-        const newState: AppState = {
-            ...state,
-            board: (false && gameBoardLevel1) || '',
-            flags: [],
-            status: null,
-            level: payload.level,
-        };
-        return newState;
-    }),
-    on(boardCellRightClick, (state, { payload }) => {
-        const newState: AppState = {
-            ...state,
-            flags: toggleFlagAt(payload.cell, state.flags),
-        };
-        return newState;
-    }),
-    on(connectionLost, state => {
-        const newState: AppState = {
-            ...state,
-            isOnline: false,
-            isProcessing: false,
-        };
-        return newState;
-    }),
-    on(mapUpdated, (state, { payload }) => {
-        const newState: AppState = {
-            ...state,
-            board: parseMapResponseToBoard(payload.message),
-        };
-        return newState;
-    }),
-    on(cellOpenedYouLose, state => {
-        const newState: AppState = {
-            ...state,
-            status: GameStatus.Lose,
-        };
-        return newState;
-    }),
-    on(cellOpenedYouWin, state => {
-        const newState: AppState = {
-            ...state,
-            flags: [],
-            status: GameStatus.Win,
-        };
-        return newState;
-    }),
-    on(unknownMessageReceived, state => {
-        const newState: AppState = {
-            ...state,
-            isProcessing: false,
-        };
-        return newState;
-    }),
-    on(processingStarted, state => {
-        const newState: AppState = {
-            ...state,
-            isProcessing: true,
-        };
-        return newState;
-    }),
-    on(processingFinished, state => {
-        const newState: AppState = {
-            ...state,
-            isProcessing: false,
-        };
-        return newState;
-    }),
-    on(safeCellsFound, (state, { payload }) => {
-        const newState: AppState = {
-            ...state,
-            safe: payload.cells,
-        };
-        return newState;
-    }),
-    on(bombCellsFound, (state, { payload }) => {
-        const newState: AppState = {
-            ...state,
-            flags: mergeFlagsAt(payload.cells, state.flags),
-        };
-        return newState;
-    })
+    ),
+    on(
+        boardCellRightClick,
+        (state, { payload }): AppState => {
+            return {
+                ...state,
+                flags: toggleFlagAt(payload.cell, state.flags),
+            };
+        }
+    ),
+    on(
+        connectionLost,
+        (state): AppState => {
+            return {
+                ...state,
+                isOnline: false,
+                isProcessing: false,
+            };
+        }
+    ),
+    on(
+        mapUpdated,
+        (state, { payload }): AppState => {
+            return {
+                ...state,
+                board: parseMapResponseToBoard(payload.message),
+            };
+        }
+    ),
+    on(
+        cellOpenedYouLose,
+        (state): AppState => {
+            return {
+                ...state,
+                status: GameStatus.Lose,
+            };
+        }
+    ),
+    on(
+        cellOpenedYouWin,
+        (state): AppState => {
+            return {
+                ...state,
+                flags: [],
+                status: GameStatus.Win,
+            };
+        }
+    ),
+    on(
+        unknownMessageReceived,
+        (state): AppState => {
+            return {
+                ...state,
+                isProcessing: false,
+            };
+        }
+    ),
+    on(
+        processingStarted,
+        (state): AppState => {
+            return {
+                ...state,
+                isProcessing: true,
+            };
+        }
+    ),
+    on(
+        processingFinished,
+        (state): AppState => {
+            return {
+                ...state,
+                isProcessing: false,
+            };
+        }
+    ),
+    on(
+        safeCellsFound,
+        (state, { payload }): AppState => {
+            return {
+                ...state,
+                safe: payload.cells,
+            };
+        }
+    ),
+    on(
+        bombCellsFound,
+        (state, { payload }): AppState => {
+            return {
+                ...state,
+                flags: mergeFlagsAt(payload.cells, state.flags),
+            };
+        }
+    )
 );
