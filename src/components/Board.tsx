@@ -11,7 +11,12 @@ import BombCell from './BombCell';
 import HintCell from './HintCell';
 import FlagCell from './FlagCell';
 import { selectBoard, selectFlags } from '../redux/selectors';
-import { isBombCell, isCoverCell, hasFlagAt } from '../helpers';
+import {
+    isBombCell,
+    isCoverCell,
+    hasFlagAt,
+    cellToUniqueId,
+} from '../helpers';
 
 const Board: React.FC = (): JSX.Element => {
     const board: GameBoard = useSelector(selectBoard);
@@ -32,7 +37,7 @@ const Board: React.FC = (): JSX.Element => {
     const rows: JSX.Element[] = board.split('\n').map((row, y) => (
         <div key={y} className='ms-board-row'>
             {row.split('').map((element, x) => {
-                const key = `${x}${y}`;
+                const key = cellToUniqueId({ x, y });
                 switch (true) {
                     case hasFlagAt({ x, y }, flags):
                         return (

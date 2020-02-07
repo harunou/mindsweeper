@@ -62,22 +62,24 @@ export const toggleFlagAt = (
 ): GameFlag[] => {
     return hasFlagAt(cell, flags)
         ? removeFlagAt(cell, flags)
-        : flags.concat(cellToFlag(cell));
+        : flags.concat(cellToUniqueId(cell));
 };
 
 export const hasFlagAt = (
     cell: GameCell,
     flags: GameFlag[]
 ): boolean => {
-    return flags.includes(cellToFlag(cell));
+    return flags.includes(cellToUniqueId(cell));
 };
 
-const cellToFlag = (cell: GameCell): string => `${cell.x},${cell.y}`;
+export const cellToUniqueId = (cell: GameCell): string =>
+    `${cell.x},${cell.y}`;
+
 const removeFlagAt = (
     cell: GameCell,
     flags: GameFlag[]
 ): GameFlag[] => {
-    const index = flags.indexOf(cellToFlag(cell));
+    const index = flags.indexOf(cellToUniqueId(cell));
     if (index === -1) {
         return [...flags];
     }
@@ -90,7 +92,7 @@ export const mergeFlagsAt = (cells: GameCell[], flags: GameFlag[]) => {
             if (hasFlagAt(cell, flags)) {
                 return [...f];
             }
-            return [...f, cellToFlag(cell)];
+            return [...f, cellToUniqueId(cell)];
         },
         [...flags]
     );

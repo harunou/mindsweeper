@@ -8,13 +8,14 @@ import {
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 import { StateObservable, ActionsObservable } from 'redux-observable';
 import { AppActions } from './redux/actions';
+import { cellToUniqueId } from './helpers';
 
 export const createCellStub = (x: number, y: number): GameCell => ({
     x,
     y,
 });
 export const createFlagStub = (x: number, y: number): GameFlag =>
-    `${x},${y}`;
+    cellToUniqueId({ x, y });
 
 type SpyObject<T> = T &
     {
