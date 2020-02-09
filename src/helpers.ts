@@ -56,47 +56,43 @@ export const parseMapResponseToBoard = (message: string): GameBoard => {
     return message.slice(message.indexOf('\n') + 1, -1);
 };
 
+export const cellToUniqueId = (cell: GameCell): string =>
+    `${cell.x},${cell.y}`;
+
+export const cellToFlag = (cell: GameCell): GameFlag =>
+    cellToUniqueId(cell);
+
 export const toggleFlagAt = (
     cell: GameCell,
     flags: GameFlag[]
 ): GameFlag[] => {
     return hasFlagAt(cell, flags)
         ? removeFlagAt(cell, flags)
-        : flags.concat(cellToUniqueId(cell));
+        : flags.concat(cellToFlag(cell));
 };
 
 export const hasFlagAt = (
     cell: GameCell,
     flags: GameFlag[]
 ): boolean => {
-    return flags.includes(cellToUniqueId(cell));
+    return flags.includes(cellToFlag(cell));
 };
-
-export const cellToUniqueId = (cell: GameCell): string =>
-    `${cell.x},${cell.y}`;
 
 const removeFlagAt = (
     cell: GameCell,
     flags: GameFlag[]
 ): GameFlag[] => {
-    const index = flags.indexOf(cellToUniqueId(cell));
+    const index = flags.indexOf(cellToFlag(cell));
     if (index === -1) {
         return [...flags];
     }
     return [...flags.slice(0, index), ...flags.slice(index + 1)];
 };
 
-export const mergeFlagsAt = (cells: GameCell[], flags: GameFlag[]) => {
-    return cells.reduce(
-        (f: GameFlag[], cell: GameCell) => {
-            if (hasFlagAt(cell, flags)) {
-                return [...f];
-            }
-            return [...f, cellToUniqueId(cell)];
-        },
-        [...flags]
-    );
-};
+export const getCellsNotInFlags = (
+    cells: GameCell[],
+    flags: GameFlag[]
+): GameCell[] => cells.filter(c => !hasFlagAt(c, flags));
 
 export const isGameOver = (state: AppState): boolean => {
     return (

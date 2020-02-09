@@ -20,7 +20,7 @@ import {
     getSafeCells,
     getBombCells,
     isGameOver,
-    hasFlagAt,
+    getCellsNotInFlags,
 } from '../../helpers';
 
 export const newCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
@@ -102,14 +102,14 @@ export const mapUpdatedEpic: AppEpic = (action$, state$) =>
             }
             const solved = solve(state$.value.board);
             const safeCells = getSafeCells(solved);
-            const bombCells = getBombCells(solved);
-            const hasNewBombs = bombCells.some(
-                c => !hasFlagAt(c, state$.value.flags)
+            const bombCells = getCellsNotInFlags(
+                getBombCells(solved),
+                state$.value.flags
             );
             switch (true) {
                 case safeCells.length > 0:
                     return safeCellsFound({ cells: safeCells });
-                case hasNewBombs:
+                case bombCells.length > 0:
                     return bombCellsFound({ cells: bombCells });
                 default:
                     return processingFinished();

@@ -270,7 +270,7 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            bombCellsFound({ cells: [cell10, cell12] })
+            bombCellsFound({ cells: [cell12] })
         );
         expect(state).toEqual({
             ...initialState,

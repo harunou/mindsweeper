@@ -17,7 +17,7 @@ import { gameBoardLevel1 } from '../../api/websocket.fixtures';
 import {
     parseMapResponseToBoard,
     toggleFlagAt,
-    mergeFlagsAt,
+    cellToFlag,
 } from '../../helpers';
 
 export const initialState: AppState = {
@@ -135,7 +135,10 @@ export const appReducer: AppReducer = reducer(
         (state, { payload }): AppState => {
             return {
                 ...state,
-                flags: mergeFlagsAt(payload.cells, state.flags),
+                flags: [
+                    ...state.flags,
+                    ...payload.cells.map(c => cellToFlag(c)),
+                ],
             };
         }
     )

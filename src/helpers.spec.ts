@@ -4,7 +4,7 @@ import {
     parseMapResponseToBoard,
     toggleFlagAt,
     hasFlagAt,
-    mergeFlagsAt,
+    getCellsNotInFlags,
 } from './helpers';
 import {
     mapResponseShort,
@@ -62,9 +62,9 @@ describe('App helper functions', () => {
         expect(hasFlagAt(cell10, [flag10])).toBeTruthy();
         expect(hasFlagAt(cell10, [])).toBeFalsy();
     });
-    it('should merge new flags into flags array', () => {
-        expect(
-            mergeFlagsAt([cell10, cell12], [flag10, flag12])
-        ).toBeTruthy();
+    it('should find cell not in flags array', () => {
+        expect(getCellsNotInFlags([cell10, cell12], [flag10])).toEqual([
+            cell12,
+        ]);
     });
 });
