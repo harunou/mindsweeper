@@ -3,6 +3,7 @@ import React, {
     useCallback,
     Dispatch,
     useEffect,
+    memo,
 } from 'react';
 import { GameLevel } from '../redux/reducer/reducer.typings';
 import { AppActions, levelInputClick } from '../redux/actions';
@@ -61,4 +62,4 @@ const LevelSelector: React.FC = (): JSX.Element => {
     );
 };
 
-export default LevelSelector;
+export default memo(LevelSelector);

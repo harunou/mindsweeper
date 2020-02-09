@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback } from 'react';
+import React, { Dispatch, useCallback, memo } from 'react';
 import { GameBoard, GameFlag } from '../redux/reducer/reducer.typings';
 import { useSelector, useDispatch } from 'react-redux';
 import CoverCell from './CoverCell';
@@ -65,4 +65,4 @@ const Board: React.FC = (): JSX.Element => {
     return <div>{rows}</div>;
 };
 
-export default Board;
+export default memo(Board);
