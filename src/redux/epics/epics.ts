@@ -60,9 +60,8 @@ export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
         }),
         ofType(newLevelStarted, cellOpenedOk, bombCellsFound),
         map(() => {
-            const [, ...safe] = state$.value.safe;
-            if (safe.length) {
-                return safeCellsFound({ cells: safe });
+            if (state$.value.safe.length > 0) {
+                return safeCellsFound({ cells: state$.value.safe });
             }
             socket$.next(socketCommand.map());
             return processingStarted();
@@ -79,11 +78,10 @@ export const safeCellOpenCommandEpic: AppEpic = (
             return !isGameOver(state$.value);
         }),
         ofType(safeCellsFound),
-        map(({ payload }) => {
-            const [cell] = payload.cells;
-            socket$.next(socketCommand.open(cell));
-            return processingStarted();
-        })
+        tap(({ payload }) => {
+            socket$.next(socketCommand.open(payload.first));
+        }),
+        map(() => processingStarted())
     );
 
 export const gameOverEpic: AppEpic = (action$, _, { socket$ }) =>

@@ -126,7 +126,7 @@ export const appReducer: AppReducer = reducer(
         (state, { payload }): AppState => {
             return {
                 ...state,
-                safe: payload.cells,
+                safe: payload.rest,
             };
         }
     ),

@@ -251,11 +251,11 @@ describe('Reducer', () => {
         };
         const state = appReducer(
             initialState,
-            safeCellsFound({ cells: [cell10] })
+            safeCellsFound({ cells: [cell10, cell12] })
         );
         expect(state).toEqual({
             ...initialState,
-            safe: [cell10],
+            safe: [cell12],
         });
     });
     it('should handle "bombCellsFound" action', () => {

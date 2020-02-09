@@ -152,22 +152,22 @@ describe('Epics', () => {
                 processingStarted()
             );
         });
-        it('should not send "map" command if tail "state.safe" is not empty', () => {
+        it('should not send "map" command if "state.safe" is not empty', () => {
             const cell10 = createCellStub(1, 0);
             const cell12 = createCellStub(1, 2);
             state = { ...state, safe: [cell10, cell12] };
             stateSource$.next(state);
-            actionsSource$.next(newLevelStarted());
+            actionsSource$.next(cellOpenedOk());
             expect(socket$.next).not.toBeCalled();
         });
-        it('should return "safeCellsFound" if tail "state.safe" is not empty', () => {
+        it('should return "safeCellsFound" if "state.safe" is not empty', () => {
             const cell10 = createCellStub(1, 0);
             const cell12 = createCellStub(1, 2);
             state = { ...state, safe: [cell10, cell12] };
             stateSource$.next(state);
             actionsSource$.next(cellOpenedOk());
             expect(epicObserver.next).toBeCalledWith(
-                safeCellsFound({ cells: [cell12] })
+                safeCellsFound({ cells: [cell10, cell12] })
             );
         });
         it('should not be called if Win or Lose status', () => {
@@ -348,31 +348,42 @@ describe('Epics', () => {
         });
         it('should send "open" command', () => {
             const cell10 = createCellStub(1, 0);
-            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
+            const cell12 = createCellStub(1, 2);
+            actionsSource$.next(
+                safeCellsFound({ cells: [cell10, cell12] })
+            );
             expect(socket$.next).toBeCalledWith(
                 socketCommand.open(cell10)
             );
         });
         it('should return "processingStarted" action"', () => {
             const cell10 = createCellStub(1, 0);
-            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
+            const cell12 = createCellStub(1, 2);
+            actionsSource$.next(
+                safeCellsFound({ cells: [cell10, cell12] })
+            );
             expect(epicObserver.next).toBeCalledWith(
                 processingStarted()
             );
         });
         it('should not be called if Win or Lose status', () => {
             const cell10 = createCellStub(1, 0);
+            const cell12 = createCellStub(1, 2);
             stateSource$.next({
                 ...state,
                 status: GameStatus.Win,
             });
-            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
+            actionsSource$.next(
+                safeCellsFound({ cells: [cell10, cell12] })
+            );
             expect(epicObserver.next).not.toBeCalled();
             stateSource$.next({
                 ...state,
                 status: GameStatus.Lose,
             });
-            actionsSource$.next(safeCellsFound({ cells: [cell10] }));
+            actionsSource$.next(
+                safeCellsFound({ cells: [cell10, cell12] })
+            );
             expect(epicObserver.next).not.toBeCalled();
         });
     });

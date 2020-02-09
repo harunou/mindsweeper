@@ -32,7 +32,21 @@ export const processingFinished = action('[WS] Processing finished');
 
 export const safeCellsFound = action(
     '[Solver] Safe cells found',
-    payload<{ cells: GameCell[] }>()
+    ({
+        cells,
+    }: {
+        cells: GameCell[];
+    }): {
+        payload: { first: GameCell; rest: GameCell[] };
+    } => {
+        const [first, ...rest] = cells;
+        return {
+            payload: {
+                first,
+                rest,
+            },
+        };
+    }
 );
 export const bombCellsFound = action(
     '[Solver] Bomb cells found',
