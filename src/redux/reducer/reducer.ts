@@ -36,7 +36,7 @@ export const appReducer: AppReducer = reducer(
         levelInputClick,
         (state, { payload }): AppState => {
             if (state.isProcessing) {
-                return { ...state };
+                return state;
             }
             return {
                 ...state,
@@ -49,97 +49,77 @@ export const appReducer: AppReducer = reducer(
     ),
     on(
         boardCellRightClick,
-        (state, { payload }): AppState => {
-            return {
-                ...state,
-                flags: toggleFlagAt(payload.cell, state.flags),
-            };
-        }
+        (state, { payload }): AppState => ({
+            ...state,
+            flags: toggleFlagAt(payload.cell, state.flags),
+        })
     ),
     on(
         connectionLost,
-        (state): AppState => {
-            return {
-                ...state,
-                isOnline: false,
-                isProcessing: false,
-            };
-        }
+        (state): AppState => ({
+            ...state,
+            isOnline: false,
+            isProcessing: false,
+        })
     ),
     on(
         mapUpdated,
-        (state, { payload }): AppState => {
-            return {
-                ...state,
-                board: parseMapResponseToBoard(payload.message),
-            };
-        }
+        (state, { payload }): AppState => ({
+            ...state,
+            board: parseMapResponseToBoard(payload.message),
+        })
     ),
     on(
         cellOpenedYouLose,
-        (state): AppState => {
-            return {
-                ...state,
-                status: GameStatus.Lose,
-            };
-        }
+        (state): AppState => ({
+            ...state,
+            status: GameStatus.Lose,
+        })
     ),
     on(
         cellOpenedYouWin,
-        (state): AppState => {
-            return {
-                ...state,
-                flags: [],
-                status: GameStatus.Win,
-            };
-        }
+        (state): AppState => ({
+            ...state,
+            flags: [],
+            status: GameStatus.Win,
+        })
     ),
     on(
         unknownMessageReceived,
-        (state): AppState => {
-            return {
-                ...state,
-                isProcessing: false,
-            };
-        }
+        (state): AppState => ({
+            ...state,
+            isProcessing: false,
+        })
     ),
     on(
         processingStarted,
-        (state): AppState => {
-            return {
-                ...state,
-                isProcessing: true,
-            };
-        }
+        (state): AppState => ({
+            ...state,
+            isProcessing: true,
+        })
     ),
     on(
         processingFinished,
-        (state): AppState => {
-            return {
-                ...state,
-                isProcessing: false,
-            };
-        }
+        (state): AppState => ({
+            ...state,
+            isProcessing: false,
+        })
     ),
     on(
         safeCellsFound,
-        (state, { payload }): AppState => {
-            return {
-                ...state,
-                safe: payload.rest,
-            };
-        }
+        (state, { payload }): AppState => ({
+            ...state,
+            safe: [...payload.rest],
+        })
     ),
     on(
         bombCellsFound,
-        (state, { payload }): AppState => {
-            return {
-                ...state,
-                flags: [
-                    ...state.flags,
-                    ...payload.cells.map(c => cellToFlag(c)),
-                ],
-            };
-        }
+        (state, { payload }): AppState => ({
+            ...state,
+            flags: [
+                ...state.flags,
+                ...payload.cells.map(c => cellToFlag(c)),
+            ],
+        })
     )
 );
