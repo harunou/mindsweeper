@@ -12,7 +12,7 @@ import {
     bombCellsFound,
 } from '../actions';
 import { ofType } from '../ts-action.patch';
-import { tap, map, filter } from 'rxjs/operators';
+import { map, filter, withLatestFrom } from 'rxjs/operators';
 import { socketCommand } from '../../api/websocket.client';
 import { AppEpic } from '../store/store.typings';
 import { solve } from '../../solver/solver';
@@ -25,15 +25,15 @@ import {
 
 export const newCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
     action$.pipe(
-        filter(() => {
-            return !isGameOver(state$.value);
-        }),
-        filter(() => !state$.value.isProcessing),
         ofType(levelInputClick),
-        tap(({ payload }) => {
-            socket$.next(socketCommand.new(payload.level));
+        withLatestFrom(state$),
+        filter(([, state]) => {
+            return !isGameOver(state) && !state.isProcessing;
         }),
-        map(() => processingStarted())
+        map(([{ payload }]) => {
+            socket$.next(socketCommand.new(payload.level));
+            return processingStarted();
+        })
     );
 
 export const openCommandEpic: AppEpic = (
@@ -42,26 +42,27 @@ export const openCommandEpic: AppEpic = (
     { socket$ }
 ) =>
     action$.pipe(
-        filter(() => {
-            return !isGameOver(state$.value);
-        }),
-        filter(() => !state$.value.isProcessing),
         ofType(boardCellClick),
-        tap(({ payload }) => {
-            socket$.next(socketCommand.open(payload.cell));
+        withLatestFrom(state$),
+        filter(([, state]) => {
+            return !isGameOver(state) && !state.isProcessing;
         }),
-        map(() => processingStarted())
+        map(([{ payload }]) => {
+            socket$.next(socketCommand.open(payload.cell));
+            return processingStarted();
+        })
     );
 
 export const mapCommandEpic: AppEpic = (action$, state$, { socket$ }) =>
     action$.pipe(
-        filter(() => {
-            return !isGameOver(state$.value);
-        }),
         ofType(newLevelStarted, cellOpenedOk, bombCellsFound),
-        map(() => {
-            if (state$.value.safe.length > 0) {
-                return safeCellsFound({ cells: state$.value.safe });
+        withLatestFrom(state$),
+        filter(([, state]) => {
+            return !isGameOver(state);
+        }),
+        map(([, state]) => {
+            if (state.safe.length > 0) {
+                return safeCellsFound({ cells: state.safe });
             }
             socket$.next(socketCommand.map());
             return processingStarted();
@@ -74,33 +75,35 @@ export const safeCellOpenCommandEpic: AppEpic = (
     { socket$ }
 ) =>
     action$.pipe(
-        filter(() => {
-            return !isGameOver(state$.value);
-        }),
         ofType(safeCellsFound),
-        tap(({ payload }) => {
-            socket$.next(socketCommand.open(payload.first));
+        withLatestFrom(state$),
+        filter(([, state]) => {
+            return !isGameOver(state);
         }),
-        map(() => processingStarted())
+        map(([{ payload }]) => {
+            socket$.next(socketCommand.open(payload.first));
+            return processingStarted();
+        })
     );
 
 export const gameOverEpic: AppEpic = (action$, _, { socket$ }) =>
     action$.pipe(
         ofType(cellOpenedYouWin, cellOpenedYouLose),
-        tap(() => {
+        map(() => {
             socket$.next(socketCommand.map());
-        }),
-        map(() => processingStarted())
+            return processingStarted();
+        })
     );
 
 export const mapUpdatedEpic: AppEpic = (action$, state$) =>
     action$.pipe(
         ofType(mapUpdated),
-        map(() => {
-            if (isGameOver(state$.value)) {
+        withLatestFrom(state$),
+        map(([, state]) => {
+            if (isGameOver(state)) {
                 return processingFinished();
             }
-            const solved = solve(state$.value.board);
+            const solved = solve(state.board);
             const safeCells = getSafeCells(solved);
             const bombCells = getCellsNotInFlags(
                 getBombCells(solved),
