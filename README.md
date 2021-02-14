@@ -4,8 +4,6 @@ Desired result:
 
 * Develop simple UI interface for the minesweeper game
 * Solve levels and (?) find 4 passwords
-* Host the code in a private Github repo and share it with `dev-home-task@evolutiongaming.com` user
-* Email passwords and link to the repo to `dtsikhanchuk@evolutiongaming.com`
 
 Game UI requirements:
 
